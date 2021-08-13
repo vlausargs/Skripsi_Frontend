@@ -169,12 +169,12 @@ const Home = ()=>{
                 }}>
                     <View style={{flex: 1}}>
                         <Text style={{...FONTS.h4,textAlign:'left'}}>
-                            {DateState}
+                            {ClockState}
                         </Text>
                     </View>
                     <View style={{flex: 1}}>
-                        <Text style={{...FONTS.h4,textAlign:'right'}}>
-                            {ClockState}
+                        <Text style={{...FONTS.h4,textAlign:'left'}}>
+                            Check In
                         </Text>
                     </View>
                 </View>
@@ -187,12 +187,12 @@ const Home = ()=>{
                 }}>
                     <View style={{flex: 1}}>
                         <Text style={{...FONTS.h4,textAlign:'left'}}>
-                            {DateState}
+                            {ClockState}
                         </Text>
                     </View>
                     <View style={{flex: 1}}>
-                        <Text style={{...FONTS.h4,textAlign:'right'}}>
-                            {ClockState}
+                        <Text style={{...FONTS.h4,textAlign:'left'}}>
+                            Check Out
                         </Text>
                     </View>
                 </View>
@@ -205,12 +205,12 @@ const Home = ()=>{
                 }}>
                     <View style={{flex: 1}}>
                         <Text style={{...FONTS.h4,textAlign:'left'}}>
-                            {DateState}
+                            {ClockState}
                         </Text>
                     </View>
                     <View style={{flex: 1}}>
-                        <Text style={{...FONTS.h4,textAlign:'right'}}>
-                            {ClockState}
+                        <Text style={{...FONTS.h4,textAlign:'left'}}>
+                            Check In
                         </Text>
                     </View>
                 </View>
@@ -223,12 +223,12 @@ const Home = ()=>{
                 }}>
                     <View style={{flex: 1}}>
                         <Text style={{...FONTS.h4,textAlign:'left'}}>
-                            {DateState}
+                            {ClockState}
                         </Text>
                     </View>
                     <View style={{flex: 1}}>
-                        <Text style={{...FONTS.h4,textAlign:'right'}}>
-                            {ClockState}
+                        <Text style={{...FONTS.h4,textAlign:'left'}}>
+                            Check Out
                         </Text>
                     </View>
                 </View>
@@ -241,12 +241,12 @@ const Home = ()=>{
                 }}>
                     <View style={{flex: 1}}>
                         <Text style={{...FONTS.h4,textAlign:'left'}}>
-                            {DateState}
+                            {ClockState}
                         </Text>
                     </View>
                     <View style={{flex: 1}}>
-                        <Text style={{...FONTS.h4,textAlign:'right'}}>
-                            {ClockState}
+                        <Text style={{...FONTS.h4,textAlign:'left'}}>
+                            Check In
                         </Text>
                     </View>
                 </View>
