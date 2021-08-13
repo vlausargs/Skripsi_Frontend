@@ -99,10 +99,10 @@ const Home = ()=>{
         return (
             <View style={{ marginTop:30}}>
                 <Text style={{...FONTS.h3,textAlign:'center'}}>
-                    Name
+                    Valos
                 </Text>
                 <Text style={{...FONTS.h3,textAlign:'center'}}>
-                    Division - Company
+                    Hacker - Google Indonesia
                 </Text>
             </View>
         )
@@ -153,6 +153,106 @@ const Home = ()=>{
             </View>
         )
     }
+    function renderActLog() {
+        return (
+            <View style={{flex:1,marginHorizontal:10}}>
+                <Text style={{...FONTS.h4,textAlign:'left'}}>
+                    Activity Log
+                </Text>
+                {/* loop activity log */}
+                <View style={{
+                    
+                    paddingLeft:SIZES.padding*2,
+                    paddingRight:SIZES.padding*2,
+                    marginHorizontal:20,
+                    justifyContent:'center', flexDirection:'row'
+                }}>
+                    <View style={{flex: 1}}>
+                        <Text style={{...FONTS.h4,textAlign:'left'}}>
+                            {DateState}
+                        </Text>
+                    </View>
+                    <View style={{flex: 1}}>
+                        <Text style={{...FONTS.h4,textAlign:'right'}}>
+                            {ClockState}
+                        </Text>
+                    </View>
+                </View>
+                <View style={{
+                    
+                    paddingLeft:SIZES.padding*2,
+                    paddingRight:SIZES.padding*2,
+                    marginHorizontal:20,
+                    justifyContent:'center', flexDirection:'row'
+                }}>
+                    <View style={{flex: 1}}>
+                        <Text style={{...FONTS.h4,textAlign:'left'}}>
+                            {DateState}
+                        </Text>
+                    </View>
+                    <View style={{flex: 1}}>
+                        <Text style={{...FONTS.h4,textAlign:'right'}}>
+                            {ClockState}
+                        </Text>
+                    </View>
+                </View>
+                <View style={{
+                    
+                    paddingLeft:SIZES.padding*2,
+                    paddingRight:SIZES.padding*2,
+                    marginHorizontal:20,
+                    justifyContent:'center', flexDirection:'row'
+                }}>
+                    <View style={{flex: 1}}>
+                        <Text style={{...FONTS.h4,textAlign:'left'}}>
+                            {DateState}
+                        </Text>
+                    </View>
+                    <View style={{flex: 1}}>
+                        <Text style={{...FONTS.h4,textAlign:'right'}}>
+                            {ClockState}
+                        </Text>
+                    </View>
+                </View>
+                <View style={{
+                    
+                    paddingLeft:SIZES.padding*2,
+                    paddingRight:SIZES.padding*2,
+                    marginHorizontal:20,
+                    justifyContent:'center', flexDirection:'row'
+                }}>
+                    <View style={{flex: 1}}>
+                        <Text style={{...FONTS.h4,textAlign:'left'}}>
+                            {DateState}
+                        </Text>
+                    </View>
+                    <View style={{flex: 1}}>
+                        <Text style={{...FONTS.h4,textAlign:'right'}}>
+                            {ClockState}
+                        </Text>
+                    </View>
+                </View>
+                <View style={{
+                    
+                    paddingLeft:SIZES.padding*2,
+                    paddingRight:SIZES.padding*2,
+                    marginHorizontal:20,
+                    justifyContent:'center', flexDirection:'row'
+                }}>
+                    <View style={{flex: 1}}>
+                        <Text style={{...FONTS.h4,textAlign:'left'}}>
+                            {DateState}
+                        </Text>
+                    </View>
+                    <View style={{flex: 1}}>
+                        <Text style={{...FONTS.h4,textAlign:'right'}}>
+                            {ClockState}
+                        </Text>
+                    </View>
+                </View>
+            </View>
+        )
+    }
     return (
       <SafeAreaView style={styles.container}>
           <View style={{...styles.shadow,backgroundColor:COLORS.white, paddingBottom:SIZES.padding}}>
@@ -161,6 +261,7 @@ const Home = ()=>{
           </View>
           {renderCompanyInfo()}
           {renderCurrAttandanceInfo()}
+          {renderActLog()}
       </SafeAreaView>
     )
 }
