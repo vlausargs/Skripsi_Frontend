@@ -24,6 +24,15 @@ export const star = require("../assets/icons/star.png");
 export const sushi = require("../assets/icons/sushi.png");
 export const user = require("../assets/icons/user.png");
 
+// tab bar icons
+export const home = require("../assets/icons/Home.png");
+export const chat = require("../assets/icons/Chat.png");
+export const news = require("../assets/icons/News.png");
+export const profile = require("../assets/icons/Profile.png");
+export const schedule = require("../assets/icons/Schedule.png");
+
+export const arrow = require("../assets/icons/ExpandArrow.png");
+
 export default {
     back,
     car,
@@ -50,4 +59,10 @@ export default {
     star,
     sushi,
     user,
+    home,
+    chat,
+    news,
+    profile,
+    schedule,
+    arrow
 }

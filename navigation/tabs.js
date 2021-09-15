@@ -93,7 +93,7 @@ const Tabs = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
-                            source={icons.cutlery}
+                            source={icons.home}
                             resizeMode="contain"
                             style={{
                                 width: 25,
@@ -111,12 +111,12 @@ const Tabs = () => {
             />
 
             <Tab.Screen
-                name="Search"
+                name="News"
                 component={Newsfeed}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
-                            source={icons.search}
+                            source={icons.news}
                             resizeMode="contain"
                             style={{
                                 width: 25,
@@ -134,12 +134,12 @@ const Tabs = () => {
             />
 
             <Tab.Screen
-                name="Like"
+                name="Chat"
                 component={Chat}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
-                            source={icons.like}
+                            source={icons.chat}
                             resizeMode="contain"
                             style={{
                                 width: 25,
@@ -162,7 +162,7 @@ const Tabs = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
-                            source={icons.user}
+                            source={icons.profile}
                             resizeMode="contain"
                             style={{
                                 width: 25,
