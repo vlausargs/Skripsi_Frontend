@@ -73,7 +73,7 @@ shadow:{
 
   });
 
-const Profile = ()=>{
+const Profile = ({navigation})=>{
     function header() {
         return (
             <View style={{...styles.shadow, ...styles.header}}>
@@ -143,7 +143,7 @@ const Profile = ()=>{
                         marginHorizontal:SIZES.padding * 10,
                         paddingVertical:SIZES.padding/2,
                         borderRadius:20
-                    }}>
+                    }} onPress={() => navigation.navigate('Splash')}>
                         <Text style={{...FONTS.h3,fontWeight: 'bold' ,textAlign:'center'}}>
                             Logout
                         </Text>

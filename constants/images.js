@@ -5,6 +5,7 @@ const avatar_3 = require("../assets/images/avatar-3.jpg");
 const avatar_4 = require("../assets/images/avatar-4.jpg");
 const avatar_5 = require("../assets/images/avatar-5.jpg");
 
+export const Background = require("../assets/images/Background.png");
 
 export default {
     avatar_1,
@@ -12,4 +13,5 @@ export default {
     avatar_3,
     avatar_4,
     avatar_5,
+    Background
 }

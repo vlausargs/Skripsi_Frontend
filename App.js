@@ -21,13 +21,104 @@ import {
   Attandance,
   Profile,
 } from './screens'
+import RootStackScreen from './screens/RootStackScreen';
+
+import { connect, Provider } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import store from './redux/store';
 
 
 const Stack = createStackNavigator();
 
 const App = () => {
-    return (
+
+   /* const loginReducer = (prevState, action) => {
+        switch( action.type ) {
+          case 'RETRIEVE_TOKEN': 
+            return {
+              ...prevState,
+              userToken: action.token,
+              isLoading: false,
+            };
+          case 'LOGIN': 
+            return {
+              ...prevState,
+              userName: action.id,
+              userToken: action.token,
+              isLoading: false,
+            };
+          case 'LOGOUT': 
+            return {
+              ...prevState,
+              userName: null,
+              userToken: null,
+              isLoading: false,
+            };
+          case 'REGISTER': 
+            return {
+              ...prevState,
+              userName: action.id,
+              userToken: action.token,
+              isLoading: false,
+            };
+        }
+      };
+    
+      const [loginState, dispatch] = React.useReducer(loginReducer, initialLoginState);
+    
+      const authContext = React.useMemo(() => ({
+        signIn: async(foundUser) => {
+          // setUserToken('fgkj');
+          // setIsLoading(false);
+          const userToken = String(foundUser[0].userToken);
+          const userName = foundUser[0].username;
+          
+          try {
+            await AsyncStorage.setItem('userToken', userToken);
+          } catch(e) {
+            console.log(e);
+          }
+          // console.log('user token: ', userToken);
+          dispatch({ type: 'LOGIN', id: userName, token: userToken });
+        },
+        signOut: async() => {
+          // setUserToken(null);
+          // setIsLoading(false);
+          try {
+            await AsyncStorage.removeItem('userToken');
+          } catch(e) {
+            console.log(e);
+          }
+          dispatch({ type: 'LOGOUT' });
+        },
+        signUp: () => {
+          // setUserToken('fgkj');
+          // setIsLoading(false);
+        },
+        toggleTheme: () => {
+          setIsDarkTheme( isDarkTheme => !isDarkTheme );
+        }
+      }), []);
+    
+      useEffect(() => {
+        setTimeout(async() => {
+          // setIsLoading(false);
+          let userToken;
+          userToken = null;
+          try {
+            userToken = await AsyncStorage.getItem('userToken');
+          } catch(e) {
+            console.log(e);
+          }
+          // console.log('user token: ', userToken);
+          dispatch({ type: 'RETRIEVE_TOKEN', token: userToken });
+        }, 1000);
+      }, []); 
+
+
+      return (
         <NavigationContainer>
+            { loginState.userToken !== null ? (
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false
@@ -42,6 +133,20 @@ const App = () => {
                 <Stack.Screen name="Profile" component={Profile} />
 
             </Stack.Navigator>
+            ) :
+            
+            <RootStackScreen />
+}
+        </NavigationContainer>
+      )
+       */
+    return (
+      
+        <NavigationContainer>
+          <Provider store={store}> 
+          <RootStackScreen />
+          </Provider>
+            
         </NavigationContainer>
     )
 }
