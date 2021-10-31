@@ -157,7 +157,6 @@ const Register = ({navigation}) => {
             type:val
         });
         console.log(val)
-        // next_step()
     }
     switch (data.steps) {
         case 1:
@@ -171,10 +170,10 @@ const Register = ({navigation}) => {
                                     Employee
                                 </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>{step1button('management')}}
+                        <TouchableOpacity onPress={()=>{step1button('owner')}}
                             style={styles.buttons}>
                                 <Text style={{...FONTS.h3,fontWeight: 'bold' ,textAlign:'center', color: COLORS.white}}>
-                                    Management
+                                    Owner
                                 </Text>
                         </TouchableOpacity>
                     </View>
@@ -241,7 +240,7 @@ const Register = ({navigation}) => {
                         </View>
                       );
                       break;
-                    case 'management':
+                    case 'owner':
                         return (
                             <View style={styles.container}>
 
