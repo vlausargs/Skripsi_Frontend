@@ -23,7 +23,7 @@ const RootStackScreen = ({navigation}) => (
         <RootStack.Screen name="Splash" component={Splash}/>
         <RootStack.Screen name="Login" component={Login}/>
         <RootStack.Screen name="Register" component={Register}/>
-                <RootStack.Screen name="Home" component={Tabs} />
+                <RootStack.Screen name="Home" component={Tabs} /> 
                 <RootStack.Screen name="Chat" component={Chat} />
                 <RootStack.Screen name="LeavePermissions" component={LeavePermissions} />
                 <RootStack.Screen name="Newsfeed" component={Newsfeed} />

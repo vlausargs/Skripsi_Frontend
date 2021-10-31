@@ -9,14 +9,14 @@ import _ from 'lodash';
  * @param {String} site: optional url if there is a different one
  */
 export function fetchAPI(endpoint, method, header, data, site) {
-    let url = (site ? site : 'http://daa4-182-253-124-110.ap.ngrok.io') + endpoint;
+    let url = (site ? site : 'http://8f9d-118-99-110-150.ap.ngrok.io') + endpoint;
 
     let options = {
         method: method,
         headers: header,
         body: data
     };
-    
+    console.log(data)
     return fetch(url, options)
         .then(response => { 
             return response.json()

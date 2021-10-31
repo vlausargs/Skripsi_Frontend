@@ -1,6 +1,6 @@
 import { Alert, AsyncStorage } from 'react-native';
 //import { AsyncStorage } from '@react-native-community/async-storage'
-var stringify = require('qs-stringify');
+// var stringify = require('qs-stringify');
 
 import * as t from './actionTypes/authTypes';
 import { fetchAPI } from '../utils/fetch';
@@ -11,7 +11,8 @@ export function login(email, password, finishCB) {
     var endpoint = "/api/login";
     
     let header = {
-        "Accept": "application/json"
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
     };
 
     let body = {
@@ -20,7 +21,7 @@ export function login(email, password, finishCB) {
     };
 
     return dispatch => {
-        return fetchAPI(endpoint, 'POST', header, stringify(body))
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
             .then((json) => {
                 AsyncStorage.setItem('token', json.token);
                 dispatch({ type: t.LOGGED_IN, token: json.token});

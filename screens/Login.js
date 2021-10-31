@@ -18,6 +18,7 @@ import { Input } from 'react-native-elements';
 import { COLORS, FONTS } from '../constants';
 import { NavigationContainer } from '@react-navigation/native';
 
+
 export const mapStateToProps = state => ({
     token: state.authReducer.token
 });
@@ -41,7 +42,7 @@ class Login extends React.Component {
       this.onLogin = this.onLogin.bind(this);
       this.onFinish = this.onFinish.bind(this);
     }
-
+     
 
     /*
     const updateSecureTextEntry = () => {
@@ -118,8 +119,9 @@ class Login extends React.Component {
     }
 
     onFinish(token) {
+        console.log(this.props)
         if (token){
-          navigation.navigate("Home");
+            this.props.navigation.navigate("Home");
         }
     }
 
