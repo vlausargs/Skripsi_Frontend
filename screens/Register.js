@@ -19,6 +19,7 @@ import { useTheme } from 'react-native-paper';
 // import { Input } from 'react-native-elements';
 import { COLORS, SIZES, FONTS, icons, images } from "../constants";
 
+import Wizard from './components/Register/Wizard'
 
 const Register = ({navigation}) => {
 
@@ -160,100 +161,124 @@ const Register = ({navigation}) => {
         });
         console.log(val)
     }
-    switch (data.steps) {
-        case 1:
-            return (
-                <View style={styles.container}>
-                <View style={styles.textInput}>
+    return (
+        <View style={styles.container}>
+            <Wizard>
+                <Wizard.Step >
+                    <View style={styles.container}>
                         <TextInput
-                            placeholder= 'Name'
-                            inputStyle={{ textAlign: 'center' }}
-                            placeholderTextColor={COLORS.black}
-                            inputContainerStyle={styles.inputContainer}
-                            disableFullscreenUI={true}
-                            autoCapitalize = 'none'
-                            onChangeText={(text)=>{setUser({
-                                ...user,
-                                name:text
-                            })}}       
-                        />  
-                        <TextInput
-                            placeholder= 'Email'
-                            inputStyle={{ textAlign: 'center' }}
-                            placeholderTextColor={COLORS.black}
-                            inputContainerStyle={styles.inputContainer}
-                            disableFullscreenUI={true}
-                            autoCapitalize = 'none'           
-                        />  
+                                    placeholder= 'Name'
+                                    inputStyle={{ textAlign: 'center' }}
+                                    placeholderTextColor={COLORS.black}
+                                    inputContainerStyle={styles.inputContainer}
+                                    disableFullscreenUI={true}
+                                    autoCapitalize = 'none'   
+                        />      
+                    </View>
+                </Wizard.Step>
+                <Wizard.Step>
+                    <Text>HELLO WORLD</Text>
+                </Wizard.Step>
+                <Wizard.Step>
+                    <Text>HELLO WORLD</Text>
+                </Wizard.Step>
+            </Wizard>
+        </View>
+    );
+    // switch (data.steps) {
+    //     case 1:
+    //         return (
+    //             <View style={styles.container}>
+    //             <View style={styles.textInput}>
+    //                     <TextInput
+    //                         placeholder= 'Name'
+    //                         inputStyle={{ textAlign: 'center' }}
+    //                         placeholderTextColor={COLORS.black}
+    //                         inputContainerStyle={styles.inputContainer}
+    //                         disableFullscreenUI={true}
+    //                         autoCapitalize = 'none'
+    //                         onChangeText={(text)=>{setUser({
+    //                             ...user,
+    //                             name:text
+    //                         })}}       
+    //                     />  
+    //                     <TextInput
+    //                         placeholder= 'Email'
+    //                         inputStyle={{ textAlign: 'center' }}
+    //                         placeholderTextColor={COLORS.black}
+    //                         inputContainerStyle={styles.inputContainer}
+    //                         disableFullscreenUI={true}
+    //                         autoCapitalize = 'none'           
+    //                     />  
          
-                        <TextInput
-                            placeholder="Password"
-                            inputStyle={{ textAlign: 'center' }}
-                            placeholderTextColor={COLORS.black}
-                            inputContainerStyle={styles.inputContainer}
-                            disableFullscreenUI={true}
-                            secureTextEntry={data.secureTextEntry ? true : false}
-                            autoCapitalize="none"
-                        />                   
-                    <View style={styles.button}>
-                        <TouchableOpacity style={styles.Login} onPress={next_step}>
-                            <Text style={styles.textSign}>Next</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-              </View>
+    //                     <TextInput
+    //                         placeholder="Password"
+    //                         inputStyle={{ textAlign: 'center' }}
+    //                         placeholderTextColor={COLORS.black}
+    //                         inputContainerStyle={styles.inputContainer}
+    //                         disableFullscreenUI={true}
+    //                         secureTextEntry={data.secureTextEntry ? true : false}
+    //                         autoCapitalize="none"
+    //                     />                   
+    //                 <View style={styles.button}>
+    //                     <TouchableOpacity style={styles.Login} onPress={next_step}>
+    //                         <Text style={styles.textSign}>Next</Text>
+    //                     </TouchableOpacity>
+    //                 </View>
+    //             </View>
+    //           </View>
 
-            );
-            break;
-        case 2:
-            return (
-                <View style={styles.container}>
-                    {/* <Text>step 1 register</Text> */}
-                    <View style={styles.buttonRow}>
-                        <TouchableOpacity onPress={()=>{step1button('employee')}}
-                            style={styles.buttons}>
-                                <Text style={{...FONTS.h3,fontWeight: 'bold' ,textAlign:'center', color: COLORS.white}}>
-                                    Employee
-                                </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>{step1button('owner')}}
-                            style={styles.buttons}>
-                                <Text style={{...FONTS.h3,fontWeight: 'bold' ,textAlign:'center', color: COLORS.white}}>
-                                    Owner
-                                </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            );
-            break;
-        case 3:
-            switch(data.type){
-                case 'employee':
-                    return (
-                        <View style={styles.container}>
+    //         );
+    //         break;
+    //     case 2:
+    //         return (
+    //             <View style={styles.container}>
+    //                 {/* <Text>step 1 register</Text> */}
+    //                 <View style={styles.buttonRow}>
+    //                     <TouchableOpacity onPress={()=>{step1button('employee')}}
+    //                         style={styles.buttons}>
+    //                             <Text style={{...FONTS.h3,fontWeight: 'bold' ,textAlign:'center', color: COLORS.white}}>
+    //                                 Employee
+    //                             </Text>
+    //                     </TouchableOpacity>
+    //                     <TouchableOpacity onPress={()=>{step1button('owner')}}
+    //                         style={styles.buttons}>
+    //                             <Text style={{...FONTS.h3,fontWeight: 'bold' ,textAlign:'center', color: COLORS.white}}>
+    //                                 Owner
+    //                             </Text>
+    //                     </TouchableOpacity>
+    //                 </View>
+    //             </View>
+    //         );
+    //         break;
+    //     case 3:
+    //         switch(data.type){
+    //             case 'employee':
+    //                 return (
+    //                     <View style={styles.container}>
 
-                        </View>
+    //                     </View>
 
-                      );
-                      break;
-                    case 'owner':
-                        return (
-                            <View style={styles.container}>
+    //                   );
+    //                   break;
+    //                 case 'owner':
+    //                     return (
+    //                         <View style={styles.container}>
 
-                            </View>
-                        );
-                        break;
-                    default:
-                        return (
-                            <View style={styles.container}>
+    //                         </View>
+    //                     );
+    //                     break;
+    //                 default:
+    //                     return (
+    //                         <View style={styles.container}>
 
-                            </View>
-                        );
-                        break;
-            }
+    //                         </View>
+    //                     );
+    //                     break;
+    //         }
            
-            break;
-    }
+    //         break;
+    // }
     
 };
 
