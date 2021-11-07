@@ -16,7 +16,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 
 import { useTheme } from 'react-native-paper';
-import { Input } from 'react-native-elements';
+// import { Input } from 'react-native-elements';
 import { COLORS, SIZES, FONTS, icons, images } from "../constants";
 
 
@@ -25,16 +25,18 @@ const Register = ({navigation}) => {
    const [data, setData] = React.useState({
         steps: 1,
         type: '',
-        name: '',
-        email: '',
-        username: '',
-        password: '',
         company: '',
         check_textInputChange: false,
         secureTextEntry: true,
         isValidUser: true,
         isValidPassword: true,
     });
+    const [user,setUser] = React.useState({
+            name: '',
+            email: '',
+            username: '',
+            password: '',
+        });
     const handleBackButton= ()=>{
         // console.log(data.steps)
         switch(data.steps) {
@@ -42,7 +44,7 @@ const Register = ({navigation}) => {
                 // navigation.goBack(null);
                 return false;
                 break;
-            case 2:
+            default:
                 prev_step();
                 return true;
                 break;
@@ -138,7 +140,7 @@ const Register = ({navigation}) => {
             ...data,
             steps:steps+1
         })
-        // console.log("masuk1")
+        console.log(user.name)
     }
     const prev_step = ()=>{
         const steps = data.steps;
@@ -162,6 +164,50 @@ const Register = ({navigation}) => {
         case 1:
             return (
                 <View style={styles.container}>
+                <View style={styles.textInput}>
+                        <TextInput
+                            placeholder= 'Name'
+                            inputStyle={{ textAlign: 'center' }}
+                            placeholderTextColor={COLORS.black}
+                            inputContainerStyle={styles.inputContainer}
+                            disableFullscreenUI={true}
+                            autoCapitalize = 'none'
+                            onChangeText={(text)=>{setUser({
+                                ...user,
+                                name:text
+                            })}}       
+                        />  
+                        <TextInput
+                            placeholder= 'Email'
+                            inputStyle={{ textAlign: 'center' }}
+                            placeholderTextColor={COLORS.black}
+                            inputContainerStyle={styles.inputContainer}
+                            disableFullscreenUI={true}
+                            autoCapitalize = 'none'           
+                        />  
+         
+                        <TextInput
+                            placeholder="Password"
+                            inputStyle={{ textAlign: 'center' }}
+                            placeholderTextColor={COLORS.black}
+                            inputContainerStyle={styles.inputContainer}
+                            disableFullscreenUI={true}
+                            secureTextEntry={data.secureTextEntry ? true : false}
+                            autoCapitalize="none"
+                        />                   
+                    <View style={styles.button}>
+                        <TouchableOpacity style={styles.Login} onPress={next_step}>
+                            <Text style={styles.textSign}>Next</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+              </View>
+
+            );
+            break;
+        case 2:
+            return (
+                <View style={styles.container}>
                     {/* <Text>step 1 register</Text> */}
                     <View style={styles.buttonRow}>
                         <TouchableOpacity onPress={()=>{step1button('employee')}}
@@ -180,64 +226,14 @@ const Register = ({navigation}) => {
                 </View>
             );
             break;
-        case 2:
+        case 3:
             switch(data.type){
                 case 'employee':
                     return (
-    
                         <View style={styles.container}>
-                          <View style={styles.textInput}>
-                                  <Input 
-                                      placeholder= 'Name'
-                                      inputStyle={{ textAlign: 'center' }}
-                                      placeholderTextColor={COLORS.black}
-                                      inputContainerStyle={styles.inputContainer}
-                                      disableFullscreenUI={true}
-                                      autoCapitalize = 'none'           
-                                  />  
-                                  <Input 
-                                      placeholder= 'Username'
-                                      inputStyle={{ textAlign: 'center' }}
-                                      placeholderTextColor={COLORS.black}
-                                      inputContainerStyle={styles.inputContainer}
-                                      disableFullscreenUI={true}
-                                      autoCapitalize = 'none'           
-                                  />   
-                                  <Input 
-                                      placeholder= 'Email'
-                                      inputStyle={{ textAlign: 'center' }}
-                                      placeholderTextColor={COLORS.black}
-                                      inputContainerStyle={styles.inputContainer}
-                                      disableFullscreenUI={true}
-                                      autoCapitalize = 'none'           
-                                  />  
-                   
-                                  <Input 
-                                      placeholder="Password"
-                                      inputStyle={{ textAlign: 'center' }}
-                                      placeholderTextColor={COLORS.black}
-                                      inputContainerStyle={styles.inputContainer}
-                                      disableFullscreenUI={true}
-                                      secureTextEntry={data.secureTextEntry ? true : false}
-                                      autoCapitalize="none"
-                                  />
-                  
-                                  <Input 
-                                      placeholder= 'Company'
-                                      inputStyle={{ textAlign: 'center' }}
-                                      placeholderTextColor={COLORS.black}
-                                      inputContainerStyle={styles.inputContainer}
-                                      disableFullscreenUI={true}
-                                      autoCapitalize = 'none'           
-                                  />  
-                              
-                              <View style={styles.button}>
-                                  <TouchableOpacity style={styles.Login}>
-                                      <Text style={styles.textSign}>Register</Text>
-                                  </TouchableOpacity>
-                              </View>
-                          </View>
+
                         </View>
+
                       );
                       break;
                     case 'owner':
@@ -256,9 +252,6 @@ const Register = ({navigation}) => {
                         break;
             }
            
-            break;
-    
-        default:
             break;
     }
     
