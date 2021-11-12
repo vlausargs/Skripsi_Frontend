@@ -13,7 +13,8 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-import {Picker} from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { useTheme } from 'react-native-paper';
 // import { Input } from 'react-native-elements';
@@ -39,13 +40,21 @@ const Register = ({navigation}) => {
             password: '',
         });
 
+    const [items, setItems] = useState([{label:'Owner', value:'owner'},{label:'Employee', value:'employee'}]);
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [showCompanyStartWH, setShowCompanyStartWH] = useState(false);
+    const [showCompanyEndWH, setShowCompanyEndWH] = useState(false);
     return (
         <View style={styles.container}>
             <Wizard initialValues={{
                 username: '',
                 email:'',
                 password:'',
-                type:''
+                type:'',
+                companyName: '',
+                companyStartWH: new Date('2021-11-11T01:30'),
+                companyEndWH: new Date('2021-11-11T10:30')
                 }}>
                 <Wizard.Step >
                     {({onChangeValue,values})=>
@@ -109,7 +118,31 @@ const Register = ({navigation}) => {
                                 >
                                     Register As
                                 </Text> 
-                                <Picker
+                                <DropDownPicker
+                                open={open}
+                                value={value}
+                                setOpen={setOpen}
+                                setValue={setValue}
+                                setItems={setItems}
+                                items={items}
+                                onChangeValue={(value) => {
+                                    onChangeValue('type',value)
+                                  }}
+                                  style={{
+                                    
+                                    marginVertical:SIZES.padding,
+                                    // marginHorizontal:SIZES.padding,
+                                    textAlign: 'center',
+                                    alignSelf: 'stretch',
+                                    backgroundColor: COLORS.lightGray,
+                                  
+                                    
+                                    }}
+                                textStyle={{
+                                    ...FONTS.body3,
+                                }}
+                                />
+                                {/* <Picker
                                     selectedValue={values.type}
                                     itemStyle={{
                                         ...FONTS.body3,
@@ -125,33 +158,126 @@ const Register = ({navigation}) => {
                                     <Picker.Item label="PLEASE CHOOSE ONE" color="blue" value="" style={styles.inputContainer}/>
                                     <Picker.Item label="Owner" color="blue" value="owner" style={styles.inputContainer}/>
                                     <Picker.Item label="Employee" color="blue" value="employee" style={styles.inputContainer} />
-                                </Picker>
+                                </Picker> */}
                             </View>
                         )
                     }
                 </Wizard.Step>
                 <Wizard.Step>
-                   
-                    {({onChangeValue,values})=>
+                    {({onChangeValue,values})=>values.type == 'employee'?(    
+                            <View style={{flex:1,alignItems:'stretch',justifyContent:'center',}}>
+                                    <Text style={{
+                                            ...FONTS.body3,
+                                            // marginVertical:SIZES.padding,
+                                            marginHorizontal:SIZES.padding,
+                                            textAlign: 'center',
+                                            alignSelf: 'stretch',
+                                        }}
+                                    >
+                                        Select Company
+                                    </Text> 
+                                    <TextInput
+                                        placeholder= 'Company'
+                                        style={styles.inputContainer}
+                                        onChangeText={text=> onChangeValue('name',text)}  
+                                        value={values.name}
+                                    />
+                            </View>
+                        ):
                         (
                             <View style={{flex:1,alignItems:'stretch',justifyContent:'center',}}>
-                                <View style={styles.buttonRow}>
-                                    <TouchableOpacity onPress={()=>{onChangeValue('type','employee')}}
-                                        style={styles.buttons}>
-                                            <Text style={{...FONTS.h3,fontWeight: 'bold' ,textAlign:'center', color: COLORS.white}}>
-                                                Employee
-                                            </Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={()=>{onChangeValue('type','owner')}}
-                                        style={styles.buttons}>
-                                            <Text style={{...FONTS.h3,fontWeight: 'bold' ,textAlign:'center', color: COLORS.white}}>
-                                                Owner
-                                            </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        )
-                    }
+                            <Text style={{
+                                    ...FONTS.body3,
+                                    // marginVertical:SIZES.padding,
+                                    marginHorizontal:SIZES.padding,
+                                    textAlign: 'center',
+                                    alignSelf: 'stretch',
+                                }}
+                            >
+                                Company Name
+                            </Text> 
+                            <TextInput
+                                placeholder= 'Company Name'
+                                style={styles.inputContainer}
+                                onChangeText={text=> onChangeValue('companyName',text)}  
+                                value={values.companyName}
+                            />
+                            <Text style={{
+                                    ...FONTS.body3,
+                                    // marginVertical:SIZES.padding,
+                                    marginHorizontal:SIZES.padding,
+                                    textAlign: 'center',
+                                    alignSelf: 'stretch',
+                                }}
+                            >
+                                Start Working Hour
+                            </Text>
+                            <TouchableOpacity 
+                                style={styles.inputContainer}
+                                onPress={
+                                    ()=>{
+                                        setShowCompanyStartWH(true);
+                                    }}
+                            >
+                                <Text
+                                style={styles.inputContainer}
+                                >{values.companyStartWH.toLocaleTimeString()}</Text>
+                            </TouchableOpacity>
+                  
+                            {showCompanyStartWH && (<DateTimePicker
+                            testID="dateTimePicker"
+                            value={values.companyStartWH}
+                            mode="time"
+                            is24Hour={true}
+                            display="default"
+                            onChange={
+                                (event, selectedDate) => {
+                                    const currentDate = selectedDate || values.companyStartWH;
+                                    // setShow(Platform.OS === 'ios');
+                                    onChangeValue('companyStartWH',currentDate);
+                                    setShowCompanyStartWH(false);
+                                  }
+                                }
+                            />) }
+                            <Text style={{
+                                    ...FONTS.body3,
+                                    // marginVertical:SIZES.padding,
+                                    marginHorizontal:SIZES.padding,
+                                    textAlign: 'center',
+                                    alignSelf: 'stretch',
+                                }}
+                            >
+                                End Working Hour
+                            </Text>
+                            <TouchableOpacity 
+                                style={styles.inputContainer}
+                                onPress={
+                                    ()=>{
+                                        setShowCompanyEndWH(true);
+                                    }}
+                            >
+                                <Text
+                                style={styles.inputContainer}
+                                >{values.companyEndWH.toLocaleTimeString()}</Text>
+                            </TouchableOpacity>
+                  
+                            {showCompanyEndWH && (<DateTimePicker
+                            testID="dateTimePicker"
+                            value={values.companyEndWH}
+                            mode="time"
+                            is24Hour={true}
+                            display="default"
+                            onChange={
+                                (event, selectedDate) => {
+                                    const currentDate = selectedDate || values.companyEndWH;
+                                    // setShow(Platform.OS === 'ios');
+                                    onChangeValue('companyEndWH',currentDate);
+                                    setShowCompanyEndWH(false);
+                                  }
+                                }
+                            />) }
+                    </View>
+                    )}
                 </Wizard.Step>
                 <Wizard.Step>
                     {()=>(

@@ -12,6 +12,8 @@ target 'Skripsi_Frontend' do
     :hermes_enabled => false
   )
 
+  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
+
   target 'Skripsi_FrontendTests' do
     inherit! :complete
     # Pods for testing
