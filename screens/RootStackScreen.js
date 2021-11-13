@@ -11,6 +11,8 @@ import Login from './Login'
 import Register from './Register';
 import Tabs from '../navigation/tabs';
 import { Attandance, Chat, LeavePermissions, Newsfeed, Profile } from '.';
+import SelectMap from './SelectMap';
+import Maps from './MapView';
 
 export const mapDispatchToProps = (dispatch) => ({
     actionsAuth: bindActionCreators(authAction, dispatch)
@@ -29,6 +31,8 @@ const RootStackScreen = ({navigation}) => (
                 <RootStack.Screen name="Newsfeed" component={Newsfeed} />
                 <RootStack.Screen name="Attandance" component={Attandance} />
                 <RootStack.Screen name="Profile" component={Profile} />
+                <RootStack.Screen name="SelectMap" component={SelectMap} />
+                <RootStack.Screen name="MapView" component={Maps} />
     </RootStack.Navigator>
     
     

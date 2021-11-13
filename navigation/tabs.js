@@ -11,6 +11,7 @@ import Svg, { Path } from 'react-native-svg';
 import { Chat, Home, Newsfeed, Profile } from "../screens"
 
 import { COLORS, icons } from "../constants"
+import SelectMap from '../screens/SelectMap';
 
 const Tab = createBottomTabNavigator();
 const TabBarCustomButton = ({ accessibilityState, children, onPress }) => {
@@ -159,6 +160,28 @@ const Tabs = () => {
             <Tab.Screen
                 name="User"
                 component={Profile}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <Image
+                            source={icons.profile}
+                            resizeMode="contain"
+                            style={{
+                                width: 25,
+                                height: 25,
+                                tintColor: focused ? COLORS.primary : COLORS.secondary
+                            }}
+                        />
+                    ),
+                    tabBarButton: (props) => (
+                        <TabBarCustomButton
+                            {...props}
+                        />
+                    )
+                }}
+            />
+            <Tab.Screen
+                name="SelectMap"
+                component={SelectMap}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
