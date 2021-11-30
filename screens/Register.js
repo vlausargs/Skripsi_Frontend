@@ -15,7 +15,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import BiometricPopup from "./components/Auth//Biometric/BiometricPopup"
 import { useTheme } from 'react-native-paper';
 // import { Input } from 'react-native-elements';
 import { COLORS, SIZES, FONTS, icons, images } from "../constants";
@@ -281,7 +281,10 @@ const Register = ({navigation}) => {
                 </Wizard.Step>
                 <Wizard.Step>
                     {()=>(
-                        <Text>HELLO WORLD</Text>
+                        <View>
+                            <Text>HELLO WORLD </Text>
+                            <BiometricPopup onAuthenticate={()=>{console.log("sukses")}}></BiometricPopup> 
+                        </View>
                     )}
                 </Wizard.Step>
             </Wizard>
