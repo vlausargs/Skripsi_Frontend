@@ -62,6 +62,7 @@ class Login extends React.Component {
     onFinish(token) {
         //this.props.actionsAuth.getUser(this.props.token);
         if (token){
+            
             this.props.navigation.navigate("Home")
            /* console.log(this.props.users.role)
             if(this.props.users.role === 1){

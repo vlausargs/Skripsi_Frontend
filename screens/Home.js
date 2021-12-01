@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-community/async-storage'
 import { 
     SafeAreaView,
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
-    FlatList
+    FlatList,
 } from "react-native";
 
 import { COLORS,SIZES,FONTS } from "../constants";
@@ -27,28 +28,27 @@ const styles= StyleSheet.create({
 })
 
 
-const Home = ()=>{
+const Home = ({navigation})=>{
     const [ClockState, setClockState] = useState();
     const [DateState, setDateState] = useState();
     const [isLoading, setLoading] = useState(true);
-    const [UserInfo, setData] = useState([]);
-
-    useEffect((token) => {
-        fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/getUserInfo',{
+    const [UserInfo, setData] = useState(null);
+    const [token, setToken] = useState([]);
+    
+    React.useEffect(()=>{
+        fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/user/getUser',{
             method: 'GET',
             headers:{
-                'Authorization': "Bearer " + token,
+                'Authorization': 'Bearer' + AsyncStorage.getItem('token'),
                 'Accept': 'application/json'
             }
         })
-          .then((response) => response.json())
-          .then((json) => setData(json.user_info.role))
+          .then((response) => await response.json())
+          .then((json) => setData(json.user))
           .catch((error) => console.error(error))
           .finally(() => setLoading(false));
-      }, []);
-   
-    React.useEffect(()=>{
-        let isMounted = true; 
+          register()
+        let isMounted = true;
         setInterval(()=>{
             if(isMounted){
                 const date = new Date();
@@ -75,6 +75,7 @@ const Home = ()=>{
     },[]);
 
     function register(){
+        console.log('cek user',UserInfo)
         if(UserInfo === 1){
             navigation.navigate('RegisterCompany')
         }
@@ -280,7 +281,6 @@ const Home = ()=>{
     }
     return (
       <SafeAreaView style={styles.container}>
-          {register()}
           <View style={{...styles.shadow,backgroundColor:COLORS.white, paddingBottom:SIZES.padding}}>
             {renderHeader()}
             {renderTodayDateTime() }

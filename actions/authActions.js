@@ -1,5 +1,5 @@
-import { Alert, AsyncStorage } from 'react-native';
-//import { AsyncStorage } from '@react-native-community/async-storage'
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage'
 var stringify = require('qs-stringify');
 
 import * as t from './actionTypes/authTypes';
