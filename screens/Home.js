@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
     SafeAreaView,
     View,
@@ -30,6 +30,22 @@ const styles= StyleSheet.create({
 const Home = ()=>{
     const [ClockState, setClockState] = useState();
     const [DateState, setDateState] = useState();
+    const [isLoading, setLoading] = useState(true);
+    const [UserInfo, setData] = useState([]);
+
+    useEffect((token) => {
+        fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/getUserInfo',{
+            method: 'GET',
+            headers:{
+                'Authorization': "Bearer " + token,
+                'Accept': 'application/json'
+            }
+        })
+          .then((response) => response.json())
+          .then((json) => setData(json.user_info.role))
+          .catch((error) => console.error(error))
+          .finally(() => setLoading(false));
+      }, []);
    
     React.useEffect(()=>{
         let isMounted = true; 
@@ -57,6 +73,15 @@ const Home = ()=>{
         })
         return () => { isMounted = false }
     },[]);
+
+    function register(){
+        if(UserInfo === 1){
+            navigation.navigate('RegisterCompany')
+        }
+       else if( UserInfo === 2){
+        navigation.navigate('RegisterEmployee')
+        }
+    }
    
     function renderHeader() {
         return (
@@ -255,6 +280,7 @@ const Home = ()=>{
     }
     return (
       <SafeAreaView style={styles.container}>
+          {register()}
           <View style={{...styles.shadow,backgroundColor:COLORS.white, paddingBottom:SIZES.padding}}>
             {renderHeader()}
             {renderTodayDateTime() }

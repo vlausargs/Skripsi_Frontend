@@ -20,7 +20,8 @@ import { NavigationContainer } from '@react-navigation/native';
 
 
 export const mapStateToProps = state => ({
-    token: state.authReducer.token
+    token: state.authReducer.token,
+    users: state.authReducer.users
 });
   
 //Maps actions from authActions to Login's props
@@ -42,66 +43,6 @@ class Login extends React.Component {
       this.onLogin = this.onLogin.bind(this);
       this.onFinish = this.onFinish.bind(this);
     }
-     
-
-    /*
-    const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
-        });
-    }
-
-    const handleValidUser = (val) => {
-        if( val.trim().length >= 4 ) {
-            setData({
-                ...data,
-                isValidUser: true
-            });
-        } else {
-            setData({
-                ...data,
-                isValidUser: false
-            });
-        }
-    }
-
-  
-
-     textInputChange = (val) => {
-        if( val.trim().length >= 4 ) {
-            setData({
-                ...data,
-                username: val,
-                check_textInputChange: true,
-                isValidUser: true
-            });
-        } else {
-            setData({
-                ...data,
-                username: val,
-                check_textInputChange: false,
-                isValidUser: false
-            });
-        }
-    }
-
-     handlePasswordChange = (val) => {
-        if( val.trim().length >= 8 ) {
-            setData({
-                ...data,
-                password: val,
-                isValidPassword: true
-            });
-        } else {
-            setData({
-                ...data,
-                password: val,
-                isValidPassword: false
-            });
-        }
-    }
-    */
 
     onLogin (email, password) {
         if ( this.state.email.length === 0 || this.state.password.length === 0 ) {
@@ -119,14 +60,20 @@ class Login extends React.Component {
     }
 
     onFinish(token) {
-        console.log(this.props)
+        //this.props.actionsAuth.getUser(this.props.token);
         if (token){
-            this.props.navigation.navigate("Home");
+            this.props.navigation.navigate("Home")
+           /* console.log(this.props.users.role)
+            if(this.props.users.role === 1){
+                this.props.navigation.navigate("RegisterCompany");
+            }
+            else if(this.props.users.role === 2){
+                this.props.navigation.navigate("RegisterCompany");
+            }*/
+
         }
     }
 
-
-        
 render(){
     return (
         <KeyboardAvoidingView style={styles.container}>
@@ -144,7 +91,6 @@ render(){
                       onChangeText={(val) => this.setState({ email: val })} 
                       value={this.state.email}     
                   />   
-   
                   <Input 
                       placeholder="Password"
                       inputStyle={{ textAlign: 'center' }}

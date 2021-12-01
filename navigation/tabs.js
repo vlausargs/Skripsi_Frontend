@@ -12,6 +12,7 @@ import { Chat, Home, Newsfeed, Profile } from "../screens"
 
 import { COLORS, icons } from "../constants"
 import SelectMap from '../screens/SelectMap';
+import RegisterCompany from '../screens/RegisterCompany';
 
 const Tab = createBottomTabNavigator();
 const TabBarCustomButton = ({ accessibilityState, children, onPress }) => {
@@ -135,8 +136,8 @@ const Tabs = () => {
             />
 
             <Tab.Screen
-                name="Chat"
-                component={Chat}
+                name="RegisterCompany"
+                component={RegisterCompany}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image

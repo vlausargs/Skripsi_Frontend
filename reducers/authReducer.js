@@ -5,6 +5,10 @@ let initialState = {
     isLoggedIn: false,
 
     token: null,
+
+    users: null,
+    company:[],
+    position:[]
 };
 
 /**
@@ -18,6 +22,18 @@ export default function authReducer(state = initialState, action) {
             return Object.assign({}, state, { isLoggedIn: true, token: action.token });
         case t.LOGGED_OUT:
             return Object.assign({}, state, initialState);
+        case t.RECEIVE_USER:
+            return Object.assign({}, state, { userReceived: true, users: action.users });
+        case t.EMPTY_USER:
+            return Object.assign({}, state, { userReceived: false, users:[] });
+        case t.RECEIVE_COMPANY:
+            return Object.assign({}, state, { companyReceived: true, company: action.company });
+        case t.EMPTY_COMPANY:
+            return Object.assign({}, state, { companyReceived: false, company:[] });
+        case t.RECEIVE_POSITION:
+            return Object.assign({}, state, { positionReceived: true, position: action.position });
+        case t.EMPTY_POSITION:
+            return Object.assign({}, state, { positionReceived: false, position:[] });
         default:
             return state;
     }

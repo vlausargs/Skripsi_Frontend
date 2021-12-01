@@ -1,6 +1,6 @@
 import { Alert, AsyncStorage } from 'react-native';
 //import { AsyncStorage } from '@react-native-community/async-storage'
-// var stringify = require('qs-stringify');
+var stringify = require('qs-stringify');
 
 import * as t from './actionTypes/authTypes';
 import { fetchAPI } from '../utils/fetch';
@@ -37,6 +37,122 @@ export function login(email, password, finishCB) {
                 else
                     Alert.alert(errors[error].name, errors[error].message);
                 finishCB(null);
+            })
+    }
+}
+
+export function register(name, email, password, password_confirmation, role, resultCB) {
+
+    var endpoint = "/api/register";
+    
+    let header = {
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+
+    let body = {
+        "name": name,
+        "email": email,
+        "password": password,
+        "password_confirmation": password_confirmation,
+        "role": role
+
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
+            })
+    }
+}
+
+export function getUserInfo (token) {
+    var endpoint = "/api/user/getUser";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_USER, users: { id: json.data.user.id, name: json.user.name, email: json.user.email, 
+                    role: json.user.role
+                } });
+            })
+            .catch((error) => {
+                    dispatch({ type: t.EMPTY_USER });     
+            })
+    }
+}
+
+export function getCompanyList (token) {
+    var endpoint = "/api/company/getCompanyList";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_COMPANY, company: json.datas });
+            })
+            .catch((error) => {
+                    dispatch({ type: t.EMPTY_COMPANY });     
+            })
+    }
+}
+
+export function registerCompany(company, country, address, start_working_hour, end_working_hour, resultCB) {
+
+    var endpoint = "/api/register";
+    
+    let header = {
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+
+    let body = {
+        "company": company,
+        "country": country,
+        "address": address,
+        "start_working_hour": start_working_hour,
+        "end_working_hour": end_working_hour
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
+            })
+    }
+}
+
+export function getPositionList (token) {
+    var endpoint = "/api/position/getPositionList";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_POSITION, position: json.position });
+            })
+            .catch((error) => {
+                    dispatch({ type: t.EMPTY_POSITION });     
             })
     }
 }

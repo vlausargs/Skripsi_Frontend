@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     getLocation(){
       var coord = JSON.stringify(this.state.marker)
       this.props.navigation.navigate('SelectMap', {text:coord})
+      console.log(coord)
       alert(coord)
     }
 
