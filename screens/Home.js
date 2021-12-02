@@ -34,23 +34,31 @@ const Home = ({navigation})=>{
     const [isLoading, setLoading] = useState(true);
     const [UserInfo, setData] = useState(null);
     const [token, setToken] = useState([]);
-    
+
+    async function  _getTokenValue(){
+        var value = await AsyncStorage.getItem('token')
+        return value
+    }
     React.useEffect(()=>{
-        fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/user/getUser',{
-            method: 'GET',
-            headers:{
-                'Authorization': 'Bearer' + AsyncStorage.getItem('token'),
-                'Accept': 'application/json'
-            }
+        _getTokenValue().then(res => {
+            console.log('Bearer ' + res)
+            fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/user/getUser',{
+                method: 'GET',
+                headers:{
+                    'Authorization': 'Bearer ' + res,
+                    'Accept': 'application/json'
+                }
+            })
+              .then((response) => response.json())
+              .then((json) => {
+                register(json.user)
+                setData(json.user)
+                
+              })
+              .catch((error) => console.error(error))
+              .finally(() => setLoading(false));
         })
-          .then((response) => await response.json())
-          .then((json) => {
-            register(json.user)
-            setData(json.user)
-            
-          })
-          .catch((error) => console.error(error))
-          .finally(() => setLoading(false));
+       
           
         let isMounted = true;
         setInterval(()=>{
