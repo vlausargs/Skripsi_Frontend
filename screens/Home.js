@@ -44,10 +44,14 @@ const Home = ({navigation})=>{
             }
         })
           .then((response) => await response.json())
-          .then((json) => setData(json.user))
+          .then((json) => {
+            register(json.user)
+            setData(json.user)
+            
+          })
           .catch((error) => console.error(error))
           .finally(() => setLoading(false));
-          register()
+          
         let isMounted = true;
         setInterval(()=>{
             if(isMounted){
@@ -74,12 +78,12 @@ const Home = ({navigation})=>{
         return () => { isMounted = false }
     },[]);
 
-    function register(){
-        console.log('cek user',UserInfo)
-        if(UserInfo === 1){
+    function register(user){
+        console.log('cek user',user)
+        if(UserInfo.type === 1){
             navigation.navigate('RegisterCompany')
         }
-       else if( UserInfo === 2){
+       else if( UserInfo.type === 2){
         navigation.navigate('RegisterEmployee')
         }
     }
