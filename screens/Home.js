@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import AsyncStorage from '@react-native-community/async-storage'
 import { 
     SafeAreaView,
@@ -7,9 +7,11 @@ import {
     StyleSheet,
     TouchableOpacity,
     FlatList,
+    Alert,
 } from "react-native";
 
 import { COLORS,SIZES,FONTS } from "../constants";
+import { ReactReduxContext } from "react-redux";
 const styles= StyleSheet.create({
     container: {
         flex:1,
@@ -40,12 +42,24 @@ const Home = ({navigation})=>{
         return value
     }
     React.useEffect(()=>{
-        _getTokenValue().then(res => {
-            console.log('Bearer ' + res)
+        _getTokenValue().then(token => {
+            console.log('Bearer ' + token) 
+            // token = null
+            if (!token) {
+                return Alert.alert(
+                    "ERROR!!!",
+                    "TOKEN EXPIRED",
+                    [
+                      { text: "OK", onPress: () => navigation.navigate('Login') }
+                    ]
+                  );
+                
+                
+            } 
             fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/user/getUser',{
                 method: 'GET',
                 headers:{
-                    'Authorization': 'Bearer ' + res,
+                    'Authorization': 'Bearer ' + token,
                     'Accept': 'application/json'
                 }
             })
