@@ -80,10 +80,10 @@ const Home = ({navigation})=>{
 
     function register(user){
         console.log('cek user',user)
-        if(UserInfo.type === 1){
+        if(user.type === 1){
             navigation.navigate('RegisterCompany')
         }
-       else if( UserInfo.type === 2){
+       else if( user.type === 2){
         navigation.navigate('RegisterEmployee')
         }
     }
