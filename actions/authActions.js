@@ -6,6 +6,21 @@ import * as t from './actionTypes/authTypes';
 import { fetchAPI } from '../utils/fetch';
 import errors from '../json/errors.json';
 
+
+
+export function checkToken(finishCB) {
+    return dispatch => {
+       return  AsyncStorage.getItem("token").then((value) => {
+           if (!value) {
+               finishCB(null);
+
+           }else{
+               dispatch({ type: t.LOGGED_IN, token: value});
+               finishCB(value);
+           }
+        });
+    }
+}
 export function login(email, password, finishCB) {
 
     var endpoint = "/api/login";

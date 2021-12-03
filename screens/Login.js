@@ -17,7 +17,7 @@ import { bindActionCreators } from 'redux';
 import { Input } from 'react-native-elements';
 import { COLORS, FONTS } from '../constants';
 import { NavigationContainer } from '@react-navigation/native';
-
+import BiometricPopup from "./components/Auth//Biometric/BiometricPopup"
 
 export const mapStateToProps = state => ({
     token: state.authReducer.token,
@@ -42,8 +42,11 @@ class Login extends React.Component {
   
       this.onLogin = this.onLogin.bind(this);
       this.onFinish = this.onFinish.bind(this);
+      
     }
-
+    componentDidMount = () =>{
+        this.props.actionsAuth.checkToken((token) => this.onFinish(token));
+    }
     onLogin (email, password) {
         if ( this.state.email.length === 0 || this.state.password.length === 0 ) {
             Alert.alert('Wrong Input!', 'email or password field cannot be empty.', [
