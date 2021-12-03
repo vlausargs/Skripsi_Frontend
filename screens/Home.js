@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
+import AsyncStorage from '@react-native-community/async-storage'
 import { 
     SafeAreaView,
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
-    FlatList
+    FlatList,
+    Alert,
 } from "react-native";
 
 import { COLORS,SIZES,FONTS } from "../constants";
+import { ReactReduxContext } from "react-redux";
 const styles= StyleSheet.create({
     container: {
         flex:1,
@@ -27,12 +30,51 @@ const styles= StyleSheet.create({
 })
 
 
-const Home = ()=>{
+const Home = ({navigation})=>{
     const [ClockState, setClockState] = useState();
     const [DateState, setDateState] = useState();
-   
+    const [isLoading, setLoading] = useState(true);
+    const [UserInfo, setData] = useState(null);
+    const [token, setToken] = useState([]);
+
+    async function  _getTokenValue(){
+        var value = await AsyncStorage.getItem('token')
+        return value
+    }
     React.useEffect(()=>{
-        let isMounted = true; 
+        _getTokenValue().then(token => {
+            console.log('Bearer ' + token) 
+            // token = null
+            if (!token) {
+                return Alert.alert(
+                    "ERROR!!!",
+                    "TOKEN EXPIRED",
+                    [
+                      { text: "OK", onPress: () => navigation.navigate('Login') }
+                    ]
+                  );
+                
+                
+            } 
+            fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/user/getUser',{
+                method: 'GET',
+                headers:{
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json'
+                }
+            })
+              .then((response) => response.json())
+              .then((json) => {
+                register(json.user)
+                setData(json.user)
+                
+              })
+              .catch((error) => console.error(error))
+              .finally(() => setLoading(false));
+        })
+       
+          
+        let isMounted = true;
         setInterval(()=>{
             if(isMounted){
                 const date = new Date();
@@ -57,6 +99,16 @@ const Home = ()=>{
         })
         return () => { isMounted = false }
     },[]);
+
+    function register(user){
+        console.log('cek user',user)
+        if(user.type === 1){
+            navigation.navigate('RegisterCompany')
+        }
+       else if( user.type === 2){
+        navigation.navigate('RegisterEmployee')
+        }
+    }
    
     function renderHeader() {
         return (
