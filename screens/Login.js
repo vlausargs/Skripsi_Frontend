@@ -44,9 +44,10 @@ class Login extends React.Component {
       this.onFinish = this.onFinish.bind(this);
       
     }
-    componentDidMount = () =>{
+   /* componentDidMount = () =>{
         this.props.actionsAuth.checkToken((token) => this.onFinish(token));
     }
+    */
     onLogin (email, password) {
         if ( this.state.email.length === 0 || this.state.password.length === 0 ) {
             Alert.alert('Wrong Input!', 'email or password field cannot be empty.', [

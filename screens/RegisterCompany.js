@@ -49,7 +49,7 @@ class RegisterCompany extends React.Component{
     }
 
       onSubmit(){
-        this.props.actionsAuth.registerCompany(this.state.name, this.state.country, this.state.address, 
+        this.props.actionsAuth.registerCompany(this.props.token, this.state.name, this.state.country, this.state.address, 
             this.state.startH, this.state.endH, (message) => alert(message));
       }
 

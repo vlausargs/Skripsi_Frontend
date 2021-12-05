@@ -96,8 +96,8 @@ export function getUserInfo (token) {
     return dispatch => {
         return fetchAPI(endpoint, 'GET', header)
             .then((json) => {          
-                dispatch({ type: t.RECEIVE_USER, users: { id: json.data.user.id, name: json.user.name, email: json.user.email, 
-                    role: json.user.role
+                dispatch({ type: t.RECEIVE_USER, users: { id: json.user[0].id, name: json.user[0].name, email: json.user[0].email, 
+                    role: json.user[0].role
                 } });
             })
             .catch((error) => {
@@ -125,11 +125,12 @@ export function getCompanyList (token) {
     }
 }
 
-export function registerCompany(company, country, address, start_working_hour, end_working_hour, resultCB) {
+export function registerCompany(token, company, country, address, start_working_hour, end_working_hour, resultCB) {
 
     var endpoint = "/api/register";
     
     let header = {
+        "Authorization": "Bearer " + token,
         "Accept": "application/json",
         'Content-Type': 'application/json' 
     };
@@ -168,6 +169,65 @@ export function getPositionList (token) {
             })
             .catch((error) => {
                     dispatch({ type: t.EMPTY_POSITION });     
+            })
+    }
+}
+
+export function registerEmployee(token, company, position, resultCB) {
+
+    var endpoint = "/api/employee/store";
+    
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+
+    let body = {
+        "company": company,
+        "position": position,
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
+            })
+    }
+}
+
+
+export function sumbitMeeting(token, id, title, date_time, meeting_type, place, description, link, resultCB) {
+
+    var endpoint = "/api/meeting/create";
+    
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json'
+        
+    };
+
+    let body = {
+        "id": id,
+        "title": title,
+        "date_time": date_time,
+        "meeting_type": meeting_type,
+        "place": place,
+        "decription": description,
+        "link": link
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
             })
     }
 }

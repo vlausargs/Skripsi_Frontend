@@ -14,6 +14,8 @@ import { Attandance, Chat, LeavePermissions, Newsfeed, Profile } from '.';
 import SelectMap from './SelectMap';
 import Maps from './MapView';
 import RegisterCompany from './RegisterCompany';
+import Meeting from './Meeting';
+import MeetingForm from './MeetingForm';
 
 export const mapDispatchToProps = (dispatch) => ({
     actionsAuth: bindActionCreators(authAction, dispatch)
@@ -27,6 +29,8 @@ const RootStackScreen = ({navigation}) => (
         <RootStack.Screen name="Login" component={Login}/>
         <RootStack.Screen name="Register" component={Register}/>
         <RootStack.Screen name="RegisterCompany" component={RegisterCompany}/>
+        <RootStack.Screen name="Meeting" component={Meeting}/>
+        <RootStack.Screen name="MeetingForm" component={MeetingForm}/>
                 <RootStack.Screen name="Home" component={Tabs} /> 
                 <RootStack.Screen name="Chat" component={Chat} />
                 <RootStack.Screen name="LeavePermissions" component={LeavePermissions} />

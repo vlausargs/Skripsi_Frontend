@@ -13,6 +13,7 @@ import { Chat, Home, Newsfeed, Profile } from "../screens"
 import { COLORS, icons } from "../constants"
 import SelectMap from '../screens/SelectMap';
 import RegisterCompany from '../screens/RegisterCompany';
+import Meeting from '../screens/Meeting';
 
 const Tab = createBottomTabNavigator();
 const TabBarCustomButton = ({ accessibilityState, children, onPress }) => {
@@ -136,8 +137,8 @@ const Tabs = () => {
             />
 
             <Tab.Screen
-                name="RegisterCompany"
-                component={RegisterCompany}
+                name="Meeting"
+                component={Meeting}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
