@@ -12,7 +12,8 @@ export function login(email, password, finishCB) {
     
     let header = {
         "Accept": "application/json",
-        'Content-Type': 'application/json' 
+        'Content-Type': 'application/json', 
+        'User-Agent' : 'PostmanRuntime/7.26.3'
     };
 
     let body = {
