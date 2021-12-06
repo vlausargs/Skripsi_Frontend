@@ -231,3 +231,23 @@ export function sumbitMeeting(token, id, title, date_time, meeting_type, place, 
             })
     }
 }
+
+export function getMeetingList (token) {
+    var endpoint = "/api/meeting/getMeetingList";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_MEETING, meeting: { id: json.meeting[0].id, title: json.meeting[0].title, 
+                    date_time: json.meeting[0].date_time } });    
+            })
+            .catch((error) => {
+                    dispatch({ type: t.EMPTY_MEETING });    
+            })
+    }
+}

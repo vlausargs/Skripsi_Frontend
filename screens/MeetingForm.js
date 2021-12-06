@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { Input } from 'react-native-elements';
-import { COLORS, FONTS } from '../constants';
+import { COLORS, FONTS, SIZES } from '../constants';
 import { NavigationContainer } from '@react-navigation/native';
 import BiometricPopup from "./components/Auth//Biometric/BiometricPopup"
 import DatePicker from 'react-native-datepicker'
@@ -80,6 +80,21 @@ render(){
                       value={this.state.title}     
                   />   
                   <DatePicker
+                  style={{width:"93%", height:"12%" ,marginVertical: 10}}
+                  customStyles={{
+                    dateInput: {
+                      backgroundColor: COLORS.lightGray,
+                      borderWidth: 0,
+                      alignItems: "flex-start",
+                      alignSelf:'center',
+                    },
+                    placeholderText: {
+                      color: COLORS.black
+                    },
+                    dateText: {
+                      color: COLORS.black
+                    }
+                  }}
                   date={this.state.date_time}
                   mode="date"
                   placeholder="Start Date"
