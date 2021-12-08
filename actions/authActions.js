@@ -117,10 +117,10 @@ export function getCompanyList (token) {
     return dispatch => {
         return fetchAPI(endpoint, 'GET', header)
             .then((json) => {          
-                dispatch({ type: t.RECEIVE_COMPANY, company: json.datas });
+                dispatch({ type: t.RECEIVE_COMPANY, company: json.company });
             })
             .catch((error) => {
-                    dispatch({ type: t.EMPTY_COMPANY });     
+                dispatch({ type: t.EMPTY_COMPANY });     
             })
     }
 }
@@ -243,11 +243,10 @@ export function getMeetingList (token) {
     return dispatch => {
         return fetchAPI(endpoint, 'GET', header)
             .then((json) => {          
-                dispatch({ type: t.RECEIVE_MEETING, meeting: { id: json.meeting[0].id, title: json.meeting[0].title, 
-                    date_time: json.meeting[0].date_time } });    
+                dispatch({ type: t.RECEIVE_MEETING, meeting: json.meeting });
             })
             .catch((error) => {
-                    dispatch({ type: t.EMPTY_MEETING });    
+                dispatch({ type: t.EMPTY_MEETING });    
             })
     }
 }

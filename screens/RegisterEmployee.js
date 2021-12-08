@@ -24,7 +24,8 @@ import { bindActionCreators } from 'redux';
 
 export const mapStateToProps = state => ({
     token: state.authReducer.token,
-    users: state.authReducer.users
+    users: state.authReducer.users,
+    position: state.authReducer.position,
 });
   
 //Maps actions from authActions to Login's props
@@ -37,16 +38,15 @@ class RegisterEmployee extends React.Component{
     constructor() {
         super();
         this.state = {
-          name: "",
-          country: "",
-          address: "",
-          startH:"",
-          endH:"",
-          secureText: true,
-
+            name:'',
+            position:''
         }
         this.onSubmit = this.onSubmit.bind(this);
 
+    }
+    
+    componentDidMount(){
+        this.props.actionsAuth.getPositionList(this.props.token)
     }
 
       onSubmit(){
@@ -70,7 +70,7 @@ class RegisterEmployee extends React.Component{
                         onValueChange={(itemValue, itemIndex) =>
                             this.setState({ name: itemValue })
                         }>
-                        <Picker.Item label="Company" value="0" />
+                        {this.props.company.map((item, key) => <Picker.Item label={item.name} value={item.id} key={item.id} />)}
                         </Picker>   
                         <Picker
                         selectedValue={this.state.position}
@@ -84,7 +84,7 @@ class RegisterEmployee extends React.Component{
                         onValueChange={(itemValue, itemIndex) =>
                             this.setState({ name: itemValue })
                         }>
-                        <Picker.Item label="Position" value="0" />
+                        {this.props.position.map((item, key) => <Picker.Item label={item.name} value={item.level} key={item.id} />)}
                         </Picker> 
                        
                   <View style={styles.button}>

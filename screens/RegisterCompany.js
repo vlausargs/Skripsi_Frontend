@@ -8,6 +8,7 @@ import {
     StyleSheet ,
     StatusBar,
     Alert,
+    Button
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
@@ -24,7 +25,8 @@ import { bindActionCreators } from 'redux';
 
 export const mapStateToProps = state => ({
     token: state.authReducer.token,
-    users: state.authReducer.users
+    users: state.authReducer.users,
+    company: state.authReducer.company,
 });
   
 //Maps actions from authActions to Login's props
@@ -48,6 +50,10 @@ class RegisterCompany extends React.Component{
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    componentDidMount(){
+        this.props.actionsAuth.getCompanyList(this.props.token)
+        console.log(this.props.company,'cek company')
+    }
       onSubmit(){
         this.props.actionsAuth.registerCompany(this.props.token, this.state.name, this.state.country, this.state.address, 
             this.state.startH, this.state.endH, (message) => alert(message));
@@ -69,7 +75,7 @@ class RegisterCompany extends React.Component{
                         onValueChange={(itemValue, itemIndex) =>
                             this.setState({ name: itemValue })
                         }>
-                        <Picker.Item label="Company" value="0" />
+                        {this.props.company.map((item, key) => <Picker.Item label={item.name} value={item.id} key={item.id} />)}
                         </Picker>   
                       <Input 
                           placeholder= 'Country'
@@ -112,11 +118,6 @@ class RegisterCompany extends React.Component{
                           onChangeText={(val) => this.setState({ endH : val })}
                           value={this.state.endH}
                       /> 
-                      <DateTimePicker
-                        value={new Date()}
-                        mode={"time"}
-                        display="default"
-                        />
                        
                   <View style={styles.button}>
                       <TouchableOpacity style={styles.Login} onPress={this.onSubmit}>

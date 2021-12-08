@@ -36,10 +36,41 @@ class Meeting extends Component{
         this.mounted = true;
         this.props.actionsAuth.getUserInfo(this.props.token)
         this.props.actionsAuth.getMeetingList(this.props.token)
-        console.log(this.props.meeting)
+        console.log(this.props.meeting,'meeting')
+    }
+
+    renderMeeting(){
+        let panels=[]
+        Object.keys(this.props.meeting).map((key, index) =>{
+            panels.push(
+                <View key={index} style={styles.itemContainer}>
+                    <TouchableOpacity> 
+                        <Text>{this.props.meeting[key].date_time}</Text>
+                        <Text>{this.props.meeting[key].title}</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }
+
+    renderItems(){
+        let items =[];
+        this.props.meeting.map((key, index) => {
+            items[this.props.meeting[key].date_time] = {
+                name: this.props.meeting[key].title
+        };
+    });
     }
 
     render(){
+        let markedDay = {};
+        this.props.meeting.map((item) => {
+            markedDay[item.date_time] = {
+                selected: true,
+                marked: true,
+                selectedColor: "purple",
+        };
+    });
         return (
             <View style={styles.container}>
                 {this.props.users.role === 1 ? <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MeetingForm')}>                   
@@ -68,6 +99,7 @@ class Meeting extends Component{
                     '2021-12-08': {disabled: true},
 
                   }}/>
+
             </View>
         )
     }
