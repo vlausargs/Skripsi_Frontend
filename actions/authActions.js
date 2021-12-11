@@ -125,7 +125,7 @@ export function getCompanyList (token) {
     }
 }
 
-export function registerCompany(token, company, country, address, start_working_hour, end_working_hour, resultCB) {
+export function registerCompany(token, company, address, start_working_hour, end_working_hour, resultCB) {
 
     var endpoint = "/api/register";
     
@@ -137,7 +137,6 @@ export function registerCompany(token, company, country, address, start_working_
 
     let body = {
         "company": company,
-        "country": country,
         "address": address,
         "start_working_hour": start_working_hour,
         "end_working_hour": end_working_hour
@@ -247,6 +246,24 @@ export function getMeetingList (token) {
             })
             .catch((error) => {
                 dispatch({ type: t.EMPTY_MEETING });    
+            })
+    }
+}
+export function getMeetingType (token) {
+    var endpoint = "/api/meetingType/getMeetingType";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_MEETINGTYPE, meetingType: json.meeting_type });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_MEETINGTYPE });    
             })
     }
 }

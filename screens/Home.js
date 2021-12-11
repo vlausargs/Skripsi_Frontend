@@ -102,10 +102,10 @@ const Home = ({navigation})=>{
 
     function register(user){
         console.log('cek user',user)
-        if(user[0].role === 1){
+        if(user.role === 1){
             navigation.navigate('RegisterCompany')
         }
-       else if( user[0].role === 2){
+       else if( user.role === 2){
         navigation.navigate('RegisterEmployee')
         }
     }
