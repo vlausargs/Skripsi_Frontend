@@ -250,3 +250,30 @@ export function getMeetingList (token) {
             })
     }
 }
+
+export function attendaceCreate(token, status, lati,long, resultCB) {
+
+    var endpoint = "/api/attendance/create";
+    
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+
+    let body = {
+        "status": status,
+        "lang": lati,
+        "long": long
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
+            })
+    }
+}

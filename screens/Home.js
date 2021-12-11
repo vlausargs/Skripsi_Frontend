@@ -12,6 +12,8 @@ import {
 
 import { COLORS,SIZES,FONTS } from "../constants";
 import { ReactReduxContext } from "react-redux";
+import Geolocation from 'react-native-geolocation-service';
+import { distance_calc } from '../utils/distance_calc';
 const styles= StyleSheet.create({
     container: {
         flex:1,
@@ -31,49 +33,72 @@ const styles= StyleSheet.create({
 
 
 const Home = ({navigation})=>{
+    const [isInitData, setisInitData] = useState(true);
     const [ClockState, setClockState] = useState();
     const [DateState, setDateState] = useState();
     const [isLoading, setLoading] = useState(true);
-    const [UserInfo, setData] = useState(null);
-    const [token, setToken] = useState([]);
 
-    async function  _getTokenValue(){
-        var value = await AsyncStorage.getItem('token')
-        return value
-    }
+    const [UserInfo, setUser] = useState(null);
+    const [currToken, setToken] = useState([]);
+    const [CurrLocation, setCurrLocation] = useState({
+            latitude: 0,
+            longitude: 0,
+            distance: 0,
+            error: null
+    });
+
+
     React.useEffect(()=>{
-        _getTokenValue().then(token => {
-            console.log('Bearer ' + token) 
-            // token = null
-            if (!token) {
-                return Alert.alert(
-                    "ERROR!!!",
-                    "TOKEN EXPIRED",
-                    [
-                      { text: "OK", onPress: () => navigation.navigate('Login') }
-                    ]
-                  );
-                
-                
-            } 
-            fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/user/getUser',{
+        if(isInitData==true){
+            checkToken();
+            visualizeDummy();
+        }
+    },[isInitData]);
+
+    React.useEffect(()=>{
+        if (isInitData==true && currToken){
+            console.log(currToken);
+            getCurrUser();
+        }
+    },[isInitData,currToken]);
+    React.useEffect(()=>{
+        if (isInitData==true && UserInfo){
+            calculateDistance();
+        }
+
+    },[isInitData,UserInfo]);
+    
+    function calculateDistance(){
+        Geolocation.getCurrentPosition(position => {
+            var dist=distance_calc(position.coords.latitude,position.coords.longitude,position.coords.latitude,position.coords.longitude)
+            setCurrLocation({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                distance: dist,
+                error: null
+            })
+        }, error => setCurrLocation({latitude:null,longitude:null,error: error.message}),
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 2000})
+    }
+    function getCurrUser(){
+        fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/user/getUser',{
                 method: 'GET',
                 headers:{
-                    'Authorization': 'Bearer ' + token,
+                    'Authorization': 'Bearer ' + currToken,
                     'Accept': 'application/json'
                 }
             })
               .then((response) => response.json())
               .then((json) => {
+                console.log(json)
                 register(json.user)
-                setData(json.user)
+                setUser(json.user)
                 
               })
               .catch((error) => console.error(error))
               .finally(() => setLoading(false));
-        })
-       
-          
+    }
+    function visualizeDummy(){
         let isMounted = true;
         setInterval(()=>{
             if(isMounted){
@@ -98,14 +123,35 @@ const Home = ({navigation})=>{
             } 
         })
         return () => { isMounted = false }
-    },[]);
-
+    }
+    async function  _getTokenValue(){
+        var value = await AsyncStorage.getItem('token')
+        return value
+    }
+    function checkToken(){
+        _getTokenValue().then(token => {
+            console.log('Bearer ' + token) 
+            // token = null
+            if (!token) {
+                return Alert.alert(
+                    "ERROR!!!",
+                    "TOKEN EXPIRED",
+                    [
+                      { text: "OK", onPress: () => navigation.navigate('Login') }
+                    ]
+                  );
+                
+                
+            }
+            setToken(token)
+        })
+    }
     function register(user){
         console.log('cek user',user)
-        if(user[0].role === 1){
+        if(user.role === 1){
             navigation.navigate('RegisterCompany')
         }
-       else if( user[0].role === 2){
+       else if( user.role === 2){
         navigation.navigate('RegisterEmployee')
         }
     }
@@ -151,10 +197,10 @@ const Home = ({navigation})=>{
         return (
             <View style={{ marginTop:30}}>
                 <Text style={{...FONTS.h3,textAlign:'center'}}>
-                    Valos
+                    nama
                 </Text>
                 <Text style={{...FONTS.h3,textAlign:'center'}}>
-                    Hacker - Google Indonesia
+                    jabatan - tempat kerja
                 </Text>
             </View>
         )
@@ -174,7 +220,7 @@ const Home = ({navigation})=>{
                 </View>
                 <View style={{marginVertical:5}}> 
                     <Text style={{...FONTS.body,textAlign:'center'}}>
-                        10 M  (within range)
+                        {CurrLocation.distance} M  (within range)
                     </Text>
                 </View>
                 <View style={{marginVertical:5}}> 
