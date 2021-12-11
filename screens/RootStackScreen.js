@@ -14,7 +14,6 @@ import { Attandance, Chat, LeavePermissions, Newsfeed, Profile } from '.';
 import SelectMap from './SelectMap';
 import Maps from './MapView';
 import RegisterCompany from './RegisterCompany';
-import RegisterEmployee from './RegisterEmployee';
 import Meeting from './Meeting';
 import MeetingForm from './MeetingForm';
 import RegisterEmployee from './RegisterEmployee';
