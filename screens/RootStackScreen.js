@@ -17,6 +17,7 @@ import RegisterCompany from './RegisterCompany';
 import RegisterEmployee from './RegisterEmployee';
 import Meeting from './Meeting';
 import MeetingForm from './MeetingForm';
+import RegisterEmployee from './RegisterEmployee';
 
 export const mapDispatchToProps = (dispatch) => ({
     actionsAuth: bindActionCreators(authAction, dispatch)

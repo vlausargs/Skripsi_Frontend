@@ -36,12 +36,12 @@ export const mapDispatchToProps = (dispatch) => ({
 
 
 class RegisterCompany extends React.Component{
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
           name: "",
-          country: "",
-          address: "",
+          lat1: this.props.lat1,
+          long1: this.props.long1,
           startH:"",
           endH:"",
           secureText: true,
@@ -55,8 +55,9 @@ class RegisterCompany extends React.Component{
         console.log(this.props.company,'cek company')
     }
       onSubmit(){
-        this.props.actionsAuth.registerCompany(this.props.token, this.state.name, this.state.country, this.state.address, 
+        this.props.actionsAuth.registerCompany(this.props.token, this.state.name, this.state.address, 
             this.state.startH, this.state.endH, (message) => alert(message));
+            console.log('cek lokasi',this.props.lat1, this.props.lat2)
       }
 
     render(){
@@ -77,27 +78,12 @@ class RegisterCompany extends React.Component{
                         }>
                         {this.props.company.map((item, key) => <Picker.Item label={item.name} value={item.id} key={item.id} />)}
                         </Picker>   
-                      <Input 
-                          placeholder= 'Country'
-                          inputStyle={{ textAlign: 'center' }}
-                          placeholderTextColor={COLORS.black}
-                          inputContainerStyle={styles.inputContainer}
-                          disableFullscreenUI={true}
-                          autoCapitalize = 'none'
-                          onChangeText={(val) => this.setState({ country : val })}
-                          value={this.state.country}           
-                      />  
        
-                      <Input 
-                          placeholder="Address"
-                          inputStyle={{ textAlign: 'center' }}
-                          placeholderTextColor={COLORS.black}
-                          inputContainerStyle={styles.inputContainer}
-                          disableFullscreenUI={true}
-                          autoCapitalize="none"
-                          onChangeText={(val) => this.setState({ address : val })}
-                          value={this.state.address}
-                      />
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('MapView')}>
+                            <Text>
+                                Select Address
+                            </Text>  
+                        </TouchableOpacity>  
                       <Input 
                           placeholder="Start Working Hour"
                           inputStyle={{ textAlign: 'center' }}

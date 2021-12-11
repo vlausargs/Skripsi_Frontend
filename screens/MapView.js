@@ -31,13 +31,15 @@ const styles = StyleSheet.create({
   });
 
   export default class Maps extends Component {
-    constructor() {
-      super()
+    constructor(props) {
+      super(props)
       this.state = {
         latitude: 0,
         longitude: 0,
         error: null,
-        marker: null
+        marker: null,
+        lat1:null,
+        long1: null,
       }
 
       this.getLocation = this.getLocation.bind(this);
@@ -56,8 +58,12 @@ const styles = StyleSheet.create({
 
     getLocation(){
       var coord = JSON.stringify(this.state.marker)
-      this.props.navigation.navigate('SelectMap', {text:coord})
+      this.props.navigation.navigate('RegisterCompany', {text:coord})
       console.log(coord)
+      this.setState({
+        lat1:this.state.marker,
+        long1:this.state.marker
+      })
       alert(coord)
     }
 
