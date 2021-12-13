@@ -9,6 +9,7 @@ import { COLORS, SIZES, FONTS, icons } from "../constants";
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import CompanyMarker from "./components/CompanyMarker";
 
 const styles = StyleSheet.create({
     container: {
@@ -29,13 +30,20 @@ const styles = StyleSheet.create({
         height: 30
     },
   });
+  const oneDegreeOfLongitudeInMeters = 111.32 * 1000;
+  const circumference = (40075 / 360) * 1000;
+  const distance  = 10000
+  const angularDistance = distance/circumference
 
   export default class Maps extends Component {
+
     constructor(props) {
       super(props)
       this.state = {
         latitude: 0,
         longitude: 0,
+        latitudeDelta: 0,
+        longitudeDelta:0,
         error: null,
         marker: null,
         lat1:null,
@@ -49,16 +57,23 @@ const styles = StyleSheet.create({
             this.setState({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
+                latitudeDelta:  distance / oneDegreeOfLongitudeInMeters,
+                longitudeDelta: Math.abs(Math.atan2(
+                  Math.sin(angularDistance)*Math.cos(position.coords.latitude),
+                  Math.cos(angularDistance) - Math.sin(position.coords.latitude) * Math.sin(position.coords.latitude))),
                 error: null
             })
         }, error => this.setState({error: error.message}),
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 2000})
-        console.log(this.state.latitude, this.state.longitude, this.state.error)
+        
+    }
+    componentDidUpdate(){
+      console.log(this.state.latitude, this.state.longitude,this.state.latitudeDelta, this.state.longitudeDelta, this.state.error)
     }
 
     getLocation(){
       var coord = JSON.stringify(this.state.marker)
-      this.props.navigation.navigate('RegisterCompany', {text:coord})
+      //this.props.navigation.navigate('RegisterCompany', {text:coord})
       console.log(coord)
       this.setState({
         lat1:this.state.marker,
@@ -78,9 +93,11 @@ const styles = StyleSheet.create({
               initialRegion={{
                 latitude: this.state.latitude, 
                 longitude: this.state.longitude, 
-                latitudeDelta:0.0922, 
-                longitudeDelta: 0.0421}}>
-                    {this.state.marker && <Marker coordinate={this.state.marker}/>}
+                latitudeDelta:this.state.latitudeDelta, 
+                longitudeDelta: this.state.longitudeDelta}}>
+                  <View >
+                    {/* <CompanyMarker/> */}
+                    </View>
               </MapView>
               <View style={styles.button}>
                 <TouchableOpacity onPress={this.getLocation} style={styles.Login}>

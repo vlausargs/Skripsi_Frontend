@@ -63,7 +63,7 @@ const Newsfeed = ()=>{
                     justifyContent:'center'
                 }}>
                     <Text style={{...FONTS.h2,fontWeight: 'bold'}}>
-                        Newsfeed
+                        SCHEDULE
                     </Text>
                 </TouchableOpacity>
             </View>

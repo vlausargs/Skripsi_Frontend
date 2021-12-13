@@ -17,6 +17,8 @@ import RegisterCompany from './RegisterCompany';
 import Meeting from './Meeting';
 import MeetingForm from './MeetingForm';
 import RegisterEmployee from './RegisterEmployee';
+import CheckInOut from './CheckInOut';
+
 
 export const mapDispatchToProps = (dispatch) => ({
     actionsAuth: bindActionCreators(authAction, dispatch)
@@ -41,6 +43,7 @@ const RootStackScreen = ({navigation}) => (
                 <RootStack.Screen name="Profile" component={Profile} />
                 <RootStack.Screen name="SelectMap" component={SelectMap} />
                 <RootStack.Screen name="MapView" component={Maps} />
+                <RootStack.Screen name="CheckInOut" component={CheckInOut} />
     </RootStack.Navigator>
     
     

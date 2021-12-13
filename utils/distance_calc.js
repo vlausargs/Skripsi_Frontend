@@ -1,7 +1,7 @@
 
 
 export function  distance_calc(lat1,lon1,lat2,lon2){
-
+console.log([lat1,lon1,lat2,lon2])
     const R = 6371e3; // metres
     const φ1 = lat1 * Math.PI/180; // φ, λ in radians
     const φ2 = lat2 * Math.PI/180;
@@ -14,7 +14,7 @@ export function  distance_calc(lat1,lon1,lat2,lon2){
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     
     const d = R * c;
-    return d;
+    return d.toFixed(0);
 }
 
 module.exports = { distance_calc };

@@ -38,8 +38,8 @@ const Home = ({navigation})=>{
     const [DateState, setDateState] = useState();
     const [isLoading, setLoading] = useState(true);
 
-    const [UserInfo, setUser] = useState(null);
-    const [currToken, setToken] = useState([]);
+    const [userInfo, setUser] = useState(null);
+    const [currToken, setToken] = useState(null);
     const [CurrLocation, setCurrLocation] = useState({
             latitude: 0,
             longitude: 0,
@@ -57,20 +57,20 @@ const Home = ({navigation})=>{
 
     React.useEffect(()=>{
         if (isInitData==true && currToken){
-            console.log(currToken);
             getCurrUser();
         }
+        
     },[isInitData,currToken]);
     React.useEffect(()=>{
-        if (isInitData==true && UserInfo){
+        if (isInitData==true && userInfo){
             calculateDistance();
         }
 
-    },[isInitData,UserInfo]);
+    },[isInitData,userInfo]);
     
     function calculateDistance(){
         Geolocation.getCurrentPosition(position => {
-            var dist=distance_calc(position.coords.latitude,position.coords.longitude,position.coords.latitude,position.coords.longitude)
+            var dist=distance_calc(position.coords.latitude,position.coords.longitude,userInfo.company_info.lat,userInfo.company_info.long)
             setCurrLocation({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
@@ -149,10 +149,10 @@ const Home = ({navigation})=>{
     function register(user){
         console.log('cek user',user)
         if(user.role === 1){
-            navigation.navigate('RegisterCompany')
+            // navigation.navigate('RegisterCompany')
         }
        else if( user.role === 2){
-        navigation.navigate('RegisterEmployee')
+        // navigation.navigate('RegisterEmployee')
         }
     }
    
@@ -242,7 +242,7 @@ const Home = ({navigation})=>{
                         marginHorizontal:SIZES.padding*5,
                         paddingVertical:SIZES.padding/2,
                         borderRadius:20
-                    }}>
+                    }} onPress={()=>{navigation.navigate('CheckInOut')}}>
                         <Text style={{...FONTS.h2,fontWeight: 'bold' ,textAlign:'center'}}>
                             Check In
                         </Text>
