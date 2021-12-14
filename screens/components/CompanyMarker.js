@@ -5,18 +5,33 @@ import {
     StyleSheet,
     Alert,
 } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+import AsyncStorage from '@react-native-community/async-storage'
+import { api_path } from '../../constants';
 export default class CompanyMarker extends PureComponent {
-    componentDidMount() {
+    constructor(props) {
+        super(props)
+        this.state = {
+            user:{
+                company_info:{
+                    lat:0,
+                    long:0
+                },
+            },
+            currToken:null,
+        }
 
     }
+    componentDidMount() {
+        this.checkToken();
+    }
 
-    async _getTokenValue(){
-        var value = await AsyncStorage.getItem('token')
+    _getTokenValue(){
+        var value =  AsyncStorage.getItem('token')
         return value
     }
     checkToken(){
-        _getTokenValue().then(token => {
+        this._getTokenValue().then(token => {
             console.log('Bearer ' + token) 
             // token = null
             if (!token) {
@@ -29,34 +44,38 @@ export default class CompanyMarker extends PureComponent {
                   );
                 
                 
+            }else{
+                this.setState({...this.state,token:token})
+                fetch(api_path+'/api/user/getUser',{
+                    method: 'GET',
+                    headers:{
+                        'Authorization': 'Bearer ' + token,
+                        'Accept': 'application/json'
+                    }
+                })
+                  .then((response) => response.json())
+                  .then((json) => {
+                    // console.log(json)
+                    // register(json.user)
+                    this.setState({...this.state,user:json.user})
+                    console.log("test")
+                    console.log(json.user)
+                  })
+                  .catch((error) => console.error(error))
+                  .finally(() =>{});
+                
             }
-            this.setState({...this.state,token:token})
         })
     }
-    componentDidUpdate(prevProps, prevState, snapshot){
-        if (this.state.currToken && !prevState.user){
-            fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/user/getUser',{
-                method: 'GET',
-                headers:{
-                    'Authorization': 'Bearer ' + currToken,
-                    'Accept': 'application/json'
-                }
-            })
-              .then((response) => response.json())
-              .then((json) => {
-                console.log(json)
-                register(json.user)
-                this.setState({...this.state,user:json.user})
-                
-              })
-              .catch((error) => console.error(error))
-              .finally(() => setLoading(false));
-        }
+    componentDidUpdate(){
+        console.log(this.state)
+        // if (this.state.currToken && this.state.user !=null){
+           
     }
     render() {
         return (
             <View style={{flex:1}}>
-                <Marker coordinate={{latitude:this.state.user.company_info.lat,longitude: this.state.user.company_info.long}}/>
+                <Marker coordinate={{latitude:parseFloat(this.state.user.company_info.lat),longitude: parseFloat(this.state.user.company_info.long)}}/>
             </View>
         )
     }

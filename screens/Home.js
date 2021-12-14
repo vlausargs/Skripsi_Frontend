@@ -10,7 +10,7 @@ import {
     Alert,
 } from "react-native";
 
-import { COLORS,SIZES,FONTS } from "../constants";
+import { COLORS,SIZES,FONTS, api_path } from "../constants";
 import { ReactReduxContext } from "react-redux";
 import Geolocation from 'react-native-geolocation-service';
 import { distance_calc } from '../utils/distance_calc';
@@ -81,7 +81,7 @@ const Home = ({navigation})=>{
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 2000})
     }
     function getCurrUser(){
-        fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/user/getUser',{
+        fetch(api_path+'/api/user/getUser',{
                 method: 'GET',
                 headers:{
                     'Authorization': 'Bearer ' + currToken,
@@ -145,6 +145,10 @@ const Home = ({navigation})=>{
             }
             setToken(token)
         })
+    }
+
+    function submitAttandace(){
+
     }
     function register(user){
         console.log('cek user',user)

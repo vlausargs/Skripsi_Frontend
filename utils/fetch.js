@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { api_path } from '../constants';
 
 /**
  * All-purpose fetch function to be used to interact with API
@@ -9,7 +10,7 @@ import _ from 'lodash';
  * @param {String} site: optional url if there is a different one
  */
 export function fetchAPI(endpoint, method, header, data, site) {
-    let url = (site ? site : 'http://f22a-118-99-110-241.ap.ngrok.io') + endpoint;
+    let url = (site ? site : api_path) + endpoint;
 
     let options = {
         method: method,

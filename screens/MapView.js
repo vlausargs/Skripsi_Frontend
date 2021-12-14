@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   });
   const oneDegreeOfLongitudeInMeters = 111.32 * 1000;
   const circumference = (40075 / 360) * 1000;
-  const distance  = 10000
+  const distance  = 5000
   const angularDistance = distance/circumference
 
   export default class Maps extends Component {
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
       this.getLocation = this.getLocation.bind(this);
     }
     componentDidMount(){
+
         Geolocation.getCurrentPosition(position => {
             this.setState({
                 latitude: position.coords.latitude,
@@ -95,9 +96,9 @@ const styles = StyleSheet.create({
                 longitude: this.state.longitude, 
                 latitudeDelta:this.state.latitudeDelta, 
                 longitudeDelta: this.state.longitudeDelta}}>
-                  <View >
-                    {/* <CompanyMarker/> */}
-                    </View>
+                  
+                    <CompanyMarker />
+                    
               </MapView>
               <View style={styles.button}>
                 <TouchableOpacity onPress={this.getLocation} style={styles.Login}>

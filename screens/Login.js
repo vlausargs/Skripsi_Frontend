@@ -34,8 +34,8 @@ class Login extends React.Component {
     constructor() {
       super();
       this.state = {
-        email: "",
-        password: "",
+        email: "hanif@gmail.com",
+        password: "asdqwe123",
         loading: false,
         secureText: true
       }
