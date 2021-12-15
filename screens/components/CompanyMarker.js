@@ -32,7 +32,7 @@ export default class CompanyMarker extends PureComponent {
     }
     checkToken(){
         this._getTokenValue().then(token => {
-            console.log('Bearer ' + token) 
+            
             // token = null
             if (!token) {
                 return Alert.alert(
@@ -55,11 +55,7 @@ export default class CompanyMarker extends PureComponent {
                 })
                   .then((response) => response.json())
                   .then((json) => {
-                    // console.log(json)
-                    // register(json.user)
                     this.setState({...this.state,user:json.user})
-                    console.log("test")
-                    console.log(json.user)
                   })
                   .catch((error) => console.error(error))
                   .finally(() =>{});
@@ -68,8 +64,6 @@ export default class CompanyMarker extends PureComponent {
         })
     }
     componentDidUpdate(){
-        console.log(this.state)
-        // if (this.state.currToken && this.state.user !=null){
            
     }
     render() {

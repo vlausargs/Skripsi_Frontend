@@ -41,6 +41,7 @@ const Home = ({ navigation }) => {
     const [isCheckOut, setIsCheckOut] = useState(false);
 
     const [userInfo, setUser] = useState(null);
+    const [attandaceActivity, setActivity] = useState(null);
     const [currToken, setToken] = useState(null);
     const [CurrLocation, setCurrLocation] = useState({
         latitude: 0,
@@ -53,13 +54,14 @@ const Home = ({ navigation }) => {
     React.useEffect(() => {
         if (isInitData == true) {
             checkToken();
-            
+
         }
     }, [isInitData]);
 
     React.useEffect(() => {
         if (isInitData == true && currToken) {
             getCurrUser();
+            getActivity();
         }
 
     }, [isInitData, currToken]);
@@ -101,6 +103,21 @@ const Home = ({ navigation }) => {
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
     }
+    function getActivity() {
+        fetch(api_path + '/api/attendance/activity', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + currToken,
+                'Accept': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                setActivity(json.activity)
+            })
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
+    }
     function visualizeDummy() {
         let isMounted = true;
         setInterval(() => {
@@ -123,7 +140,7 @@ const Home = ({ navigation }) => {
                 }
                 setClockState(date.toLocaleTimeString());
                 setDateState(date.toShortFormat())
-                renderButton(date.toLocaleTimeString()); 
+                renderButton(date.toLocaleTimeString());
             }
         })
         return () => { isMounted = false }
@@ -151,9 +168,7 @@ const Home = ({ navigation }) => {
         })
     }
 
-    function submitAttandace() {
 
-    }
     function register(user) {
         console.log('cek user', user)
         if (user.role === 1) {
@@ -203,36 +218,28 @@ const Home = ({ navigation }) => {
     }
     function renderCompanyInfo() {
         return (
-            <View style={{ marginTop: 30 }}>
-                <Text style={{ ...FONTS.h3, textAlign: 'center' }}>
+            <View style={{ marginTop: 40 }}>
+                {/* <Text style={{ ...FONTS.h3, textAlign: 'center' }}>
                     nama
                 </Text>
                 <Text style={{ ...FONTS.h3, textAlign: 'center' }}>
                     jabatan - tempat kerja
-                </Text>
+                </Text> */}
             </View>
         )
     }
     function renderButton(curr_time) {
         if (userInfo) {
 
-            var startDay = "00:00:00"
-            var startWorkHour = userInfo.company_info.start_working_hour+":00"
-            var endWorkHour = userInfo.company_info.end_working_hour+":00"
+            var endDay = "23:59:59"
+            var startWorkHour = userInfo.company_info.start_working_hour + ":00"
+            var endWorkHour = userInfo.company_info.end_working_hour + ":00"
             // var checkInLimit= new Date(((new Date(new Date().toDateString()+"T"+startWorkHour)).getTime()+(30*60*1000))).toLocaleTimeString()
-            var checkInLimit= new Date((new Date(new Date().toDateString()+" "+startWorkHour).getTime()+(30*60*1000))).toLocaleTimeString()
+            var checkInLimit = new Date((new Date(new Date().toDateString() + " " + startWorkHour).getTime() + (30 * 60 * 1000))).toLocaleTimeString()
             // console.log(curr_time>startWorkHour && curr_time < checkInLimit)
-            if (curr_time>startWorkHour && curr_time < checkInLimit){
-                setIsCheckIn(true)
-            }else{
-                setIsCheckIn(false)
-            }
 
-            if ( curr_time>endWorkHour && curr_time <startDay){
-                setIsCheckOut(true)
-            }else{
-                setIsCheckOut(false)
-            }
+            setIsCheckIn((curr_time > startWorkHour && curr_time < checkInLimit))
+            setIsCheckOut((curr_time > endWorkHour && curr_time < endDay))
         }
 
     }
@@ -244,39 +251,50 @@ const Home = ({ navigation }) => {
                       Office Location
                     </Text>    
                  </View> */}
-                <View style={{ marginVertical: 5 }}>
+                {/* <View style={{ marginVertical: 5 }}>
                     <Text style={{ ...FONTS.h2, textAlign: 'center' }}>
-                        Distance to Office:
+                        
                     </Text>
                 </View>
                 <View style={{ marginVertical: 5 }}>
                     <Text style={{ ...FONTS.body, textAlign: 'center' }}>
                         {CurrLocation.distance} M ( {CurrLocation.distance < 100 ? 'within range' : 'not in range'} )
                     </Text>
-                </View>
+                </View> */}
                 <View style={{ marginVertical: 5 }}>
-                    <Text style={{ ...FONTS.h2, textAlign: 'center' }}>
-                        Office Hour:
+                    <Text style={{ ...FONTS.h3, textAlign: 'center' ,fontWeight: '700' }}>
+                        Halo, {userInfo?userInfo.name:""}
                     </Text>
                 </View>
+                {/* <View style={{ marginVertical: 5 }}>
+
+                    <Text style={{ ...FONTS.h3, textAlign: 'center' ,fontWeight: '700' }}>
+                        {userInfo?userInfo.employee_info.position:""} - {userInfo?userInfo.company_info.name:""}
+                    </Text>
+                </View> */}
                 <View style={{ marginVertical: 5 }}>
-                    <Text style={{ ...FONTS.body, textAlign: 'center' }}>
+                    <Text style={{ ...FONTS.h3, textAlign: 'center', textAlign: 'center', fontWeight: '700' }}>
+                        Office Hour {userInfo?userInfo.company_info.name:""} 
+                    </Text>
+                </View>
+                <View style={{ marginVertical: 10 }}>
+                    <Text style={{ ...FONTS.h4, textAlign: 'center' }}>
                         {userInfo ? userInfo.company_info.start_working_hour : ''}- {userInfo ? userInfo.company_info.end_working_hour : ''}
                     </Text>
                 </View>
                 <View style={{ marginVertical: 5 }}>
                     <TouchableOpacity
-                        disabled={!isCheckIn}
+                        disabled={!isCheckIn && !isCheckOut}
                         style={{
 
-                            ...styles.shadow, backgroundColor: isCheckIn?"#71BC68":"#808080",
+                            ...styles.shadow, backgroundColor: (isCheckIn || isCheckOut) ? "#71BC68" : "#808080",
                             justifyContent: 'center',
                             marginHorizontal: SIZES.padding * 5,
                             paddingVertical: SIZES.padding / 2,
                             borderRadius: 20
-                        }} onPress={() => { navigation.navigate('CheckInOut') }}>
+                        }} onPress={() => { navigation.navigate('CheckInOut',{type:(isCheckIn || (isCheckIn == false && isCheckOut == false) ? "Check In" : "Check Out")}) }}>
                         <Text style={{ ...FONTS.h2, fontWeight: 'bold', textAlign: 'center' }}>
-                        {isCheckIn||(isCheckIn==false&&isCheckOut==false)?"Check In":"Check Out"}
+                            {isCheckIn || (isCheckIn == false && isCheckOut == false) ? "Check In" : "Check Out"}
                         </Text>
                     </TouchableOpacity>
 
@@ -291,96 +309,29 @@ const Home = ({ navigation }) => {
                     Activity Log
                 </Text>
                 {/* loop activity log */}
-                <View style={{
+                { attandaceActivity?attandaceActivity.map((item, key)=>(
+                    <View style={{
 
-                    paddingLeft: SIZES.padding * 2,
-                    paddingRight: SIZES.padding * 2,
-                    marginHorizontal: 20,
-                    justifyContent: 'center', flexDirection: 'row'
-                }}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
-                            {ClockState}
-                        </Text>
+                        paddingLeft: SIZES.padding * 2,
+                        paddingRight: SIZES.padding * 2,
+                        marginHorizontal: 20,
+                        justifyContent: 'center', flexDirection: 'row'
+                    }}>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
+                                {new Date(item.created_at).toLocaleTimeString()}
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
+                                {item.type}
+                            </Text>
+                        </View>
                     </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
-                            Check In
-                        </Text>
-                    </View>
-                </View>
-                <View style={{
-
-                    paddingLeft: SIZES.padding * 2,
-                    paddingRight: SIZES.padding * 2,
-                    marginHorizontal: 20,
-                    justifyContent: 'center', flexDirection: 'row'
-                }}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
-                            {ClockState}
-                        </Text>
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
-                            Check Out
-                        </Text>
-                    </View>
-                </View>
-                <View style={{
-
-                    paddingLeft: SIZES.padding * 2,
-                    paddingRight: SIZES.padding * 2,
-                    marginHorizontal: 20,
-                    justifyContent: 'center', flexDirection: 'row'
-                }}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
-                            {ClockState}
-                        </Text>
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
-                            Check In
-                        </Text>
-                    </View>
-                </View>
-                <View style={{
-
-                    paddingLeft: SIZES.padding * 2,
-                    paddingRight: SIZES.padding * 2,
-                    marginHorizontal: 20,
-                    justifyContent: 'center', flexDirection: 'row'
-                }}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
-                            {ClockState}
-                        </Text>
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
-                            Check Out
-                        </Text>
-                    </View>
-                </View>
-                <View style={{
-
-                    paddingLeft: SIZES.padding * 2,
-                    paddingRight: SIZES.padding * 2,
-                    marginHorizontal: 20,
-                    justifyContent: 'center', flexDirection: 'row'
-                }}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
-                            {ClockState}
-                        </Text>
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
-                            Check In
-                        </Text>
-                    </View>
-                </View>
+                )
+                ):<View></View>}
+               
+                
             </View>
         )
     }
