@@ -38,6 +38,7 @@ class RegisterEmployee extends React.Component {
   constructor() {
     super();
     this.state = {
+      nik:'',
       name: '',
       position: '',
     };
@@ -60,6 +61,16 @@ class RegisterEmployee extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.textInput}>
+          <Input
+            placeholder="NIK"
+            inputStyle={{textAlign: 'center'}}
+            placeholderTextColor={COLORS.black}
+            inputContainerStyle={styles.inputContainer}
+            disableFullscreenUI={true}
+            autoCapitalize="none"
+            onChangeText={val => this.setState({nik: val})}
+            value={this.state.nik}
+          />
           <Picker
             selectedValue={this.state.name}
             style={{

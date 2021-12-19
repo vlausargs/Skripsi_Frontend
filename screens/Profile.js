@@ -7,7 +7,8 @@ import {
     SafeAreaView,
     TouchableOpacity
 } from "react-native";
-import { COLORS, SIZES, FONTS, icons } from "../constants";
+import { ScrollView } from "react-native-gesture-handler";
+import { COLORS, SIZES, FONTS, icons, images } from "../constants";
 
 const styles = StyleSheet.create({
     container: {
@@ -83,7 +84,7 @@ const Profile = ({navigation})=>{
                     justifyContent:'center'
                 }}>
                     <Text style={{...FONTS.h2,fontWeight: 'bold'}}>
-                        Profile
+                        Menu
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -114,41 +115,26 @@ const Profile = ({navigation})=>{
     return (
         <SafeAreaView style={styles.container}>
             {header()}
-            <View style={{marginTop: 20}}>
-                {renderPanel()}
+            {renderPanel()}
+            <ScrollView >
+            <View style={{flex:1, flexDirection:'row', justifyContent:'space-evenly', marginVertical: 20}}>
+                <TouchableOpacity onPress={() => navigation.navigate("Survey")}> 
+                    <Image source={images.SurveyButton} style={{resizeMode:'contain', width:150, height: 150}}/>
+                </TouchableOpacity>
+                <TouchableOpacity> 
+                    <Image source={images.ReviewButton} style={{resizeMode:'contain', width:150, height: 150}}/>
+                </TouchableOpacity>
             </View>
+            <View style={{flex:1, flexDirection:'row', justifyContent:'space-evenly'}}>
+                <TouchableOpacity onPress={() => navigation.navigate("LeavePermissions")}> 
+                    <Image source={images.LeaveButton} style={{resizeMode:'contain', width:150, height: 150}}/>
+                </TouchableOpacity>
+            </View>
+            </ScrollView>
             
-            <View style={{marginVertical: 30}}>
-                <TouchableOpacity style={{marginVertical: 5}}> 
-                    <View style={styles.panel2}>
-                        <View style={styles.panelRow}>
-                            <Text style={styles.panelText2}>Attendance Information</Text>
-                            <Image source={icons.arrow} resizeMode="contain" />
-                        </View>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={{marginVertical: 5}}> 
-                    <View style={styles.panel2}>
-                        <View style={styles.panelRow}>
-                            <Text style={styles.panelText2}>Leave Permission</Text>
-                            <Image source={icons.arrow} resizeMode="contain" />
-                        </View>
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <View style={{ marginVertical: 50}}> 
-                    <TouchableOpacity style={{     
-                        backgroundColor: COLORS.red,
-                        justifyContent:'center',
-                        marginHorizontal:SIZES.padding * 10,
-                        paddingVertical:SIZES.padding/2,
-                        borderRadius:20
-                    }} onPress={() => navigation.navigate('Splash')}>
-                        <Text style={{...FONTS.h3,fontWeight: 'bold' ,textAlign:'center'}}>
-                            Logout
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+            
+            
+            
            
         </SafeAreaView>
     )

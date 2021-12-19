@@ -17,6 +17,7 @@ import RegisterCompany from './RegisterCompany';
 import Meeting from './Meeting';
 import MeetingForm from './MeetingForm';
 import RegisterEmployee from './RegisterEmployee';
+import Survey from './Survey';
 
 export const mapDispatchToProps = (dispatch) => ({
     actionsAuth: bindActionCreators(authAction, dispatch)
@@ -33,6 +34,7 @@ const RootStackScreen = ({navigation}) => (
         <RootStack.Screen name="RegisterEmployee" component={RegisterEmployee}/>
         <RootStack.Screen name="Meeting" component={Meeting}/>
         <RootStack.Screen name="MeetingForm" component={MeetingForm}/>
+        <RootStack.Screen name="Survey" component={Survey}/>
                 <RootStack.Screen name="Home" component={Tabs} /> 
                 <RootStack.Screen name="Chat" component={Chat} />
                 <RootStack.Screen name="LeavePermissions" component={LeavePermissions} />

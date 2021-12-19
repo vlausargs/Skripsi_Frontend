@@ -96,30 +96,7 @@ const Tabs = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
-                            source={icons.home}
-                            resizeMode="contain"
-                            style={{
-                                width: 25,
-                                height: 25,
-                                tintColor: focused ? COLORS.primary : COLORS.secondary
-                            }}
-                        />
-                    ),
-                    tabBarButton: (props) => (
-                        <TabBarCustomButton
-                            {...props}
-                        />
-                    )
-                }}
-            />
-
-            <Tab.Screen
-                name="News"
-                component={Newsfeed}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <Image
-                            source={icons.news}
+                            source={icons.attendance}
                             resizeMode="contain"
                             style={{
                                 width: 25,
@@ -142,7 +119,7 @@ const Tabs = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
-                            source={icons.chat}
+                            source={icons.schedule}
                             resizeMode="contain"
                             style={{
                                 width: 25,
@@ -165,29 +142,7 @@ const Tabs = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
-                            source={icons.profile}
-                            resizeMode="contain"
-                            style={{
-                                width: 25,
-                                height: 25,
-                                tintColor: focused ? COLORS.primary : COLORS.secondary
-                            }}
-                        />
-                    ),
-                    tabBarButton: (props) => (
-                        <TabBarCustomButton
-                            {...props}
-                        />
-                    )
-                }}
-            />
-            <Tab.Screen
-                name="SelectMap"
-                component={SelectMap}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <Image
-                            source={icons.profile}
+                            source={icons.menu}
                             resizeMode="contain"
                             style={{
                                 width: 25,

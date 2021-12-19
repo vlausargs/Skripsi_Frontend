@@ -81,7 +81,7 @@ const Home = ({navigation})=>{
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 2000})
     }
     function getCurrUser(){
-        fetch('http://f22a-118-99-110-241.ap.ngrok.io/api/user/getUser',{
+        fetch('http://3f6f-2404-8000-1003-81b8-e65f-1ff-fe35-55fa.ap.ngrok.io/api/user/getUser',{
                 method: 'GET',
                 headers:{
                     'Authorization': 'Bearer ' + currToken,

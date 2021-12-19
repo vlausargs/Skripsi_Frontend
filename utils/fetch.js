@@ -9,7 +9,7 @@ import _ from 'lodash';
  * @param {String} site: optional url if there is a different one
  */
 export function fetchAPI(endpoint, method, header, data, site) {
-    let url = (site ? site : 'http://f22a-118-99-110-241.ap.ngrok.io') + endpoint;
+    let url = (site ? site : 'http://3f6f-2404-8000-1003-81b8-e65f-1ff-fe35-55fa.ap.ngrok.io') + endpoint;
 
     let options = {
         method: method,
