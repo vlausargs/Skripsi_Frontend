@@ -101,9 +101,9 @@ class Survey extends Component{
             </View>
         )
     }
-    onClickDropdown(value,index){
+    onClickDropdown(value,indexPicker,indexQuestion){
         let selectValue = this.state.rating;
-        selectValue[index] = value;
+        selectValue[indexQuestion] = value;
         this.setState({
             rating: selectValue
         });
@@ -118,7 +118,7 @@ class Survey extends Component{
                         <Picker
                         selectedValue={this.state.rating}
                         style={styles.panelText}
-                        onValueChange={(itemValue, itemIndex) => this.onClickDropdown(itemValue, itemIndex)}>
+                        onValueChange={(itemValue, itemIndex) => this.onClickDropdown(itemValue, itemIndex,index)}>
                         {
                             score.map((item, key) => (
                                 <Picker.Item label={item.label} value={item.value} key={item.key} />
