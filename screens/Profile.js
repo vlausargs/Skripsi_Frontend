@@ -127,7 +127,7 @@ const Profile = ({navigation})=>{
                         </View>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={{marginVertical: 5}}> 
+                <TouchableOpacity style={{marginVertical: 5}} onPress={() => navigation.navigate('LeavePermissions')}> 
                     <View style={styles.panel2}>
                         <View style={styles.panelRow}>
                             <Text style={styles.panelText2}>Leave Permission</Text>

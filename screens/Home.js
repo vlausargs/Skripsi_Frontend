@@ -95,7 +95,7 @@ const Home = ({ navigation }) => {
         })
             .then((response) => response.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
                 register(json.user)
                 setUser(json.user)
 
@@ -113,6 +113,7 @@ const Home = ({ navigation }) => {
         })
             .then((response) => response.json())
             .then((json) => {
+                // console.log(json)
                 setActivity(json.activity)
             })
             .catch((error) => console.error(error))
@@ -158,7 +159,15 @@ const Home = ({ navigation }) => {
                     "ERROR!!!",
                     "TOKEN EXPIRED",
                     [
-                        { text: "OK", onPress: () => navigation.navigate('Login') }
+                        { text: "OK", onPress: () => navigation.reset({
+                            index: 0,
+                            routes: [
+                                {
+                                    name: 'Login',
+                                    params: { messages: 'TOKEN EXPIRED' },
+                                },
+                            ],
+                        }) }
                     ]
                 );
 
@@ -316,7 +325,7 @@ const Home = ({ navigation }) => {
                         paddingRight: SIZES.padding * 2,
                         marginHorizontal: 20,
                         justifyContent: 'center', flexDirection: 'row'
-                    }}>
+                    }} key={key}>
                         <View style={{ flex: 1 }}>
                             <Text style={{ ...FONTS.h4, textAlign: 'left' }}>
                                 {new Date(item.created_at).toLocaleTimeString()}

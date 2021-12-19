@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { api_path } from '../constants';
 import Geolocation from 'react-native-geolocation-service';
 import { distance_calc } from '../utils/distance_calc';
+
 export default function CheckInOut({ route, navigation }) {
     const styles = StyleSheet.create({
         container: {
@@ -35,9 +36,11 @@ export default function CheckInOut({ route, navigation }) {
     const [user, setUser] = useState(null)
     const [currToken, setCurrToken] = useState(null)
     const [CurrLocation, setCurrLocation] = useState({});
+
     useEffect(() => {
         if (isInitData == true) getUserInfo();
     }, [isInitData])
+
     function _getTokenValue() {
         var value = AsyncStorage.getItem('token')
         return value
@@ -51,7 +54,15 @@ export default function CheckInOut({ route, navigation }) {
                     "ERROR!!!",
                     "TOKEN EXPIRED",
                     [
-                        { text: "OK", onPress: () => navigation.navigate('Login') }
+                        { text: "OK", onPress: () => navigation.reset({
+                            index: 0,
+                            routes: [
+                                {
+                                    name: 'Login',
+                                    params: { messages: 'TOKEN EXPIRED' },
+                                },
+                            ],
+                        }) }
                     ]
                 );
             }

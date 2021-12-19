@@ -18,6 +18,7 @@ import Meeting from './Meeting';
 import MeetingForm from './MeetingForm';
 import RegisterEmployee from './RegisterEmployee';
 import CheckInOut from './CheckInOut';
+import CreateLeavePermisson from './CreateLeavePermisson';
 
 
 export const mapDispatchToProps = (dispatch) => ({
@@ -44,6 +45,7 @@ const RootStackScreen = ({navigation}) => (
                 <RootStack.Screen name="SelectMap" component={SelectMap} />
                 <RootStack.Screen name="MapView" component={Maps} />
                 <RootStack.Screen name="CheckInOut" component={CheckInOut} />
+                <RootStack.Screen name="CreateLeavePermisson" component={CreateLeavePermisson} />
     </RootStack.Navigator>
     
     

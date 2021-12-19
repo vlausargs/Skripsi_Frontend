@@ -39,7 +39,15 @@ export default class CompanyMarker extends PureComponent {
                     "ERROR!!!",
                     "TOKEN EXPIRED",
                     [
-                      { text: "OK", onPress: () => navigation.navigate('Login') }
+                      { text: "OK", onPress: () => navigation.reset({
+                        index: 0,
+                        routes: [
+                            {
+                                name: 'Login',
+                                params: { messages: 'TOKEN EXPIRED' },
+                            },
+                        ],
+                    }) }
                     ]
                   );
                 
