@@ -9,9 +9,28 @@ import {
 } from "react-native";
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
-import { api_path, COLORS, FONTS, SIZES } from "../constants";
+import { api_path, COLORS, FONTS, icons, SIZES } from "../constants";
 import { Alert } from "react-native";
-export default function CreateLeavePermisson() {
+import { Image } from "react-native-elements";
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: COLORS.lightGray4
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 10,
+    }
+})
+export default function CreateLeavePermisson({ navigation }) {
     const [currToken, setToken] = useState(null);
     const [isInitData, setisInitData] = useState(true);
 
@@ -51,10 +70,54 @@ export default function CreateLeavePermisson() {
             checkToken();
         }
     }, [isInitData]);
+    function renderHeader() {
+        return (
+            <View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingBottom: SIZES.padding }}>
 
+                <View style={{ flexDirection: 'row', height: 50 }}>
+                    <TouchableOpacity
+                        style={{
+
+                            paddingLeft: SIZES.padding * 2,
+                            paddingTop: SIZES.padding,
+                            justifyContent: 'center'
+                            
+                        }}
+                        onPress={()=>{
+                            navigation.goBack();
+                        }}
+                        >
+                        <Image
+                            source={icons.back}
+                            resizeMode="contain"
+                            style={{
+                                width: 25,
+                                height: 25,
+                                tintColor:  COLORS.primary 
+                            }}
+                        />
+                        
+                    </TouchableOpacity>
+                    <View style={{
+
+                        paddingLeft: SIZES.padding * 2,
+                        justifyContent: 'center'
+                    }}>
+                        <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
+                            Create Leave Permission
+                        </Text>
+                    </View>
+                </View>
+            </View>
+
+        )
+    }
     return (
         <View>
-            create leave permission
+            {renderHeader()}
+            <Text>
+                create leave permission
+            </Text>
         </View>
     )
 }
