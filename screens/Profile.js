@@ -121,14 +121,14 @@ const Profile = ({navigation})=>{
                 <TouchableOpacity onPress={() => navigation.navigate("Survey")}> 
                     <Image source={images.SurveyButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                 </TouchableOpacity>
-                <TouchableOpacity style={{marginVertical: 5}} onPress={() => navigation.navigate('LeavePermissions')}> 
+                {/* <TouchableOpacity style={{marginVertical: 5}} onPress={() => navigation.navigate('LeavePermissions')}> 
                     <View style={styles.panel2}>
                         <View style={styles.panelRow}>
                             <Text style={styles.panelText2}>Leave Permission</Text>
                             <Image source={icons.arrow} resizeMode="contain" />
                         </View>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity onPress={() => navigation.navigate("ChartPerformance")}> 
                     <Image source={images.ReviewButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                 </TouchableOpacity>

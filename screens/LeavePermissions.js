@@ -92,6 +92,7 @@ const LeavePermissions = ({ navigation }) => {
     React.useEffect(() => {
         if (isInitData == true && currToken) {
             getLeavePermissionList()
+            setisInitData(false)
         }
 
     }, [isInitData, currToken]);
@@ -122,6 +123,46 @@ const LeavePermissions = ({ navigation }) => {
 
         )
     }
+    function postPermissionApprove(id) {
+        fetch(api_path + '/api/permission/permissionAccepted', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + currToken,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({
+                "id":id,
+            })
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json)
+                if(json.alert =="success") setisInitData(true)
+            })
+            .catch((error) => console.error(error))
+            .finally(() => {  });
+    }
+    function postPermissionReject(id) {
+        fetch(api_path + '/api/permission/permissionRejected', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + currToken,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({
+                "id":id,
+            })
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json)
+                if(json.alert =="success") setisInitData(true)
+            })
+            .catch((error) => console.error(error))
+            .finally(() => {  });
+    }
     function renderPermissionList() {
         console.log(leavePermissions.map((item, key) => { return item.permission_type }))
 
@@ -130,12 +171,15 @@ const LeavePermissions = ({ navigation }) => {
                 return (
                     <View style={{margin: 20}} key={key}>
                         <TouchableOpacity style={{
-                            ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding + 10, borderRadius: 20,
+                            ...styles.shadow, backgroundColor: item.status==0?COLORS.white:item.status==1?COLORS.primary:COLORS.secondary, paddingVertical: SIZES.padding + 10, borderRadius: 20
                         }} 
                         onPress={()=>{
-                            var pref= [...leavePermissions]
-                            pref[key].expand = !pref[key].expand
-                            setLeavePermissions(pref)
+                            if (item.status== 0){
+                                const pref= [...leavePermissions]
+                                pref[key].expand = !pref[key].expand
+                                console.log(pref)
+                                setLeavePermissions(pref)
+                            }
                         }}>
                             <View style={{ marginVertical: 5 }}>
                                 <Text style={{ ...FONTS.h3, textAlign: 'left', fontWeight: '700',paddingHorizontal:SIZES.padding*1.5 }}>
@@ -151,7 +195,7 @@ const LeavePermissions = ({ navigation }) => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        {item.expand && (<View style={{...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding, borderRadius: 20,flexDirection:'row'}} >
+                        {item.expand && (<View style={{...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding, borderRadius: 20,flexDirection:'row',marginTop:10}} >
                             
                             <TouchableOpacity
                                 style={{
@@ -183,10 +227,10 @@ const LeavePermissions = ({ navigation }) => {
                                     maxHeight:100,
                                     borderRadius: 25,
                                     flex:1,
-                                    alignItems:'left'
+                                   
                                 }}
                                 onPress={() => {
-                                    postPermissionApprove(item.id);
+                                    postPermissionReject(item.id);
                                 }}
                             >
                             <Text style={{...styles.inputContainer,textAlign: 'center',alignSelf: 'stretch',color:'white'}}>Reject</Text>
@@ -200,9 +244,7 @@ const LeavePermissions = ({ navigation }) => {
             })
         )
     }
-    function addLeavePermission() {
 
-    }
     return (
         <SafeAreaView style={styles.container}>
             {renderHeader()}
