@@ -6,6 +6,9 @@ const avatar_4 = require("../assets/images/avatar-4.jpg");
 const avatar_5 = require("../assets/images/avatar-5.jpg");
 
 export const Background = require("../assets/images/Background.png");
+export const LeaveButton = require("../assets/images/LeaveButton.png");
+export const ReviewButton = require("../assets/images/ReviewButton.png");
+export const SurveyButton = require("../assets/images/SurveyButton.png");
 
 export default {
     avatar_1,
@@ -13,5 +16,8 @@ export default {
     avatar_3,
     avatar_4,
     avatar_5,
-    Background
+    Background,
+    LeaveButton,
+    ReviewButton,
+    SurveyButton
 }

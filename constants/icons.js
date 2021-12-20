@@ -30,8 +30,11 @@ export const chat = require("../assets/icons/Chat.png");
 export const news = require("../assets/icons/News.png");
 export const profile = require("../assets/icons/Profile.png");
 export const schedule = require("../assets/icons/Schedule.png");
+export const attendance = require("../assets/icons/attendance.png");
+export const menu = require("../assets/icons/menu.png");
 
 export const arrow = require("../assets/icons/ExpandArrow.png");
+export const add = require("../assets/icons/addButton.png");
 
 export default {
     back,
@@ -64,5 +67,8 @@ export default {
     news,
     profile,
     schedule,
-    arrow
+    arrow,
+    attendance,
+    menu,
+    add
 }

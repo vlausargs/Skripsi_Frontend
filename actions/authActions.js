@@ -294,3 +294,68 @@ export function getMeetingType (token) {
             })
     }
 }
+
+export function getCompanyQuestion (token) {
+    var endpoint = "/api/companyQuestion/getCompanyQuestion";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_COMPANYQUESTION, companyQuestion: json.companyQuestion });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_COMPANYQUESTION });    
+            })
+    }
+}
+
+export function getListEmployee (token) {
+    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/getUserByCompany";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_LISTEMPLOYEE, listEmployee: json.listEmployee });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_LISTEMPLOYEE });    
+            })
+    }
+}
+
+export function scoreEmployee(token, employee_id, month, score, resultCB) {
+
+    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/store";
+    
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+
+    let body = {
+        "employee_id": employee_id,
+        "month": month,
+        "score": score
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
+            })
+    }
+}

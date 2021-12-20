@@ -13,8 +13,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import DataTable, {COL_TYPES} from 'react-native-datatable-component';
+import Accordion from 'react-native-collapsible/Accordion';
 
-import {COLORS} from '../constants';
+import {COLORS, SIZES, FONTS, icons} from '../constants';
 import {Input} from 'react-native-elements';
 
 export const mapStateToProps = state => ({
@@ -34,8 +35,10 @@ class Meeting extends Component {
       role: 1,
       toggled: false,
       data: [],
+      activeSection:[]
     };
   }
+  
 
   componentDidMount() {
     this.mounted = true;
@@ -71,6 +74,52 @@ class Meeting extends Component {
     });
   }
 
+  renderHeader() {
+    return (
+        <View style={{flexDirection:'row',height:50}}>
+            <TouchableOpacity 
+            style={{
+                
+                paddingLeft:SIZES.padding*2,
+                justifyContent:'center'
+            }}>
+                <Text style={{...FONTS.h2,fontWeight: 'bold'}}>
+                    Meeting Schedule
+                </Text>
+            </TouchableOpacity>
+        </View>
+    )
+}
+  _renderSectionTitle = (section) => {
+    return (
+      <View>
+        <Text style={[styles.headerText, {color:COLORS.primary, fontWeight:'bold'}]}>{section.date_time}</Text>
+      </View>
+    );
+  };
+
+  _renderHeader = (section) => {
+    return (
+      <View style={styles.content}>
+        <Text style={styles.headerText}>{section.title}</Text>
+      </View>
+    );
+  };
+
+  _renderContent = (section) => {
+    return (
+      <View style={styles.content}>
+        <Text style={styles.panelText}>{section.place}</Text>
+        <Text style={styles.panelText}>{section.description}</Text>
+        <Text style={[ styles.panelText, {color:COLORS.primary}]}onPress={() => Linking.openURL(section.link)}>LINK</Text>
+      </View>
+    );
+  };
+
+  _updateSections = (activeSection) => {
+    this.setState({ activeSection });
+  };
+
   render() {
     let markedDay = {};
     this.props.meeting.map(item => {
@@ -82,11 +131,12 @@ class Meeting extends Component {
     });
     return (
       <View style={styles.container}>
+        {this.renderHeader()}
         {this.props.users.role === 1 ? (
           <TouchableOpacity
             style={styles.button}
             onPress={() => this.props.navigation.navigate('MeetingForm')}>
-            <Text style={{color: COLORS.white}}>Add Meeting</Text>
+            <Image source={icons.add}/>
           </TouchableOpacity>
         ) : (
           <View />
@@ -104,7 +154,7 @@ class Meeting extends Component {
             markedDates={this.props.meeting.date_time}
           />
         ) : (
-          <FlatList
+          /*<FlatList
             data={this.props.meeting}
             renderItem={({item}) => (
               <View style={styles.tableContainer}>
@@ -122,6 +172,14 @@ class Meeting extends Component {
                 </TouchableOpacity>
               </View>
             )}
+          />*/
+          <Accordion
+            sections={this.props.meeting}
+            activeSections={this.state.activeSection}
+            renderSectionTitle={this._renderSectionTitle}
+            renderHeader={this._renderHeader}
+            renderContent={this._renderContent}
+            onChange={this._updateSections}
           />
         )}
       </View>
@@ -166,6 +224,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
+  content:{
+    height: 70,
+    marginHorizontal: 20,
+    backgroundColor: COLORS.lightGray,
+    elevation: 5,
+    shadowOpacity: 0.2,
+    shadowOffset: {
+        height: 1,
+        width: 1
+    },
+    justifyContent:'space-evenly'
+},
+headerText: {
+  fontSize:SIZES.h2
+},
+panelText:{
+  fontSize:SIZES.body2
+}
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Meeting);

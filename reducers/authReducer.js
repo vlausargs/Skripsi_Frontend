@@ -11,12 +11,16 @@ let initialState = {
     positionReceived: false,
     meetingReceived: false,
     meetingTypeReceived: false,
+    companyQuestionReceived: false,
+    listEmployeeReceived: false,
 
     users: [],
     company:[],
     position:[],
     meeting:[],
-    meetingType:[]
+    meetingType:[],
+    companyQuestion:[],
+    listEmployee:[]
 };
 
 /**
@@ -50,6 +54,14 @@ export default function authReducer(state = initialState, action) {
             return Object.assign({}, state, { meetingTypeReceived: true, meetingType: action.meetingType });
         case t.EMPTY_MEETINGTYPE:
             return Object.assign({}, state, { meetingTypeReceived: false, meetingType:[] });
+        case t.RECEIVE_COMPANYQUESTION:
+            return Object.assign({}, state, { companyQuestionReceived: true, companyQuestion: action.companyQuestion });
+        case t.EMPTY_COMPANYQUESTION:
+            return Object.assign({}, state, { companyQuestionReceived: false, companyQuestion:[] });
+        case t.RECEIVE_LISTEMPLOYEE:
+            return Object.assign({}, state, { listEmployeeReceived: true, listEmployee: action.listEmployee });
+        case t.EMPTY_LISTEMPLOYEE:
+            return Object.assign({}, state, { listEmployeeReceived: false, listEmployee:[] });
         default:
             return state;
     }
