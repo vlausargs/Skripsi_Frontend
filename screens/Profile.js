@@ -121,7 +121,7 @@ const Profile = ({navigation})=>{
                 <TouchableOpacity onPress={() => navigation.navigate("Survey")}> 
                     <Image source={images.SurveyButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                 </TouchableOpacity>
-                <TouchableOpacity> 
+                <TouchableOpacity onPress={() => navigation.navigate("ChartPerformance")}> 
                     <Image source={images.ReviewButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                 </TouchableOpacity>
             </View>

@@ -28,6 +28,11 @@ export const mapStateToProps = state => ({
 
 const score =  [
     {
+        key:"0",
+        label: "Score",
+        value: "0"
+    },
+    {
         key:"1",
         label: "1",
         value: "1"
@@ -83,6 +88,7 @@ class Survey extends Component{
             this.state.rating,
             message => alert(message),
           );;
+          console.log('submit')
     }
 
     renderHeader() {
@@ -101,28 +107,28 @@ class Survey extends Component{
             </View>
         )
     }
-    onClickDropdown(value,index){
+    onClickDropdown(value, indexPicker, indexQuestion){
         let selectValue = this.state.rating;
-        selectValue[index] = value;
+        selectValue[indexQuestion] = value;
         this.setState({
             rating: selectValue
         });
       }
     renderQuestion(){
         let panels = []
-          this.props.companyQuestion.map((key, index) => {
+          this.props.companyQuestion.map((item, index) => {
             panels.push(
                 <View key={index} style={styles.panel}>
                     <View style={styles.panelRow}>
-                        <Text style={styles.panelText}>{key.question}</Text>
+                        <Text style={styles.panelText}>{item.question}</Text>
                         <Picker
-                        selectedValue={this.state.rating}
-                        style={styles.panelText}
-                        onValueChange={(itemValue, itemIndex) => this.onClickDropdown(itemValue, itemIndex)}>
-                        {
-                            score.map((item, key) => (
-                                <Picker.Item label={item.label} value={item.value} key={item.key} />
-                        ))}
+                            selectedValue={this.state.rating[index]}
+                            style={styles.panelText}
+                            onValueChange={(itemValue, itemIndex) => this.onClickDropdown(itemValue, itemIndex, index)}>
+                            {
+                                score.map((item, key) => (
+                                    <Picker.Item label={item.label} value={item.value} key={item.key} />
+                            ))}
                         </Picker> 
                     </View>
                 </View>
@@ -154,7 +160,7 @@ class Survey extends Component{
                         ))}
                     </Picker>
                     <Picker
-                        selectedValue={this.state.employee}
+                        selectedValue={this.state.date}
                         style={{
                             marginVertical: SIZES.padding,
                             marginHorizontal: SIZES.padding,
@@ -163,7 +169,7 @@ class Survey extends Component{
                             backgroundColor: COLORS.white,
                           }}
                         onValueChange={(itemValue, itemIndex) =>
-                            this.setState({employee: itemValue})
+                            this.setState({date: itemValue})
                         }>
                         <Picker.Item label="Month" value="0" />
                         <Picker.Item label="January" value="1" />
