@@ -6,7 +6,8 @@ import {
     TouchableOpacity,
     StyleSheet,
     SafeAreaView,
-    Alert
+    Alert,
+    ScrollView
 } from "react-native";
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
@@ -77,7 +78,7 @@ const LeavePermissions = ({ navigation }) => {
             .then((response) => response.json())
             .then((json) => {
                 console.log(json)
-                setLeavePermissions(json.permissions)
+                setLeavePermissions(json.permissions.map((item, key) => { return {...item,"expand":false}}))
             })
             .catch((error) => console.error(error))
             .finally(() => { });
@@ -127,15 +128,75 @@ const LeavePermissions = ({ navigation }) => {
         return (
             leavePermissions.map((item, key) => {
                 return (
-                    <View style={{
-                        ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding + 10, margin: 20, borderRadius: 20
-                    }} key={key}>
-                        <View style={{ marginVertical: 5 }}>
-                            <Text style={{ ...FONTS.h3, textAlign: 'center', fontWeight: '700' }}>
-                                {item.permission_type.leave_type} {(new Date(item.start_date)).toLocaleDateString()} {(new Date(item.end_date)).toLocaleDateString()}
-                            </Text>
-                        </View>
-                    </View>)
+                    <View style={{margin: 20}} key={key}>
+                        <TouchableOpacity style={{
+                            ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding + 10, borderRadius: 20,
+                        }} 
+                        onPress={()=>{
+                            var pref= [...leavePermissions]
+                            pref[key].expand = !pref[key].expand
+                            setLeavePermissions(pref)
+                        }}>
+                            <View style={{ marginVertical: 5 }}>
+                                <Text style={{ ...FONTS.h3, textAlign: 'left', fontWeight: '700',paddingHorizontal:SIZES.padding*1.5 }}>
+                                    {item.permission_type.leave_type} 
+                                </Text>
+                            </View>
+                            <View style={{ marginVertical: 10 ,flexDirection:'row'}}>
+                                <Text style={{ ...FONTS.h3, textAlign: 'left', fontWeight: '700' ,flex:1 ,paddingHorizontal:SIZES.padding*1.5 }}>
+                                    {(new Date(item.start_date)).toLocaleDateString()} 
+                                </Text>
+                                <Text style={{ ...FONTS.h3, textAlign: 'right', fontWeight: '700',flex:1 ,paddingHorizontal:SIZES.padding*1.5 }}>
+                                    {(new Date(item.end_date)).toLocaleDateString()}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        {item.expand && (<View style={{...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding, borderRadius: 20,flexDirection:'row'}} >
+                            
+                            <TouchableOpacity
+                                style={{
+                                    ...styles.shadow,
+                                    backgroundColor: COLORS.primary,
+                                    paddingVertical:SIZES.padding*1.5,
+                                    marginVertical: SIZES.padding,
+                                    marginHorizontal: SIZES.padding,
+                                    maxWidth:100,
+                                    maxHeight:100,
+                                    borderRadius: 25,
+                                    flex:1
+                                }}
+                                onPress={() => {
+                                    postPermissionApprove(item.id);
+                                }}
+                            >
+                            <Text style={{...styles.inputContainer,textAlign: 'center',alignSelf: 'stretch',color:'white'}}>Approve</Text>
+
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    ...styles.shadow,
+                                    backgroundColor: COLORS.primary,
+                                    paddingVertical:SIZES.padding*1.5,
+                                    marginVertical: SIZES.padding,
+                                    marginHorizontal: SIZES.padding,
+                                    maxWidth:100,
+                                    maxHeight:100,
+                                    borderRadius: 25,
+                                    flex:1,
+                                    alignItems:'left'
+                                }}
+                                onPress={() => {
+                                    postPermissionApprove(item.id);
+                                }}
+                            >
+                            <Text style={{...styles.inputContainer,textAlign: 'center',alignSelf: 'stretch',color:'white'}}>Reject</Text>
+
+                            </TouchableOpacity>
+                            
+                        </View>)}
+                    </View>
+                    )
+                    
             })
         )
     }
@@ -148,11 +209,11 @@ const LeavePermissions = ({ navigation }) => {
             <View>
                 {/* render loop  */}
                 <Text>
-
-                    list all Leave Permission approved or rejected  with create new button
                 </Text>
             </View>
-            {leavePermissions ? renderPermissionList() : <Text>you dont have any leave request for this period</Text>}
+            <ScrollView>
+                {leavePermissions ? renderPermissionList() : <Text>you dont have any leave request for this period</Text>}
+            </ScrollView>
             <TouchableOpacity
                 style={{
                     borderWidth: 1,

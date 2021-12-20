@@ -94,7 +94,7 @@ export default function CreateLeavePermisson({ navigation }) {
 
             })
             .catch((error) => console.error(error))
-            .finally(() => { });
+            .finally(() => {  });
     }
 
     function postPermissionRule() {
@@ -107,17 +107,17 @@ export default function CreateLeavePermisson({ navigation }) {
             },
             body:JSON.stringify({
                 "permission_type_id":userInput.permission_type_id,
-                "start_date":userInput.start_date,
-                "end_date":userInput.end_date
+                "start_date":userInput.start_date.toLocaleDateString(),
+                "end_date":userInput.end_date.toLocaleDateString()
             })
         })
             .then((response) => response.json())
             .then((json) => {
                 console.log(json)
-
+                if(json.alert =="success")navigation.goBack();
             })
             .catch((error) => console.error(error))
-            .finally(() => { });
+            .finally(() => {  });
     }
 
     React.useEffect(() => {
@@ -219,7 +219,7 @@ export default function CreateLeavePermisson({ navigation }) {
                             style={{
                                 ...styles.shadow,
                                  backgroundColor: COLORS.white,
-                                paddingVertical:SIZES.padding*1.5,
+                                 padding:SIZES.padding*1.5,
                                 marginVertical: SIZES.padding,
                                 marginHorizontal: SIZES.padding
                             }}
@@ -251,7 +251,7 @@ export default function CreateLeavePermisson({ navigation }) {
                             style={{
                                 ...styles.shadow,
                                  backgroundColor: COLORS.white,
-                                paddingVertical:SIZES.padding*1.5,
+                                padding:SIZES.padding*1.5,
                                 marginVertical: SIZES.padding,
                                 marginHorizontal: SIZES.padding
                             }}
@@ -273,6 +273,27 @@ export default function CreateLeavePermisson({ navigation }) {
                                 setShowDate({...showDate,end:false})
                             }}
                         />)}
+                        {/* dropdown leave type */}
+                    </View>
+                    <View>
+                        <TouchableOpacity
+                            style={{
+                                ...styles.shadow,
+                                backgroundColor: COLORS.primary,
+                                paddingVertical:SIZES.padding*1.5,
+                                marginVertical: SIZES.padding,
+                                marginHorizontal: SIZES.padding,
+                                maxWidth:100,
+                                maxHeight:100,
+                                borderRadius: 25,
+                            }}
+                            onPress={() => {
+                                postPermissionRule();
+                            }}
+                        >
+                           <Text style={{...styles.inputContainer,textAlign: 'center',alignSelf: 'stretch',color:'white'}}>Submit</Text>
+
+                        </TouchableOpacity>
                         {/* dropdown leave type */}
                     </View>
                 </View>
