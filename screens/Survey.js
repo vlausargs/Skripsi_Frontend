@@ -107,7 +107,7 @@ class Survey extends Component{
             </View>
         )
     }
-    onClickDropdown(value, indexPicker, indexQuestion){
+    onClickDropdown(value,indexPicker,indexQuestion){
         let selectValue = this.state.rating;
         selectValue[indexQuestion] = value;
         this.setState({
