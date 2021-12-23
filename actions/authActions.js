@@ -172,7 +172,7 @@ export function getPositionList (token) {
     }
 }
 
-export function registerEmployee(token, company, position, resultCB) {
+export function registerEmployee(token, nik, company, position, resultCB) {
 
     var endpoint = "/api/employee/store";
     
@@ -183,6 +183,7 @@ export function registerEmployee(token, company, position, resultCB) {
     };
 
     let body = {
+        "nik": nik,
         "company": company,
         "position": position,
     };
@@ -356,6 +357,25 @@ export function scoreEmployee(token, employee_id, month, score, resultCB) {
             })
             .catch((error) => {         
                 resultCB(error.message)
+            })
+    }
+}
+
+export function getEmployeeScore (token) {
+    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/getEmployeeScore";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_EMPLOYEESCORE, employeeScore: json.data });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_EMPLOYEESCORE});    
             })
     }
 }

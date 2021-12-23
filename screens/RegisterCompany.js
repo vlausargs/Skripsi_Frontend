@@ -2,19 +2,10 @@ import React, {useState} from 'react';
 import { 
     View, 
     Text, 
-    TouchableOpacity, 
-    TextInput,
+    TouchableOpacity,
     Platform,
     StyleSheet ,
-    StatusBar,
-    Alert,
-    Button
 } from 'react-native';
-import * as Animatable from 'react-native-animatable';
-import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
-import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { Input } from 'react-native-elements';
@@ -42,13 +33,53 @@ class RegisterCompany extends React.Component{
           name: "",
           lat1: this.props.lat1,
           long1: this.props.long1,
-          startH:"",
-          endH:"",
-          secureText: true,
-
+          startH: new Date(),
+          endH: new Date(),
+          mode: 'time',
+          showStart: false,
+          showEnd: false,
         }
         this.onSubmit = this.onSubmit.bind(this);
     }
+    
+    setStartH = (event, startH) => {
+        startH = startH || this.state.startH;
+    
+        this.setState({
+          showStart: Platform.OS === 'ios' ? true : false,
+          startH,
+        });
+      }
+      setEndH = (event, endH) => {
+        endH = endH || this.state.endH;
+    
+        this.setState({
+          showEnd: Platform.OS === 'ios' ? true : false,
+          endH,
+        });
+      }
+
+    showStart = mode => {
+        this.setState({
+          showStart: true,
+          mode,
+        });
+      }
+
+    showEnd = mode => {
+        this.setState({
+          showEnd: true,
+          mode,
+        });
+      }
+    
+      endHPicker = () => {
+        this.showEnd('time');
+      }
+    
+      startHPicker = () => {
+        this.showStart('time');
+      }
 
     componentDidMount(){
         this.props.actionsAuth.getCompanyList(this.props.token)
@@ -61,56 +92,81 @@ class RegisterCompany extends React.Component{
       }
 
     render(){
+        let minDate = new Date();
+        minDate.setDate(minDate.getDate());
+        const { showStart, showEnd, startH, endH, mode } = this.state;
+        console.log(this.state.date)
         return (
             <View style={styles.container}>
-              <View style={styles.textInput}>
-              <Picker
-                        selectedValue={this.state.name}
-                        style={{
-                            marginVertical:SIZES.padding, 
-                            marginHorizontal:SIZES.padding,
-                            textAlign: 'center',
-                            alignSelf: 'stretch',
-                            backgroundColor: COLORS.lightGray,
+                <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Company</Text>
+                <Input 
+                          placeholder= 'Company'
+                          inputStyle={{ textAlign: 'center' }}
+                          placeholderTextColor={COLORS.black}
+                          inputContainerStyle={styles.inputContainer}
+                          disableFullscreenUI={true}
+                          autoCapitalize = 'none'
+                          onChangeText={(val) => this.setState({ name : val })}
+                          value={this.state.name}           
+                      /> 
+              
+                        <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Address</Text>   
+                        <TouchableOpacity style={{
+                                 backgroundColor: COLORS.lightGray,
+                                 padding:SIZES.padding*1.5,
+                                marginVertical: SIZES.padding,
+                                marginHorizontal: SIZES.padding
                             }}
-                        onValueChange={(itemValue, itemIndex) =>
-                            this.setState({ name: itemValue })
-                        }>
-                        {this.props.company.map((item, key) => <Picker.Item label={item.name} value={item.id} key={item.id} />)}
-                        </Picker>   
-       
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('MapView')}>
-                            <Text>
-                                Select Address
+                            onPress={() => this.props.navigation.navigate('MapView')}>
+                            <Text style={styles.inputContainer}>
+                                 Address
                             </Text>  
-                        </TouchableOpacity>  
-                      <Input 
-                          placeholder="Start Working Hour"
-                          inputStyle={{ textAlign: 'center' }}
-                          placeholderTextColor={COLORS.black}
-                          inputContainerStyle={styles.inputContainer}
-                          disableFullscreenUI={true}
-                          autoCapitalize="none"
-                          onChangeText={(val) => this.setState({ startH : val })}
-                          value={this.state.startH}
-                      /> 
-                      <Input 
-                          placeholder="End Working Hour"
-                          inputStyle={{ textAlign: 'center' }}
-                          placeholderTextColor={COLORS.black}
-                          inputContainerStyle={styles.inputContainer}
-                          disableFullscreenUI={true}
-                          autoCapitalize="none"
-                          onChangeText={(val) => this.setState({ endH : val })}
-                          value={this.state.endH}
-                      /> 
-                       
+                        </TouchableOpacity>
+                        <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Start Working Hour</Text>
+                        <TouchableOpacity style={{
+                                 backgroundColor: COLORS.lightGray,
+                                 padding:SIZES.padding*1.5,
+                                marginVertical: SIZES.padding,
+                                marginHorizontal: SIZES.padding
+                            }}
+                            onPress={this.startHPicker}>
+                            <Text style={styles.inputContainer}>
+                                {this.state.startH.toLocaleTimeString()}
+                            </Text>  
+                        </TouchableOpacity> 
+                        <View>
+                        {showStart && <DateTimePicker value={startH}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={this.setStartH} />
+                        }
+                    </View>
+                    <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>End Working Hour</Text>
+                        <TouchableOpacity style={{
+                                 backgroundColor: COLORS.lightGray,
+                                 padding:SIZES.padding*1.5,
+                                marginVertical: SIZES.padding,
+                                marginHorizontal: SIZES.padding
+                            }}
+                            onPress={this.endHPicker}>
+                            <Text style={styles.inputContainer}>
+                                {this.state.endH.toLocaleTimeString()}
+                            </Text>  
+                        </TouchableOpacity> 
+                        <View>
+                        {showEnd && <DateTimePicker value={endH}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={this.setEndH} />
+                        }
+                    </View>
                   <View style={styles.button}>
                       <TouchableOpacity style={styles.Login} onPress={this.onSubmit}>
                           <Text style={styles.textSign}>Register</Text>
                       </TouchableOpacity>
                   </View>
-              </View>
             </View>
           );  
 }
@@ -123,11 +179,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(RegisterCompany);
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'space-evenly',
       backgroundColor:COLORS.white,
-    },
-    textInput: {
-        alignItems:'center',
+      marginVertical: SIZES.padding,
         justifyContent: 'center'
     },
     button: {
@@ -149,7 +202,8 @@ const styles = StyleSheet.create({
     inputContainer:{
         alignSelf: 'center',
         backgroundColor: COLORS.lightGray,
-        borderBottomWidth: 0
+        borderBottomWidth: 0,
+        
     }
     
   });

@@ -1,106 +1,96 @@
-import React, { Component } from "react";
-import { 
-    View,
-    Text,
-    TouchableOpacity,
-    StyleSheet,
-    Dimensions
-} from "react-native";
+import React, {Component} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 
 import * as authAction from '../actions/authActions';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
-import { COLORS, SIZES, FONTS, icons, images } from "../constants";
-import { SafeAreaView } from "react-native";
+import {COLORS, SIZES, FONTS, icons, images} from '../constants';
+import {SafeAreaView} from 'react-native';
 import {
-    LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
-  } from "react-native-chart-kit";
+  BarChart,
+} from 'react-native-chart-kit';
 
 export const mapStateToProps = state => ({
-    token: state.authReducer.token,
-    users: state.authReducer.users,
-    companyQuestion: state.authReducer.companyQuestion,
-    listEmployee: state.authReducer.listEmployee,
-  });
-  
-  export const mapDispatchToProps = dispatch => ({
-    actionsAuth: bindActionCreators(authAction, dispatch),
-  }); 
+  token: state.authReducer.token,
+  employeeScore: state.authReducer.employeeScore,
+});
 
-class ChartPerformance extends Component{
-    constructor(props) {
-        super(props)
+export const mapDispatchToProps = dispatch => ({
+  actionsAuth: bindActionCreators(authAction, dispatch),
+});
 
-        this.state = {
+class ChartPerformance extends Component {
+  constructor(props) {
+    super(props);
 
-        }
+    this.state = {};
+  }
 
-      }
+  componentDidMount() {
+    this.mounted = true;
+    this.props.actionsAuth.getEmployeeScore(this.props.token);
+  }
 
-    render(){
-        return (
-            <SafeAreaView style={{flex: 1}}>
-                <View>
-  <Text>Bar Chart</Text>
-  <BarChart
-    data={{
-      labels: ["January", "February", "March", "April", "May", "June"],
-      datasets: [
-        {
-          data: [
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100
-          ]
-        }
-      ]
-    }}
-    width={Dimensions.get("window").width} // from react-native
-    height={220}
-    yAxisLabel="$"
-    yAxisSuffix="k"
-    yAxisInterval={1} // optional, defaults to 1
-    chartConfig={{
-      backgroundColor: "#e26a00",
-      backgroundGradientFrom: "#fb8c00",
-      backgroundGradientTo: "#ffa726",
-      decimalPlaces: 2, // optional, defaults to 2dp
-      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-      labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-      style: {
-        borderRadius: 16
-      },
-      propsForDots: {
-        r: "6",
-        strokeWidth: "2",
-        stroke: "#ffa726"
-      }
-    }}
-    bezier
-    style={{
-      marginVertical: 8,
-      borderRadius: 16
-    }}
-  />
-</View>
-            </SafeAreaView>
-        )
-    }
+  render() {
+    return (
+      <SafeAreaView style={{flex: 1}}>
+        <View>
+          <Text>Performance Chart</Text>
+          <BarChart
+            data={{
+              labels: this.props.employeeScore.map(item => {
+                return item.month;
+              }),
+              datasets: [
+                {
+                  data: this.props.employeeScore.map(item => {
+                    return item.score;
+                  }),
+                },
+              ],
+            }}
+            width={Dimensions.get('window').width} // from react-native
+            height={220}
+            yAxisInterval={1} // optional, defaults to 1
+            chartConfig={{
+              backgroundColor: COLORS.black,
+              backgroundGradientFrom: COLORS.primary,
+              backgroundGradientTo: COLORS.primary,
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16,
+              },
+              propsForDots: {
+                r: '6',
+                strokeWidth: '2',
+                stroke: COLORS.white,
+              },
+            }}
+            bezier
+            style={{
+              marginVertical: 8,
+              borderRadius: 16,
+            }}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-      backgroundColor: COLORS.lightGray4
-    }
-  });
+  container: {
+    backgroundColor: COLORS.lightGray4,
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChartPerformance);

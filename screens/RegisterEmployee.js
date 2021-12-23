@@ -51,6 +51,7 @@ class RegisterEmployee extends React.Component {
 
   onSubmit() {
     this.props.actionsAuth.registerEmployee(
+      this.state.nik,
       this.state.name,
       this.state.position,
       message => alert(message),
@@ -60,10 +61,9 @@ class RegisterEmployee extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.textInput}>
+        <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>NIK</Text>
           <Input
             placeholder="NIK"
-            inputStyle={{textAlign: 'center'}}
             placeholderTextColor={COLORS.black}
             inputContainerStyle={styles.inputContainer}
             disableFullscreenUI={true}
@@ -71,6 +71,7 @@ class RegisterEmployee extends React.Component {
             onChangeText={val => this.setState({nik: val})}
             value={this.state.nik}
           />
+          <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Company</Text>
           <Picker
             selectedValue={this.state.name}
             style={{
@@ -83,10 +84,12 @@ class RegisterEmployee extends React.Component {
             onValueChange={(itemValue, itemIndex) =>
               this.setState({name: itemValue})
             }>
+              <Picker.Item label="Select Company" value="" />
             {this.props.company.map((item, key) => (
               <Picker.Item label={item.name} value={item.id} key={item.id} />
             ))}
           </Picker>
+          <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Position</Text>
           <Picker
             selectedValue={this.state.position}
             style={{
@@ -99,6 +102,7 @@ class RegisterEmployee extends React.Component {
             onValueChange={(itemValue, itemIndex) =>
               this.setState({name: itemValue})
             }>
+              <Picker.Item label="Select Position" value="" />
             {this.props.position.map((item, key) => (
               <Picker.Item label={item.name} value={item.level} key={item.id} />
             ))}
@@ -109,7 +113,6 @@ class RegisterEmployee extends React.Component {
               <Text style={styles.textSign}>Register</Text>
             </TouchableOpacity>
           </View>
-        </View>
       </View>
     );
   }
@@ -122,9 +125,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-evenly',
     backgroundColor: COLORS.white,
-  },
-  textInput: {
-    alignItems: 'center',
     justifyContent: 'center',
   },
   button: {
