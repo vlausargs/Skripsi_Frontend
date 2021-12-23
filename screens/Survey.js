@@ -30,34 +30,97 @@ const score =  [
     {
         key:"0",
         label: "Score",
-        value: "0"
+        value: 0
     },
     {
         key:"1",
         label: "1",
-        value: "1"
+        value: 1
     },
     {
         key:"2",
         label: "2",
-        value: "2"
+        value: 2
     },
     {
         key:"3",
         label: "3",
-        value: "3"
+        value: 3
     },
     {
         key:"4",
         label: "4",
-        value: "4"
+        value: 4
     },
     {
         key:"5",
         label: "5",
-        value: "5"
+        value: 5
     },
 
+]
+
+const month = [
+    {
+        key:1,
+        label: "January",
+        value: "January"
+    },
+    {
+        key:2,
+        label: "February",
+        value: "February"
+    },
+    {
+        key:3,
+        label: "March",
+        value: "March"
+    },
+    {
+        key:4,
+        label: "April",
+        value: "April"
+    },
+    {
+        key:5,
+        label: "May",
+        value: "May"
+    },
+    {
+        key:6,
+        label: "June",
+        value: "June"
+    },
+    {
+        key:7,
+        label: "July",
+        value: "July"
+    },
+    {
+        key:8,
+        label: "August",
+        value: "August"
+    },
+    {
+        key:9,
+        label: "September",
+        value: "September"
+    },
+    {
+        key:10,
+        label: "October",
+        value: "October"
+    },
+    {
+        key:11,
+        label: "November",
+        value: "November"
+    },
+    {
+        key:12,
+        label: "December",
+        value: "December"
+    },
 ]
   
 
@@ -66,7 +129,7 @@ class Survey extends Component{
         super(props)
 
         this.state = {
-            employee: null,
+            employee: "584bd780-bf7f-41de-9759-bd80db230dc0",
             date: null,
             rating: [],
             arrRating:[]
@@ -81,14 +144,20 @@ class Survey extends Component{
     }
 
     onSubmit(){
+        const array = this.state.rating;
+        let sum = 0;
+
+        for (let i = 0; i < array.length; i++) {
+            sum += array[i];
+        }
+        console.log(sum);
         this.props.actionsAuth.scoreEmployee(
             this.props.token,
             this.state.employee,
             this.state.date,
-            this.state.rating,
+            sum,
             message => alert(message),
           );;
-          console.log('submit')
     }
 
     renderHeader() {
@@ -101,7 +170,7 @@ class Survey extends Component{
                     justifyContent:'center'
                 }}>
                     <Text style={{...FONTS.h2,fontWeight: 'bold'}}>
-                        Performance Review
+                        Performance Survey
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -155,6 +224,7 @@ class Survey extends Component{
                         onValueChange={(itemValue, itemIndex) =>
                             this.setState({employee: itemValue})
                         }>
+                        <Picker.Item label="Select Employee" value=""  style={styles.panelText} />
                         {this.props.listEmployee.map((item, key) => (
                         <Picker.Item label={item.name} value={item.id} key={item.id} />
                         ))}
@@ -171,23 +241,15 @@ class Survey extends Component{
                         onValueChange={(itemValue, itemIndex) =>
                             this.setState({date: itemValue})
                         }>
-                        <Picker.Item label="Month" value="0" />
-                        <Picker.Item label="January" value="1" />
-                        <Picker.Item label="February" value="2" />
-                        <Picker.Item label="March" value="3" />
-                        <Picker.Item label="April" value="4" />
-                        <Picker.Item label="May" value="5" />
-                        <Picker.Item label="June" value="6" />
-                        <Picker.Item label="July" value="7" />
-                        <Picker.Item label="August" value="8" />
-                        <Picker.Item label="September" value="9" />
-                        <Picker.Item label="October" value="10" />
-                        <Picker.Item label="November" value="11" />
-                        <Picker.Item label="December" value="12" />
+                            <Picker.Item label=" Select Month" value="" />
+                        {
+                            month.map((item, key) => (
+                                <Picker.Item label={item.label} value={item.value} key={item.key} />
+                            ))}
                     </Picker> 
                     {this.renderQuestion()}
                     <View style={styles.button}>
-                  <TouchableOpacity onpress={() => this.onSubmit()} style={styles.Login}>
+                  <TouchableOpacity onPress={this.onSubmit} style={styles.Login}>
                       <Text style={styles.textSign}>Submit</Text>
                   </TouchableOpacity>
               </View>

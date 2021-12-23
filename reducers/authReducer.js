@@ -13,6 +13,7 @@ let initialState = {
     meetingTypeReceived: false,
     companyQuestionReceived: false,
     listEmployeeReceived: false,
+    employeeScoreReceived: false,
 
     users: [],
     company:[],
@@ -20,7 +21,8 @@ let initialState = {
     meeting:[],
     meetingType:[],
     companyQuestion:[],
-    listEmployee:[]
+    listEmployee:[],
+    employeeScore:[],
 };
 
 /**
@@ -62,6 +64,10 @@ export default function authReducer(state = initialState, action) {
             return Object.assign({}, state, { listEmployeeReceived: true, listEmployee: action.listEmployee });
         case t.EMPTY_LISTEMPLOYEE:
             return Object.assign({}, state, { listEmployeeReceived: false, listEmployee:[] });
+        case t.RECEIVE_EMPLOYEESCORE:
+            return Object.assign({}, state, { employeeScoreReceived: true, employeeScore: action.employeeScore });
+        case t.EMPTY_EMPLOYEESCORE:
+            return Object.assign({}, state, { employeeScoreReceived: false, employeeScore:[] });
         default:
             return state;
     }
