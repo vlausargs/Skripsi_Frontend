@@ -18,6 +18,13 @@ export const COLORS = {
     lightGray4: "#F8F8F9",
     transparent: "transparent",
     darkgray: '#898C95',
+
+    p2_blue_charcoal:'#264653',
+    p2_green_persian:'#2A9D8F',
+    p2_orange_yellow_crayola:'#E9C46A',
+    p2_sandy_brown:'#F4A261',
+    p2_burnt_siena:'#E76F51',
+
 };
 
 export const SIZES = {

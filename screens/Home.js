@@ -49,13 +49,14 @@ const Home = ({ navigation }) => {
         distance: 0,
         error: null
     });
-
+    const controller = new AbortController();
 
     React.useEffect(() => {
         if (isInitData == true) {
             checkToken();
 
         }
+        return controller.abort();
     }, [isInitData]);
 
     React.useEffect(() => {
@@ -63,14 +64,19 @@ const Home = ({ navigation }) => {
             getCurrUser();
             getActivity();
         }
-
+        return controller.abort();
     }, [isInitData, currToken]);
     React.useEffect(() => {
         if (isInitData == true && userInfo) {
-            calculateDistance();
+            // calculateDistance();
             visualizeDummy();
+            
         }
-
+        return function cleanup() {
+            console.log("cleaning up");
+            clearInterval(visualizeDummy());
+          };
+          
     }, [isInitData, userInfo]);
 
     function calculateDistance() {
@@ -180,11 +186,12 @@ const Home = ({ navigation }) => {
 
     function register(user) {
         console.log('cek user', user)
-        if (user.role === 1) {
-            // navigation.navigate('RegisterCompany')
+        if (!user) return;
+    if (user.role == 1 && !user.company_info) {
+            navigation.navigate('RegisterCompany')
         }
-        else if (user.role === 2) {
-            // navigation.navigate('RegisterEmployee')
+        else if (user.role == 2 && !user.employee_info) {
+            navigation.navigate('RegisterEmployee')
         }
     }
 
@@ -238,7 +245,7 @@ const Home = ({ navigation }) => {
         )
     }
     function renderButton(curr_time) {
-        if (userInfo) {
+        if (userInfo && userInfo.company_info) {
 
             var endDay = "23:59:59"
             var startWorkHour = userInfo.company_info.start_working_hour + ":00"
@@ -253,7 +260,7 @@ const Home = ({ navigation }) => {
 
     }
     function renderCurrAttandanceInfo() {
-        return (
+        return userInfo && userInfo.company_info &&(
             <View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding + 10, margin: 20, borderRadius: 20 }}>
                 {/* <View style={{marginVertical:5}}>
                     <Text style={{...FONTS.h2,textAlign:'center',fontWeight: 'bold'}}>

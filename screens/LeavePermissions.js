@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-community/async-storage";
+import moment from "moment";
 import React, { useState } from "react";
 import {
     View,
@@ -171,7 +172,7 @@ const LeavePermissions = ({ navigation }) => {
                 return (
                     <View style={{margin: 20}} key={key}>
                         <TouchableOpacity style={{
-                            ...styles.shadow, backgroundColor: item.status==0?COLORS.white:item.status==1?COLORS.primary:COLORS.secondary, paddingVertical: SIZES.padding + 10, borderRadius: 20
+                            ...styles.shadow, backgroundColor: item.status==0?COLORS.white:item.status==1?COLORS.p2_green_persian:COLORS.p2_sandy_brown, paddingVertical: SIZES.padding + 10, borderRadius: 20
                         }} 
                         onPress={()=>{
                             if (item.status== 0){
@@ -183,15 +184,15 @@ const LeavePermissions = ({ navigation }) => {
                         }}>
                             <View style={{ marginVertical: 5 }}>
                                 <Text style={{ ...FONTS.h3, textAlign: 'left', fontWeight: '700',paddingHorizontal:SIZES.padding*1.5 }}>
-                                    {item.permission_type.leave_type} 
+                                    {item.permission_type.leave_type} {}
                                 </Text>
                             </View>
                             <View style={{ marginVertical: 10 ,flexDirection:'row'}}>
-                                <Text style={{ ...FONTS.h3, textAlign: 'left', fontWeight: '700' ,flex:1 ,paddingHorizontal:SIZES.padding*1.5 }}>
-                                    {(new Date(item.start_date)).toLocaleDateString()} 
+                                <Text style={{ ...FONTS.body3, textAlign: 'left', fontWeight: '700' ,flex:1 ,paddingHorizontal:SIZES.padding*1.5 }}>
+                                    From: {moment(item.start_date).format('DD/MM/YY')}
                                 </Text>
-                                <Text style={{ ...FONTS.h3, textAlign: 'right', fontWeight: '700',flex:1 ,paddingHorizontal:SIZES.padding*1.5 }}>
-                                    {(new Date(item.end_date)).toLocaleDateString()}
+                                <Text style={{ ...FONTS.body3, textAlign: 'right', fontWeight: '700',flex:1 ,paddingHorizontal:SIZES.padding*1.5 }}>
+                                    To: {moment(item.end_date).format('DD/MM/YY')}
                                 </Text>
                             </View>
                         </TouchableOpacity>
