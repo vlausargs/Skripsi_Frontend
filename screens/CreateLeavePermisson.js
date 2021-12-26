@@ -97,7 +97,7 @@ export default function CreateLeavePermisson({ navigation }) {
             .finally(() => {  });
     }
 
-    function postPermissionRule() {
+    function postPermission() {
         fetch(api_path + '/api/permission/create', {
             method: 'POST',
             headers: {
@@ -288,7 +288,7 @@ export default function CreateLeavePermisson({ navigation }) {
                                 borderRadius: 25,
                             }}
                             onPress={() => {
-                                postPermissionRule();
+                                postPermission();
                             }}
                         >
                            <Text style={{...styles.inputContainer,textAlign: 'center',alignSelf: 'stretch',color:'white'}}>Submit</Text>
