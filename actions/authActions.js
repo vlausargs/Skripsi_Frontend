@@ -97,8 +97,8 @@ export function getUserInfo (token) {
     return dispatch => {
         return fetchAPI(endpoint, 'GET', header)
             .then((json) => {          
-                dispatch({ type: t.RECEIVE_USER, users: { id: json.data.user.id, name: json.user.name, email: json.user.email, 
-                    role: json.user.role
+                dispatch({ type: t.RECEIVE_USER, users: { id: json.user[0].id, name: json.user[0].name, email: json.user[0].email, 
+                    role: json.user[0].role
                 } });
             })
             .catch((error) => {
@@ -118,26 +118,26 @@ export function getCompanyList (token) {
     return dispatch => {
         return fetchAPI(endpoint, 'GET', header)
             .then((json) => {          
-                dispatch({ type: t.RECEIVE_COMPANY, company: json.datas });
+                dispatch({ type: t.RECEIVE_COMPANY, company: json.company });
             })
             .catch((error) => {
-                    dispatch({ type: t.EMPTY_COMPANY });     
+                dispatch({ type: t.EMPTY_COMPANY });     
             })
     }
 }
 
-export function registerCompany(company, country, address, start_working_hour, end_working_hour, resultCB) {
+export function registerCompany(token, company, address, start_working_hour, end_working_hour, resultCB) {
 
     var endpoint = "/api/register";
     
     let header = {
+        "Authorization": "Bearer " + token,
         "Accept": "application/json",
         'Content-Type': 'application/json' 
     };
 
     let body = {
         "company": company,
-        "country": country,
         "address": address,
         "start_working_hour": start_working_hour,
         "end_working_hour": end_working_hour
@@ -169,6 +169,214 @@ export function getPositionList (token) {
             })
             .catch((error) => {
                     dispatch({ type: t.EMPTY_POSITION });     
+            })
+    }
+}
+
+export function registerEmployee(token, nik, company, position, resultCB) {
+
+    var endpoint = "/api/employee/store";
+    
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+
+    let body = {
+        "nik": nik,
+        "company": company,
+        "position": position,
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
+            })
+    }
+}
+
+
+export function sumbitMeeting(token, id, title, date_time, meeting_type, place, description, link, resultCB) {
+
+    var endpoint = "/api/meeting/create";
+    
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json'
+        
+    };
+
+    let body = {
+        "id": id,
+        "title": title,
+        "date_time": date_time,
+        "meeting_type": meeting_type,
+        "place": place,
+        "decription": description,
+        "link": link
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
+            })
+    }
+}
+
+export function getMeetingList (token) {
+    var endpoint = "/api/meeting/getMeetingList";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_MEETING, meeting: json.meeting });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_MEETING });    
+            })
+    }
+}
+
+export function attendaceCreate(token, status, lati,long, resultCB) {
+
+    var endpoint = "/api/attendance/create";
+    
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+
+    let body = {
+        "status": status,
+        "lang": lati,
+        "long": long
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
+            })
+    }
+}
+export function getMeetingType (token) {
+    var endpoint = "/api/meetingType/getMeetingType";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_MEETINGTYPE, meetingType: json.meeting_type });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_MEETINGTYPE });    
+            })
+    }
+}
+
+export function getCompanyQuestion (token) {
+    var endpoint = "/api/companyQuestion/getCompanyQuestion";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_COMPANYQUESTION, companyQuestion: json.companyQuestion });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_COMPANYQUESTION });    
+            })
+    }
+}
+
+export function getListEmployee (token) {
+    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/getUserByCompany";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_LISTEMPLOYEE, listEmployee: json.listEmployee });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_LISTEMPLOYEE });    
+            })
+    }
+}
+
+export function scoreEmployee(token, employee_id, month, score, resultCB) {
+
+    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/store";
+    
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+
+    let body = {
+        "employee_id": employee_id,
+        "month": month,
+        "score": score
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
+            })
+    }
+}
+
+export function getEmployeeScore (token) {
+    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/getEmployeeScore";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_EMPLOYEESCORE, employeeScore: json.data });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_EMPLOYEESCORE});    
             })
     }
 }

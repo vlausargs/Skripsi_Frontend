@@ -14,6 +14,13 @@ import { Attandance, Chat, LeavePermissions, Newsfeed, Profile } from '.';
 import SelectMap from './SelectMap';
 import Maps from './MapView';
 import RegisterCompany from './RegisterCompany';
+import Meeting from './Meeting';
+import MeetingForm from './MeetingForm';
+import RegisterEmployee from './RegisterEmployee';
+import CheckInOut from './CheckInOut';
+import CreateLeavePermisson from './CreateLeavePermisson';
+import Survey from './Survey';
+import ChartPerformance from './ChartPerformance';
 
 export const mapDispatchToProps = (dispatch) => ({
     actionsAuth: bindActionCreators(authAction, dispatch)
@@ -27,6 +34,11 @@ const RootStackScreen = ({navigation}) => (
         <RootStack.Screen name="Login" component={Login}/>
         <RootStack.Screen name="Register" component={Register}/>
         <RootStack.Screen name="RegisterCompany" component={RegisterCompany}/>
+        <RootStack.Screen name="RegisterEmployee" component={RegisterEmployee}/>
+        <RootStack.Screen name="Meeting" component={Meeting}/>
+        <RootStack.Screen name="MeetingForm" component={MeetingForm}/>
+        <RootStack.Screen name="Survey" component={Survey}/>
+        <RootStack.Screen name="ChartPerformance" component={ChartPerformance}/>
                 <RootStack.Screen name="Home" component={Tabs} /> 
                 <RootStack.Screen name="Chat" component={Chat} />
                 <RootStack.Screen name="LeavePermissions" component={LeavePermissions} />
@@ -35,6 +47,8 @@ const RootStackScreen = ({navigation}) => (
                 <RootStack.Screen name="Profile" component={Profile} />
                 <RootStack.Screen name="SelectMap" component={SelectMap} />
                 <RootStack.Screen name="MapView" component={Maps} />
+                <RootStack.Screen name="CheckInOut" component={CheckInOut} />
+                <RootStack.Screen name="CreateLeavePermisson" component={CreateLeavePermisson} />
     </RootStack.Navigator>
     
     

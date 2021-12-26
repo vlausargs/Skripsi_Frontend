@@ -26,12 +26,12 @@ import RootStackScreen from './screens/RootStackScreen';
 import { connect, Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import store from './redux/store';
-
+import { Appearance } from 'react-native';
 
 const Stack = createStackNavigator();
 
 const App = () => {
-
+  // Appearance.set({ colorScheme: 'light' });
    /* const loginReducer = (prevState, action) => {
         switch( action.type ) {
           case 'RETRIEVE_TOKEN': 
