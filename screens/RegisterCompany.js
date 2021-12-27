@@ -73,11 +73,11 @@ class RegisterCompany extends React.Component{
         });
       }
     
-      endHPicker = () => {
+    endHPicker = () => {
         this.showEnd('time');
       }
     
-      startHPicker = () => {
+    startHPicker = () => {
         this.showStart('time');
       }
 
@@ -86,18 +86,16 @@ class RegisterCompany extends React.Component{
         console.log(this.props.company,'cek company')
     }
       onSubmit(){
-        this.props.actionsAuth.registerCompany(this.props.token, this.state.name, this.state.address, 
+        this.props.actionsAuth.registerCompany(this.props.token, this.state.name, this.state.lat1, this.state.long1, 
             this.state.startH, this.state.endH, (message) => alert(message));
             console.log('cek lokasi',this.props.lat1, this.props.lat2)
       }
 
     render(){
-        let minDate = new Date();
-        minDate.setDate(minDate.getDate());
         const { showStart, showEnd, startH, endH, mode } = this.state;
-        console.log(this.state.date)
         return (
             <View style={styles.container}>
+                <View style={{ marginTop: SIZES.padding, marginHorizontal: SIZES.padding }}>
                 <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Company</Text>
                 <Input 
                           placeholder= 'Company'
@@ -167,6 +165,8 @@ class RegisterCompany extends React.Component{
                           <Text style={styles.textSign}>Register</Text>
                       </TouchableOpacity>
                   </View>
+
+                </View>
             </View>
           );  
 }
@@ -191,8 +191,9 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
-        width:150
+        borderRadius: 20,
+        width:150,
+        height: 30
     },
     textSign: {
         fontSize: 18,

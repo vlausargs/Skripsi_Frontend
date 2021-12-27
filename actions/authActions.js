@@ -125,7 +125,7 @@ export function getCompanyList (token) {
     }
 }
 
-export function registerCompany(token, company, address, start_working_hour, end_working_hour, resultCB) {
+export function registerCompany(token, company, lat1, long1, start_working_hour, end_working_hour, resultCB) {
 
     var endpoint = "/api/register";
     
@@ -137,7 +137,8 @@ export function registerCompany(token, company, address, start_working_hour, end
 
     let body = {
         "company": company,
-        "address": address,
+        "lat1": lat1,
+        "long1": long1,
         "start_working_hour": start_working_hour,
         "end_working_hour": end_working_hour
     };
@@ -316,7 +317,7 @@ export function getCompanyQuestion (token) {
 }
 
 export function getListEmployee (token) {
-    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/getUserByCompany";
+    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/getUnscoredEmployee";
 
     let header = {
         "Authorization": "Bearer " + token,
@@ -326,7 +327,7 @@ export function getListEmployee (token) {
     return dispatch => {
         return fetchAPI(endpoint, 'GET', header)
             .then((json) => {          
-                dispatch({ type: t.RECEIVE_LISTEMPLOYEE, listEmployee: json.listEmployee });
+                dispatch({ type: t.RECEIVE_LISTEMPLOYEE, listEmployee: json.employee });
             })
             .catch((error) => {
                 dispatch({ type: t.EMPTY_LISTEMPLOYEE });    
@@ -376,6 +377,32 @@ export function getEmployeeScore (token) {
             })
             .catch((error) => {
                 dispatch({ type: t.EMPTY_EMPLOYEESCORE});    
+            })
+    }
+}
+
+export function editWorkFrom(token, employee_id, work_from, resultCB) {
+
+    var endpoint = "/api/employee/editWorkFromUser";
+    
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+
+    let body = {
+        "employee_id": employee_id,
+        "work_from": work_from
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
             })
     }
 }

@@ -38,15 +38,51 @@ class ChartPerformance extends Component {
     this.props.actionsAuth.getEmployeeScore(this.props.token);
   }
 
+  renderHeader() {
+    return (
+        <View style={{flexDirection:'row',height:50}}>
+            <TouchableOpacity 
+            style={{
+                
+                paddingLeft:SIZES.padding*2,
+                justifyContent:'center'
+            }}>
+                <Text style={{...FONTS.h2,fontWeight: 'bold'}}>
+                    Performance Chart
+                </Text>
+            </TouchableOpacity>
+        </View>
+    )
+}
+
+checkMonthName =(month)=>{
+  var monthName ;
+    if(month == 1)  monthName = "January"
+    else if(month == 2) monthName = "February" 
+    else if(month == 3) monthName = "March"
+    else if(month == 4) monthName = "April"
+    else if(month == 5) monthName = "May"
+    else if(month == 6) monthName = "June"
+    else if(month == 7) monthName = "July"
+    else if(month == 8) monthName = "August"
+    else if(month == 9) monthName = "September"
+    else if(month == 10) monthName = "October"
+    else if(month == 11) monthName = "November"
+    else if(month == 12) monthName = "December"
+    
+    return monthName;
+}
+
   render() {
+    var months = this.props.employeeScore.month
     return (
       <SafeAreaView style={{flex: 1}}>
         <View>
-          <Text>Performance Chart</Text>
+        {this.renderHeader()}
           <BarChart
             data={{
               labels: this.props.employeeScore.map(item => {
-                return item.month;
+                return this.checkMonthName(item.month);
               }),
               datasets: [
                 {
@@ -60,10 +96,11 @@ class ChartPerformance extends Component {
             height={220}
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
+              fillShadowGradientOpacity:1,
               backgroundColor: COLORS.black,
               backgroundGradientFrom: COLORS.primary,
               backgroundGradientTo: COLORS.primary,
-              decimalPlaces: 2, // optional, defaults to 2dp
+              decimalPlaces: 0, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               style: {

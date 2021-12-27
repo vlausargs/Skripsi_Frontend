@@ -132,7 +132,7 @@ class Meeting extends Component {
     return (
       <View style={styles.container}>
         {this.renderHeader()}
-        {this.props.users.role === 1 ? (
+        {this.props.users.role === 2 ? (
           <TouchableOpacity
             style={styles.button}
             onPress={() => this.props.navigation.navigate('MeetingForm')}>
@@ -228,8 +228,8 @@ const styles = StyleSheet.create({
     height: 70,
     marginHorizontal: 20,
     backgroundColor: COLORS.lightGray,
-    elevation: 5,
-    shadowOpacity: 0.2,
+    elevation: 3,
+    shadowOpacity: 0.1,
     shadowOffset: {
         height: 1,
         width: 1

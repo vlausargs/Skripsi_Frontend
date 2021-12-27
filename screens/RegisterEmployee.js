@@ -61,8 +61,9 @@ class RegisterEmployee extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <View style={{ marginTop: SIZES.padding, marginHorizontal: SIZES.padding }}>
         <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>NIK</Text>
-          <Input
+        <Input
             placeholder="NIK"
             placeholderTextColor={COLORS.black}
             inputContainerStyle={styles.inputContainer}
@@ -113,6 +114,8 @@ class RegisterEmployee extends React.Component {
               <Text style={styles.textSign}>Register</Text>
             </TouchableOpacity>
           </View>
+        </View>
+          
       </View>
     );
   }
@@ -135,8 +138,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
-    width: 150,
+    borderRadius: 20,
+    width:150,
+    height: 30
   },
   textSign: {
     fontSize: 18,

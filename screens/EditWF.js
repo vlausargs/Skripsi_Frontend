@@ -18,7 +18,6 @@ import { Picker } from "@react-native-picker/picker";
 export const mapStateToProps = state => ({
     token: state.authReducer.token,
     users: state.authReducer.users,
-    companyQuestion: state.authReducer.companyQuestion,
     listEmployee: state.authReducer.listEmployee,
   });
   
@@ -26,138 +25,49 @@ export const mapStateToProps = state => ({
     actionsAuth: bindActionCreators(authAction, dispatch),
   });
 
-const score =  [
+  const workFrom =  [
     {
         key:"0",
-        label: "Score",
-        value: 0
+        label: "Work From",
+        value: ""
     },
     {
         key:"1",
-        label: "1",
-        value: 1
+        label: "Office",
+        value: "Office"
     },
     {
         key:"2",
-        label: "2",
-        value: 2
-    },
-    {
-        key:"3",
-        label: "3",
-        value: 3
-    },
-    {
-        key:"4",
-        label: "4",
-        value: 4
-    },
-    {
-        key:"5",
-        label: "5",
-        value: 5
-    },
+        label: "Home",
+        value: "Home"
+    }
 
 ]
 
-const month = [
-    {
-        key:1,
-        label: "January",
-        value: 1
-    },
-    {
-        key:2,
-        label: "February",
-        value: 2
-    },
-    {
-        key:3,
-        label: "March",
-        value: 3
-    },
-    {
-        key:4,
-        label: "April",
-        value: 4
-    },
-    {
-        key:5,
-        label: "May",
-        value: 5
-    },
-    {
-        key:6,
-        label: "June",
-        value: 6
-    },
-    {
-        key:7,
-        label: "July",
-        value: 7
-    },
-    {
-        key:8,
-        label: "August",
-        value: 8
-    },
-    {
-        key:9,
-        label: "September",
-        value: 9
-    },
-    {
-        key:10,
-        label: "October",
-        value: 10
-    },
-    {
-        key:11,
-        label: "November",
-        value: 11
-    },
-    {
-        key:12,
-        label: "December",
-        value: 12
-    },
-]
-  
-
-class Survey extends Component{
+class EditWF extends Component{
     constructor(props) {
         super(props)
 
         this.state = {
             employee: "584bd780-bf7f-41de-9759-bd80db230dc0",
-            date: null,
-            rating: [],
-            arrRating:[]
+            workFrom: ""
         }
+
         this.onSubmit = this.onSubmit.bind(this);
-        this.onClickDropdown = this.onClickDropdown.bind(this);
       }
 
     componentDidMount(){
-        this.props.actionsAuth.getCompanyQuestion(this.props.token);
         this.props.actionsAuth.getListEmployee(this.props.token);
     }
 
     onSubmit(){
-        const array = this.state.rating;
-        let sum = 0;
-
-        for (let i = 0; i < array.length; i++) {
-            sum += array[i];
-        }
-        console.log(sum);
-        this.props.actionsAuth.scoreEmployee(
+        this.props.actionsAuth.editWorkFrom(
             this.props.token,
             this.state.employee,
-            this.state.date,
-            sum,
+            this.state.workFrom,
             message => alert(message),
           );;
+          console.log(this.state.employee, this.state.workFrom, 'cek submiti')
     }
 
     renderHeader() {
@@ -170,44 +80,14 @@ class Survey extends Component{
                     justifyContent:'center'
                 }}>
                     <Text style={{...FONTS.h2,fontWeight: 'bold'}}>
-                        Performance Survey
+                        Edit Work From
                     </Text>
                 </TouchableOpacity>
             </View>
         )
     }
-    onClickDropdown(value,indexPicker,indexQuestion){
-        let selectValue = this.state.rating;
-        selectValue[indexQuestion] = value;
-        this.setState({
-            rating: selectValue
-        });
-      }
-    renderQuestion(){
-        let panels = []
-          this.props.companyQuestion.map((item, index) => {
-            panels.push(
-                <View key={index} style={styles.panel}>
-                    <View style={styles.panelRow}>
-                        <Text style={styles.panelText}>{item.question}</Text>
-                        <Picker
-                            selectedValue={this.state.rating[index]}
-                            style={styles.panelText}
-                            onValueChange={(itemValue, itemIndex) => this.onClickDropdown(itemValue, itemIndex, index)}>
-                            {
-                                score.map((item, key) => (
-                                    <Picker.Item label={item.label} value={item.value} key={item.key} />
-                            ))}
-                        </Picker> 
-                    </View>
-                </View>
-            );
-          })
-        return panels;
-    }
 
     render(){
-        console.log(this.state.rating, 'cek rating')
         return (
             <SafeAreaView style={{flex: 1}}>
                 {this.renderHeader()}
@@ -230,7 +110,7 @@ class Survey extends Component{
                         ))}
                     </Picker>
                     <Picker
-                        selectedValue={this.state.date}
+                        selectedValue={this.state.workFrom}
                         style={{
                             marginVertical: SIZES.padding,
                             marginHorizontal: SIZES.padding,
@@ -239,15 +119,13 @@ class Survey extends Component{
                             backgroundColor: COLORS.white,
                           }}
                         onValueChange={(itemValue, itemIndex) =>
-                            this.setState({date: itemValue})
+                            this.setState({workFrom: itemValue})
                         }>
-                            <Picker.Item label=" Select Month" value="" />
                         {
-                            month.map((item, key) => (
+                            workFrom.map((item, key) => (
                                 <Picker.Item label={item.label} value={item.value} key={item.key} />
                             ))}
                     </Picker> 
-                    {this.renderQuestion()}
                     <View style={styles.button}>
                   <TouchableOpacity onPress={this.onSubmit} style={styles.Login}>
                       <Text style={styles.textSign}>Submit</Text>
@@ -309,5 +187,5 @@ Login: {
 
   });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Survey);
+export default connect(mapStateToProps, mapDispatchToProps)(EditWF);
 
