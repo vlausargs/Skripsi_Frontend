@@ -31,8 +31,8 @@ class RegisterCompany extends React.Component{
         super(props);
         this.state = {
           name: "",
-          lat1: this.props.lat1,
-          long1: this.props.long1,
+          lat1: null,
+          long1: null,
           startH: new Date(),
           endH: new Date(),
           mode: 'time',
@@ -90,9 +90,16 @@ class RegisterCompany extends React.Component{
             this.state.startH, this.state.endH, (message) => alert(message));
             console.log('cek lokasi',this.props.lat1, this.props.lat2)
       }
+      refresh=(data)=>{
+        this.setState({
+          lat1: this.props.navigation.getParam(data),
+          long1: this.props.navigation.getParam(data),
+        })
+      }
 
     render(){
         const { showStart, showEnd, startH, endH, mode } = this.state;
+        const data = this.props.route.params.data
         return (
             <View style={styles.container}>
                 <View style={{ marginTop: SIZES.padding, marginHorizontal: SIZES.padding }}>
@@ -115,9 +122,11 @@ class RegisterCompany extends React.Component{
                                 marginVertical: SIZES.padding,
                                 marginHorizontal: SIZES.padding
                             }}
-                            onPress={() => this.props.navigation.navigate('MapView')}>
+                            onPress={() => this.props.navigation.navigate('MapRegisterView',{
+                              onGoBack: this.refresh
+                            })}>
                             <Text style={styles.inputContainer}>
-                                 Address
+                                {data}
                             </Text>  
                         </TouchableOpacity>
                         <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Start Working Hour</Text>

@@ -1,22 +1,26 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  FlatList,
+
   Switch,
   Linking,
+  SafeAreaView,
 } from 'react-native';
 import * as authAction from '../actions/authActions';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
-import DataTable, {COL_TYPES} from 'react-native-datatable-component';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import DataTable, { COL_TYPES } from 'react-native-datatable-component';
 import Accordion from 'react-native-collapsible/Accordion';
 
-import {COLORS, SIZES, FONTS, icons} from '../constants';
-import {Input} from 'react-native-elements';
+import { COLORS, SIZES, FONTS, icons, api_path } from '../constants';
+
+import moment from 'moment';
+import BiometricPopup from "./components/Auth//Biometric/BiometricPopup"
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 export const mapStateToProps = state => ({
   token: state.authReducer.token,
@@ -35,10 +39,14 @@ class Meeting extends Component {
       role: 1,
       toggled: false,
       data: [],
-      activeSection:[]
+      activeSection: [],
+
+      biometricActive:false,
+      curr_section:null,
     };
+ 
   }
-  
+
 
   componentDidMount() {
     this.mounted = true;
@@ -48,7 +56,7 @@ class Meeting extends Component {
   }
 
   toggleSwitch = value => {
-    this.setState({toggled: value});
+    this.setState({ toggled: value });
   };
 
   renderMeeting() {
@@ -76,31 +84,32 @@ class Meeting extends Component {
 
   renderHeader() {
     return (
-        <View style={{flexDirection:'row',height:50}}>
-            <TouchableOpacity 
-            style={{
-                
-                paddingLeft:SIZES.padding*2,
-                justifyContent:'center'
-            }}>
-                <Text style={{...FONTS.h2,fontWeight: 'bold'}}>
-                    Meeting Schedule
-                </Text>
-            </TouchableOpacity>
-        </View>
+      <View style={{ flexDirection: 'row', height: 50 }}>
+        <TouchableOpacity
+          style={{
+
+            paddingLeft: SIZES.padding * 2,
+            justifyContent: 'center'
+          }}>
+          <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
+            Meeting Schedule
+          </Text>
+        </TouchableOpacity>
+      </View>
     )
-}
+  }
   _renderSectionTitle = (section) => {
     return (
       <View>
-        <Text style={[styles.headerText, {color:COLORS.primary, fontWeight:'bold'}]}>{section.date_time}</Text>
+        <Text style={[styles.headerText, { color: COLORS.primary, fontWeight: 'bold' }]}>{section.date_time}</Text>
       </View>
     );
   };
 
   _renderHeader = (section) => {
     return (
-      <View style={styles.content}>
+      <View style={{...styles.content,backgroundColor:COLORS.p2_sandy_brown}}>
+        <Text style={styles.headerText2}>{moment(section.date_time).format('ddd DD/MM/YY (hh:mm)')}</Text>
         <Text style={styles.headerText}>{section.title}</Text>
       </View>
     );
@@ -108,14 +117,43 @@ class Meeting extends Component {
 
   _renderContent = (section) => {
     return (
-      <View style={styles.content}>
-        <Text style={styles.panelText}>{section.place}</Text>
-        <Text style={styles.panelText}>{section.description}</Text>
-        <Text style={[ styles.panelText, {color:COLORS.primary}]}onPress={() => Linking.openURL(section.link)}>LINK</Text>
+      <View style={{...styles.content,backgroundColor:COLORS.white}}>
+        <Text style={styles.panelText}>Place: {section.place}</Text>
+        <Text style={styles.panelText}>Desc: {section.description}</Text>
+        <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {
+        // console.log("press")
+          this.setState({biometricActive:true,curr_section:section});
+        }
+        }>LINK</Text>
       </View>
     );
   };
+  _logAttandance(id) {
+    console.log(JSON.stringify({
+      "meeting_id": id,
+      "attendace_time": (new Date()).toLocaleString()
+    }))
+    fetch(api_path + '/api/meetingAttandance/create', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + this.props.token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "meeting_id": id,
+        "attendance_time": (new Date()).toISOString()
+      })
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json)
+        // if (json.alert == "success") setisInitData(true)
+      })
+      .catch((error) => console.error(error))
+      .finally(() => { });
 
+  }
   _updateSections = (activeSection) => {
     this.setState({ activeSection });
   };
@@ -136,7 +174,7 @@ class Meeting extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => this.props.navigation.navigate('MeetingForm')}>
-            <Image source={icons.add}/>
+            <Image source={icons.add} />
           </TouchableOpacity>
         ) : (
           <View />
@@ -144,7 +182,7 @@ class Meeting extends Component {
         <Switch
           onValueChange={this.toggleSwitch}
           value={this.state.toggled}
-          trackColor={{true: COLORS.primary, false: 'grey'}}
+          trackColor={{ true: COLORS.primary, false: 'grey' }}
         />
         {this.state.toggled ? (
           <Agenda
@@ -152,6 +190,7 @@ class Meeting extends Component {
             renderItem={this.renderMeeting()}
             renderEmptyDate={() => <View />}
             markedDates={this.props.meeting.date_time}
+            style={{ marginBottom: (SIZES.padding * 3) + 10 }}
           />
         ) : (
           /*<FlatList
@@ -176,21 +215,57 @@ class Meeting extends Component {
           <Accordion
             sections={this.props.meeting}
             activeSections={this.state.activeSection}
-            renderSectionTitle={this._renderSectionTitle}
+            // renderSectionTitle={this._renderSectionTitle}
             renderHeader={this._renderHeader}
             renderContent={this._renderContent}
             onChange={this._updateSections}
           />
         )}
+
+        {this.state.biometricActive==true && (<BiometricPopup onAuthenticate={() => {
+          // console.log(this.state.curr_section)
+          this._logAttandance(this.state.curr_section.id)
+          Linking.openURL(this.state.curr_section.link)
+            this.setState({biometricActive:false,curr_section:null})
+          }} onCancel={()=>{this.setState({biometricActive:false,destUrl:null})}}></BiometricPopup>)}
+          <TouchableOpacity
+                style={{
+                    borderWidth: 1,
+                    borderColor: 'rgba(0,0,0,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 50,
+                    position: 'absolute',
+                    bottom: 10,
+                    right: 10,
+                    height: 50,
+                    backgroundColor: '#fff',
+                    borderRadius: 100,
+                }}
+                onPress={() => { this.props.navigation.navigate('CreateMeeting') }}
+            >
+                <Icon name='plus' size={30} color='#000000' />
+            </TouchableOpacity>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 10,
+  },
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.lightGray4,
+    marginBottom:40
   },
   tableTitleContainer: {
     flexDirection: 'row',
@@ -224,24 +299,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  content:{
-    height: 70,
+  content: {
+    paddingVertical: SIZES.padding,
     marginHorizontal: 20,
     backgroundColor: COLORS.lightGray,
     elevation: 3,
     shadowOpacity: 0.1,
     shadowOffset: {
-        height: 1,
-        width: 1
+      height: 1,
+      width: 1
     },
-    justifyContent:'space-evenly'
-},
-headerText: {
-  fontSize:SIZES.h2
-},
-panelText:{
-  fontSize:SIZES.body2
-}
+    justifyContent: 'space-evenly',
+    borderRadius: 10,
+    marginTop: SIZES.padding,
+    marginBottom: SIZES.padding
+  },
+  headerText: {
+    ...FONTS.h3,
+    fontWeight: 'bold',
+    paddingHorizontal: SIZES.padding
+  },
+  headerText2: {
+    ...FONTS.body3,
+    fontWeight: 'bold',
+    paddingHorizontal: SIZES.padding
+  },
+  panelText: {
+    ...FONTS.body2,
+    paddingHorizontal: SIZES.padding
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Meeting);

@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     width: 100,
-    height: 30
+    height: 40
   },
 });
 const oneDegreeOfLongitudeInMeters = 111.32 * 1000;
@@ -35,12 +35,13 @@ const circumference = (40075 / 360) * 1000;
 const distance = 5000
 const angularDistance = distance / circumference
 
-export default class Maps extends Component {
+export default class Maps2 extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      region:null
+      region:null,
+      marker: null
     }
 
     this.getLocation = this.getLocation.bind(this);
@@ -71,14 +72,14 @@ export default class Maps extends Component {
     // console.log(this.state.region)
   }
 
+  callback(marker) {
+    this.setState({ marker: marker })
+}
+
   getLocation() {
     var coord = JSON.stringify(this.state.marker)
-    //this.props.navigation.navigate('RegisterCompany', {text:coord})
-    // console.log(coord)
-    this.setState({
-      lat1: this.state.marker,
-      long1: this.state.marker
-    })
+    this.props.navigation.state.params.onGoBack(this.state.marker)
+    this.props.navigation.goBack()
     alert(coord)
   }
   showMap() {
@@ -91,7 +92,6 @@ export default class Maps extends Component {
         initialRegion={this.state.region}
         region={this.state.region}>
           {this.state.marker&&<Marker coordinate={this.state.marker}/>}
-          <CompanyMarker />
       </MapView>) : (
       <MapView
         showsUserLocation={true}
@@ -105,13 +105,13 @@ export default class Maps extends Component {
     return (
       <View style={styles.container}>
         {this.showMap()}
-        {/* <View style={styles.button}>
+        <View style={styles.button}>
           <TouchableOpacity onPress={this.getLocation} style={styles.Login}>
             <Text style={{ color: COLORS.white }}>
-              getLocation
+              Select as company
             </Text>
           </TouchableOpacity>
-        </View> */}
+        </View>
       </View>
 
     );
