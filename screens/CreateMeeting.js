@@ -168,7 +168,7 @@ export default function CreateMeeting({ navigation }) {
                         justifyContent: 'center'
                     }}>
                         <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
-                            Create Leave Permission
+                            Create Meeting
                         </Text>
                     </View>
                 </View>
@@ -286,6 +286,38 @@ export default function CreateMeeting({ navigation }) {
                             autoCapitalize='none'
                             onChangeText={(val) => setUserInput({ ...userInput, place: val })}
                             value={userInput.place}
+                        ></Input>
+                        {/* dropdown leave type */}
+                    </View>
+                    <Text style={{ ...FONTS.h3, fontWeight: 'bold' }}>
+                        Link
+                    </Text>
+                    <View>
+                        <Input
+                            placeholder='Link'
+                            inputStyle={{ textAlign: 'center' }}
+                            placeholderTextColor={COLORS.black}
+                            inputContainerStyle={styles.inputContainer}
+                            disableFullscreenUI={true}
+                            autoCapitalize='none'
+                            onChangeText={(val) => setUserInput({ ...userInput, link: val })}
+                            value={userInput.link}
+                        ></Input>
+                        {/* dropdown leave type */}
+                    </View>
+                    <Text style={{ ...FONTS.h3, fontWeight: 'bold' }}>
+                        Description
+                    </Text>
+                    <View>
+                        <Input
+                            placeholder='Description'
+                            inputStyle={{ textAlign: 'center' }}
+                            placeholderTextColor={COLORS.black}
+                            inputContainerStyle={styles.inputContainer}
+                            disableFullscreenUI={true}
+                            autoCapitalize='none'
+                            onChangeText={(val) => setUserInput({ ...userInput, description: val })}
+                            value={userInput.description}
                         ></Input>
                         {/* dropdown leave type */}
                     </View>

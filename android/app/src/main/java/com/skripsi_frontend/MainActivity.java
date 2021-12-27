@@ -1,6 +1,8 @@
 package com.skripsi_frontend;
 
 import com.facebook.react.ReactActivity;
+import android.view.WindowManager;
+import android.os.Bundle;
 
 public class MainActivity extends ReactActivity {
 
@@ -12,4 +14,10 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "Skripsi_Frontend";
   }
+@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+    }
+  
 }

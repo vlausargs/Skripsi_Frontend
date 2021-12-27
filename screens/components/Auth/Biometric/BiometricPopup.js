@@ -8,6 +8,7 @@ import {
   View,
   ViewPropTypes,
   Platform,
+  NativeModules,
 } from 'react-native';
 
 import FingerprintScanner from 'react-native-fingerprint-scanner';
@@ -48,7 +49,7 @@ class BiometricPopup extends Component {
 
   authCurrent() {
     FingerprintScanner
-      .authenticate({ title: 'Fingerprint' })
+      .authenticate({ title: 'Fingerprint'})
       .then(() => {
         this.props.onAuthenticate();
       })

@@ -109,7 +109,7 @@ class Meeting extends Component {
   _renderHeader = (section) => {
     return (
       <View style={{...styles.content,backgroundColor:COLORS.p2_sandy_brown}}>
-        <Text style={styles.headerText2}>{moment(section.date_time).format('ddd DD/MM/YY (hh:mm)')}</Text>
+        <Text style={styles.headerText2}>{moment(section.date_time+'Z').local().format('ddd DD/MM/YY (HH:mm)')}</Text>
         <Text style={styles.headerText}>{section.title}</Text>
       </View>
     );
