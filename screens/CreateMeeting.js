@@ -6,13 +6,15 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView
+    SafeAreaView,
+    TextInput,
+    ScrollView
 } from "react-native";
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 import { api_path, COLORS, FONTS, icons, SIZES } from "../constants";
 import { Alert } from "react-native";
-import { Image } from "react-native-elements";
+import { Image, Input } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
 
 
@@ -36,16 +38,13 @@ const styles = StyleSheet.create({
         ...FONTS.h4,
     }
 })
-export default function CreateLeavePermisson({ navigation }) {
+export default function CreateMeeting({ navigation }) {
     const [currToken, setToken] = useState(null);
-    const [permissionRule, setPermissionRule] = useState([]);
+    const [meetingType, setMeetingType] = useState([]);
+    const [mode, setMode] = useState('date');
     const [isInitData, setisInitData] = useState(true);
     const [showDate, setShowDate] = useState({ start: false, end: false });
-    const [userInput, setUserInput] = useState({
-        'permission_type_id': null,
-        'start_date': new Date(),
-        'end_date': new Date(),
-    });
+    const [userInput, setUserInput] = useState({ 'date': new Date(), 'time': new Date() });
     async function _getTokenValue() {
         var value = await AsyncStorage.getItem('token')
         return value
@@ -79,8 +78,8 @@ export default function CreateLeavePermisson({ navigation }) {
         })
     }
 
-    function getPermissionRule() {
-        fetch(api_path + '/api/permission/getPermissionLeft', {
+    function getMeetingType() {
+        fetch(api_path + '/api/meetingType/getMeetingType', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + currToken,
@@ -90,34 +89,37 @@ export default function CreateLeavePermisson({ navigation }) {
             .then((response) => response.json())
             .then((json) => {
                 console.log(json)
-                setPermissionRule(json.result)
+                setMeetingType(json.result)
 
             })
             .catch((error) => console.error(error))
-            .finally(() => {  });
+            .finally(() => { });
     }
 
     function postPermission() {
-        fetch(api_path + '/api/permission/create', {
+        fetch(api_path + '/api/meeting/create', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + currToken,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body:JSON.stringify({
-                "permission_type_id":userInput.permission_type_id,
-                "start_date":userInput.start_date.toLocaleDateString(),
-                "end_date":userInput.end_date.toLocaleDateString()
+            body: JSON.stringify({
+                "meeting_type_id": userInput.meeting_type_id,
+                "title": userInput.title,
+                "place": userInput.place,
+                "description": userInput.description,
+                "link": userInput.link,
+                "date_time": userInput.date.toLocaleDateString() + 'T' + userInput.time.toLocaleTimeString(),
             })
         })
             .then((response) => response.json())
             .then((json) => {
                 console.log(json)
-                if(json.alert =="success")navigation.goBack();
+                if (json.alert == "success") navigation.goBack();
             })
             .catch((error) => console.error(error))
-            .finally(() => {  });
+            .finally(() => { });
     }
 
     React.useEffect(() => {
@@ -128,7 +130,7 @@ export default function CreateLeavePermisson({ navigation }) {
 
     React.useEffect(() => {
         if (isInitData == true && currToken) {
-            getPermissionRule();
+            getMeetingType();
         }
     }, [isInitData, currToken]);
 
@@ -176,18 +178,18 @@ export default function CreateLeavePermisson({ navigation }) {
     }
     function changeType(value) {
         console.log(userInput)
-        setUserInput({ ...userInput, 'permission_type_id': value })
+        setUserInput({ ...userInput, 'meeting_type_id': value })
     }
     function renderForm() {
         return (
-            <View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingBottom: SIZES.padding, marginVertical: SIZES.padding, flex: 1 }}>
+            <ScrollView style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingBottom: SIZES.padding, marginVertical: SIZES.padding, flex: 1 }}>
                 <View style={{ marginTop: SIZES.padding, marginHorizontal: SIZES.padding }}>
                     <Text style={{ ...FONTS.h3, fontWeight: 'bold' }}>
                         Types
                     </Text>
                     <View>
                         <Picker
-                            selectedValue={userInput.permission_type_id}
+                            selectedValue={userInput.meeting_type_id}
                             style={{
                                 ...styles.shadow,
                                 marginVertical: SIZES.padding,
@@ -201,9 +203,9 @@ export default function CreateLeavePermisson({ navigation }) {
                             onValueChange={(itemValue, itemIndex) => changeType(itemValue)}
                         >
                             <Picker.Item label="PLEASE CHOOSE ONE" color="black" value="" style={styles.inputContainer} />
-                            {permissionRule.map((item, key) => {
+                            {meetingType && meetingType.map((item, key) => {
                                 return (
-                                    <Picker.Item label={item.leave_type + " (" + item.left_permission + " days)"} color="black" value={item.id} style={styles.inputContainer} key={key} />
+                                    <Picker.Item label={item.name} color="black" value={item.id} style={styles.inputContainer} key={key} />
                                 )
                             })}
 
@@ -212,67 +214,79 @@ export default function CreateLeavePermisson({ navigation }) {
                         {/* dropdown leave type */}
                     </View>
                     <Text style={{ ...FONTS.h3, fontWeight: 'bold' }}>
-                        Start Date
+                        Title
+                    </Text>
+                    <View>
+                        <Input
+                            placeholder='Title'
+                            inputStyle={{ textAlign: 'center' }}
+                            placeholderTextColor={COLORS.black}
+                            inputContainerStyle={styles.inputContainer}
+                            disableFullscreenUI={true}
+                            autoCapitalize='none'
+                            onChangeText={(val) => setUserInput({ ...userInput, title: val })}
+                            value={userInput.title}
+                        ></Input>
+                        {/* dropdown leave type */}
+                    </View>
+                    <Text style={{ ...FONTS.h3, fontWeight: 'bold' }}>
+                        Date Time
                     </Text>
                     <View>
                         <TouchableOpacity
                             style={{
                                 ...styles.shadow,
-                                 backgroundColor: COLORS.white,
-                                 padding:SIZES.padding*1.5,
+                                backgroundColor: COLORS.white,
+                                padding: SIZES.padding * 1.5,
                                 marginVertical: SIZES.padding,
                                 marginHorizontal: SIZES.padding
                             }}
                             onPress={() => {
-                                setShowDate({...showDate,start:true})
+                                setShowDate({ ...showDate, start: true })
                             }}
                         >
-                           <Text style={styles.inputContainer}>{userInput.start_date.toLocaleDateString()}</Text>
+                            <Text style={styles.inputContainer}>{userInput.date.toLocaleDateString()}T{userInput.time.toLocaleTimeString()}</Text>
 
                         </TouchableOpacity>
-                        {showDate.start &&(<DateTimePicker
+
+                        {showDate.start && (<DateTimePicker
                             testID="startDate"
-                            value={userInput.start_date}
-                            mode="date"
+                            value={userInput.date}
+                            mode={mode}
                             display="default"
-                            on
-                            onChange={(e,selectedValue)=>{
-                                setUserInput({...userInput,start_date:selectedValue||userInput.start_date})
-                                setShowDate({...showDate,start:false})
+                            onChange={(e, selectedValue) => {
+                                setShowDate({ ...showDate, start: Platform.OS === 'ios' })
+                                if (mode == 'date') {
+                                    const currentDate = selectedValue || new Date();
+                                    setUserInput({ ...userInput, date: currentDate });
+                                    setMode('time');
+                                    setShowDate({ ...showDate, start: Platform.OS !== 'ios' }) // to show time
+                                } else {
+                                    const selectedTime = selectedValue || new Date();
+                                    setUserInput({ ...userInput, time: selectedTime });
+                                    setShowDate({ ...showDate, start: Platform.OS === 'ios' }) // to hide back the picker
+                                    setMode('date'); // defaulting to date for next open
+                                }
+                                // setUserInput({...userInput,date_time:selectedValue||userInput.date_time})
+                                // setShowDate({...showDate,start:false})
                             }}
                         />)}
                         {/* dropdown leave type */}
                     </View>
                     <Text style={{ ...FONTS.h3, fontWeight: 'bold' }}>
-                        End Date
+                        Place
                     </Text>
                     <View>
-                    <TouchableOpacity
-                            style={{
-                                ...styles.shadow,
-                                 backgroundColor: COLORS.white,
-                                padding:SIZES.padding*1.5,
-                                marginVertical: SIZES.padding,
-                                marginHorizontal: SIZES.padding
-                            }}
-                            onPress={() => {
-                                setShowDate({...showDate,end:true})
-                            }}
-                        >
-                           <Text style={styles.inputContainer}>{userInput.end_date.toLocaleDateString()}</Text>
-
-                        </TouchableOpacity>
-                      
-                        {showDate.end &&(<DateTimePicker
-                            testID="endDate"
-                            value={userInput.end_date}
-                            mode="date"
-                            display="default"
-                            onChange={(e,selectedValue)=>{
-                                setUserInput({...userInput,end_date:selectedValue||userInput.end_date})
-                                setShowDate({...showDate,end:false})
-                            }}
-                        />)}
+                        <Input
+                            placeholder='Place'
+                            inputStyle={{ textAlign: 'center' }}
+                            placeholderTextColor={COLORS.black}
+                            inputContainerStyle={styles.inputContainer}
+                            disableFullscreenUI={true}
+                            autoCapitalize='none'
+                            onChangeText={(val) => setUserInput({ ...userInput, place: val })}
+                            value={userInput.place}
+                        ></Input>
                         {/* dropdown leave type */}
                     </View>
                     <View>
@@ -280,24 +294,24 @@ export default function CreateLeavePermisson({ navigation }) {
                             style={{
                                 ...styles.shadow,
                                 backgroundColor: COLORS.primary,
-                                paddingVertical:SIZES.padding*1.5,
+                                paddingVertical: SIZES.padding * 1.5,
                                 marginVertical: SIZES.padding,
                                 marginHorizontal: SIZES.padding,
-                                maxWidth:100,
-                                maxHeight:100,
+                                maxWidth: 100,
+                                maxHeight: 100,
                                 borderRadius: 25,
                             }}
                             onPress={() => {
                                 postPermission();
                             }}
                         >
-                           <Text style={{...styles.inputContainer,textAlign: 'center',alignSelf: 'stretch',color:'white'}}>Submit</Text>
+                            <Text style={{ ...styles.inputContainer, textAlign: 'center', alignSelf: 'stretch', color: 'white' }}>Submit</Text>
 
                         </TouchableOpacity>
                         {/* dropdown leave type */}
                     </View>
                 </View>
-            </View>
+            </ScrollView>
         )
     }
     return (

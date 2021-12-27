@@ -77,7 +77,7 @@ export default class CompanyMarker extends PureComponent {
     render() {
         return (
             <View style={{flex:1}}>
-                <Marker coordinate={{latitude:parseFloat(this.state.user.company_info.lat),longitude: parseFloat(this.state.user.company_info.long)}}/>
+                { this.state.user.company_info &&(<Marker coordinate={{latitude:parseFloat(this.state.user.company_info.lat),longitude: parseFloat(this.state.user.company_info.long)}}/>)}
             </View>
         )
     }

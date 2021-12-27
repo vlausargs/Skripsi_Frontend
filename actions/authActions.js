@@ -78,10 +78,10 @@ export function register(name, email, password, password_confirmation, role, res
     return dispatch => {
         return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
             .then((json) => {
-                resultCB(json.message)
+                resultCB(json)
             })
             .catch((error) => {         
-                resultCB(error.message)
+                resultCB(error)
             })
     }
 }

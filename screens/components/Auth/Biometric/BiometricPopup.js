@@ -48,9 +48,26 @@ class BiometricPopup extends Component {
 
   authCurrent() {
     FingerprintScanner
-      .authenticate({ title: 'FINGER PRINT BOS' })
+      .authenticate({ title: 'Fingerprint' })
       .then(() => {
         this.props.onAuthenticate();
+      })
+      .catch((error)=>{
+        this.setState({ errorMessageLegacy: error.message, biometricLegacy: error.biometric });
+        // this.description.shake();
+
+        switch (error.name) {
+          case 'UserCancel':
+            this.props.onCancel();
+            break;
+          case 'DeviceLocked':
+            Alert.alert('FAIL!!!','Device Locked')
+            this.props.onCancel();
+            break;
+          default:
+            this.props.onCancel();
+            break;
+        }
       });
   }
 

@@ -32,8 +32,8 @@ export const mapDispatchToProps = (dispatch) => ({
 });
 
 class Register extends React.Component{
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
           name: "",
           email: "",
@@ -49,7 +49,16 @@ class Register extends React.Component{
 
       onSubmit(){
         this.props.actionsAuth.register(this.state.name, this.state.email, this.state.password, 
-            this.state.confirm_password, this.state.role, (message) => alert(message));
+            this.state.confirm_password, this.state.role, ({message,token}) => {
+                if(message!=='success') return alert(message)
+                alert(message)
+                return this.props.navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Login' }]
+               })
+
+
+        });
         console.log(this.state.name, this.state.email, this.state.password, 
             this.state.confirm_password, this.state.role)
       }
