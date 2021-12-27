@@ -105,13 +105,13 @@ export default class Maps2 extends Component {
     return (
       <View style={styles.container}>
         {this.showMap()}
-        {/* <View style={styles.button}>
+        <View style={styles.button}>
           <TouchableOpacity onPress={this.getLocation} style={styles.Login}>
             <Text style={{ color: COLORS.white }}>
-              getLocation
+              Select as company
             </Text>
           </TouchableOpacity>
-        </View> */}
+        </View>
       </View>
 
     );
