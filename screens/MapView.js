@@ -87,9 +87,10 @@ export default class Maps extends Component {
         showsUserLocation={true}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        onPress={(e) => this.setState({ marker: e.nativeEvent.coordinate })}
+        onPress={(e) => {this.setState({ marker: e.nativeEvent.coordinate }); console.log(e.nativeEvent.coordinate)}}
         initialRegion={this.state.region}
         region={this.state.region}>
+          {this.state.marker&&<Marker coordinate={this.state.marker}/>}
           <CompanyMarker />
       </MapView>) : (
       <MapView
