@@ -79,6 +79,11 @@ export default class Maps2 extends Component {
       lat1: this.state.marker,
       long1: this.state.marker
     })
+    // const { navigation } = this.props;
+    const {onGoBack} = this.props.route.params
+    console.log(this.props.route.params)
+    onGoBack({lat:this.state.marker.latitude,long:this.state.marker.longitude})
+    this.props.navigation.goBack();
     alert(coord)
   }
   showMap() {

@@ -40,6 +40,7 @@ class RegisterCompany extends React.Component{
           showEnd: false,
         }
         this.onSubmit = this.onSubmit.bind(this);
+        this.onGoBack = this.onGoBack.bind(this);
     }
     
     setStartH = (event, startH) => {
@@ -86,11 +87,13 @@ class RegisterCompany extends React.Component{
         console.log(this.props.company,'cek company')
     }
       onSubmit(){
-        this.props.actionsAuth.registerCompany(this.props.token, this.state.name, this.state.address, 
+        this.props.actionsAuth.registerCompany(this.props.token, this.state.name, this.state.lat1,this.state.long1, 
             this.state.startH, this.state.endH, (message) => alert(message));
             console.log('cek lokasi',this.props.lat1, this.props.lat2)
       }
-
+      onGoBack(data){
+      this.setState({lat1:data.lat,long1:data.long});
+    }
     render(){
         let minDate = new Date();
         minDate.setDate(minDate.getDate());
@@ -117,9 +120,9 @@ class RegisterCompany extends React.Component{
                                 marginVertical: SIZES.padding,
                                 marginHorizontal: SIZES.padding
                             }}
-                            onPress={() => this.props.navigation.navigate('MapRegisterView')}>
+                            onPress={() => this.props.navigation.navigate('MapRegisterView',{onGoBack:this.onGoBack})}>
                             <Text style={styles.inputContainer}>
-                                 Address
+                                {this.state.lat1} , {this.state.long1}
                             </Text>  
                         </TouchableOpacity>
                         <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Start Working Hour</Text>
