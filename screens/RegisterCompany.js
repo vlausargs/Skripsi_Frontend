@@ -117,7 +117,7 @@ class RegisterCompany extends React.Component{
                                 marginVertical: SIZES.padding,
                                 marginHorizontal: SIZES.padding
                             }}
-                            onPress={() => this.props.navigation.navigate('MapView')}>
+                            onPress={() => this.props.navigation.navigate('MapRegisterView')}>
                             <Text style={styles.inputContainer}>
                                  Address
                             </Text>  
