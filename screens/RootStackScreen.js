@@ -13,6 +13,7 @@ import Tabs from '../navigation/tabs';
 import { Attandance, Chat, LeavePermissions, Newsfeed, Profile } from '.';
 import SelectMap from './SelectMap';
 import Maps from './MapView';
+import Maps2 from './MapView2';
 import RegisterCompany from './RegisterCompany';
 import Meeting from './Meeting';
 import MeetingForm from './MeetingForm';
@@ -48,6 +49,7 @@ const RootStackScreen = ({navigation}) => (
                 <RootStack.Screen name="Profile" component={Profile} />
                 <RootStack.Screen name="SelectMap" component={SelectMap} />
                 <RootStack.Screen name="MapView" component={Maps} />
+                <RootStack.Screen name="MapRegisterView" component={Maps2} />
                 <RootStack.Screen name="CheckInOut" component={CheckInOut} />
                 <RootStack.Screen name="CreateLeavePermisson" component={CreateLeavePermisson} />
                 <RootStack.Screen name="CreateMeeting" component={CreateMeeting} />

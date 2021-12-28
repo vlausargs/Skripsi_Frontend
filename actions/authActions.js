@@ -126,9 +126,9 @@ export function getCompanyList (token) {
     }
 }
 
-export function registerCompany(token, company, address, start_working_hour, end_working_hour, resultCB) {
+export function registerCompany(token, company, lat,long, start_working_hour, end_working_hour, resultCB) {
 
-    var endpoint = "/api/register";
+    var endpoint = "/api/company/store";
     
     let header = {
         "Authorization": "Bearer " + token,
@@ -137,10 +137,11 @@ export function registerCompany(token, company, address, start_working_hour, end
     };
 
     let body = {
-        "company": company,
-        "address": address,
-        "start_working_hour": start_working_hour,
-        "end_working_hour": end_working_hour
+        "name": company,
+        "lat": lat,
+        "long":long,
+        "start_working_hour": start_working_hour.toLocaleTimeString().substring(0, start_working_hour.toLocaleTimeString().length - 3),
+        "end_working_hour": end_working_hour.toLocaleTimeString().substring(0, end_working_hour.toLocaleTimeString().length - 3)
     };
 
     return dispatch => {

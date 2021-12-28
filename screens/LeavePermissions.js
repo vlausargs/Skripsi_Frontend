@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import moment from "moment";
 import React, { useState } from "react";
+import { RefreshControl } from "react-native";
 import {
     View,
     Text,
@@ -34,6 +35,7 @@ const LeavePermissions = ({ navigation }) => {
     const [currToken, setToken] = useState(null);
     const [leavePermissions, setLeavePermissions] = useState(null);
     const [isInitData, setisInitData] = useState(true);
+    const [isRefreshing, setisRefreshing] = useState(false);
 
     async function _getTokenValue() {
         var value = await AsyncStorage.getItem('token')
@@ -93,10 +95,15 @@ const LeavePermissions = ({ navigation }) => {
     React.useEffect(() => {
         if (isInitData == true && currToken) {
             getLeavePermissionList()
-            setisInitData(false)
+            setisInitData(false);
+            setisRefreshing(false);
         }
 
     }, [isInitData, currToken]);
+    function refresh() {
+        setisRefreshing(true);
+        setisInitData(true);
+    }
     function renderHeader() {
         return (
             <View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingBottom: SIZES.padding }}>
@@ -254,7 +261,11 @@ const LeavePermissions = ({ navigation }) => {
                 <Text>
                 </Text>
             </View>
-            <ScrollView>
+            <ScrollView
+             refreshControl={
+                <RefreshControl refreshing={isRefreshing} onRefresh={()=>refresh()} />
+              }
+            >
                 {leavePermissions ? renderPermissionList() : <Text>you dont have any leave request for this period</Text>}
             </ScrollView>
             <TouchableOpacity

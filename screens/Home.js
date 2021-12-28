@@ -8,6 +8,8 @@ import {
     TouchableOpacity,
     FlatList,
     Alert,
+    RefreshControl,
+    ScrollView,
 } from "react-native";
 
 import { COLORS, SIZES, FONTS, api_path } from "../constants";
@@ -37,6 +39,7 @@ const Home = ({ navigation }) => {
     const [ClockState, setClockState] = useState();
     const [DateState, setDateState] = useState();
     const [isLoading, setLoading] = useState(true);
+    const [isRefreshing, setisRefreshing] = useState(false);
     const [isCheckIn, setIsCheckIn] = useState(false);
     const [isCheckOut, setIsCheckOut] = useState(false);
 
@@ -70,7 +73,8 @@ const Home = ({ navigation }) => {
         if (isInitData == true && userInfo) {
             // calculateDistance();
             visualizeDummy();
-            
+            setisInitData(false);
+            setisRefreshing(false);
         }
         return function cleanup() {
             console.log("cleaning up");
@@ -79,6 +83,10 @@ const Home = ({ navigation }) => {
           
     }, [isInitData, userInfo]);
 
+    function refresh() {
+        setisRefreshing(true);
+        setisInitData(true);
+    }
     function calculateDistance() {
         Geolocation.getCurrentPosition(position => {
             var dist = distance_calc(position.coords.latitude, position.coords.longitude, userInfo.company_info.lat, userInfo.company_info.long)
@@ -357,9 +365,16 @@ const Home = ({ navigation }) => {
                 {renderHeader()}
                 {renderTodayDateTime()}
             </View>
+            <ScrollView
+                    refreshControl={
+                        <RefreshControl refreshing={isRefreshing} onRefresh={()=>refresh()} />
+                      }
+            >
             {renderCompanyInfo()}
             {renderCurrAttandanceInfo()}
             {renderActLog()}
+
+            </ScrollView>
         </SafeAreaView>
     )
 }
