@@ -147,6 +147,7 @@ export function registerCompany(token, company, lat,long, start_working_hour, en
     return dispatch => {
         return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
             .then((json) => {
+                console.log(json)
                 resultCB(json.message)
             })
             .catch((error) => {         
