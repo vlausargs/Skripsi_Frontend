@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { 
     View,
     Text,
@@ -7,8 +7,9 @@ import {
     SafeAreaView,
     TouchableOpacity
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage'
 import { ScrollView } from "react-native-gesture-handler";
-import { COLORS, SIZES, FONTS, icons, images } from "../constants";
+import { COLORS, SIZES, FONTS, icons, images, api_path } from "../constants";
 
 const styles = StyleSheet.create({
     container: {
@@ -75,20 +76,117 @@ shadow:{
   });
 
 const Profile = ({navigation})=>{
-    function header() {
-        return (
-            <View style={{...styles.shadow, ...styles.header}}>
-                <TouchableOpacity 
-                style={{
-                    paddingLeft:SIZES.padding*2,
-                    justifyContent:'center'
-                }}>
-                    <Text style={{...FONTS.h2,fontWeight: 'bold'}}>
-                        Menu
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        )
+
+    const [isInitData, setisInitData] = useState(true);
+    const [isLoading, setLoading] = useState(true);
+    const [userInfo, setUser] = useState(null);
+    const [currToken, setToken] = useState(null);
+
+    const controller = new AbortController();
+
+    React.useEffect(() => {
+        if (isInitData == true) {
+            checkToken();
+
+        }
+        return controller.abort();
+    }, [isInitData]);
+
+    React.useEffect(() => {
+        if (isInitData == true && currToken) {
+            getCurrUser();
+        }
+        return controller.abort();
+    }, [isInitData, currToken]);
+    React.useEffect(() => {
+        if (isInitData == true && userInfo) {
+            setisInitData(false);
+        }
+          
+    }, [isInitData, userInfo]);
+
+    async function _getTokenValue() {
+        var value = await AsyncStorage.getItem('token')
+        return value
+    }
+    function checkToken() {
+        _getTokenValue().then(token => {
+            console.log('Bearer ' + token)
+            // token = null
+            if (!token) {
+                return Alert.alert(
+                    "ERROR!!!",
+                    "TOKEN EXPIRED",
+                    [
+                        { text: "OK", onPress: () => navigation.reset({
+                            index: 0,
+                            routes: [
+                                {
+                                    name: 'Login',
+                                    params: { messages: 'TOKEN EXPIRED' },
+                                },
+                            ],
+                        }) }
+                    ]
+                );
+
+
+            }
+            setToken(token)
+        })
+    }
+
+    function renderHeader() {
+        if (!userInfo) return;
+        if (userInfo.role === 1){
+            return (
+                <View style={{ flexDirection: 'row', height: 50 }}>
+                    <TouchableOpacity
+                        style={{
+                            paddingLeft: SIZES.padding * 2,
+                            justifyContent: 'center'
+                        }}>
+                        <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
+                            Menu (Admin)
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
+        else if (userInfo.role === 2){
+            return (
+                <View style={{ flexDirection: 'row', height: 50 }}>
+                    <TouchableOpacity
+                        style={{
+    
+                            paddingLeft: SIZES.padding * 2,
+                            justifyContent: 'center'
+                        }}>
+                        <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
+                            Menu (Employee)
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
+    }
+
+    function getCurrUser() {
+        fetch(api_path + '/api/user/getUser', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + currToken,
+                'Accept': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                // console.log(json)
+                setUser(json.user)
+
+            })
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
     }
 
     function renderPanel(){
@@ -96,7 +194,7 @@ const Profile = ({navigation})=>{
             <View style={styles.panel}>
                 <View style={{flex: 1}}>
                     <View style={styles.panelRow}>
-                        <Text style={styles.panelText}>Name</Text>
+                        <Text style={styles.panelText}>{userInfo.name}</Text>
                     </View>
                     <View style={styles.panelRow}>
                         <Text style={styles.panelText}>Division</Text> 
@@ -114,7 +212,7 @@ const Profile = ({navigation})=>{
 
     return (
         <SafeAreaView style={styles.container}>
-            {header()}
+            {renderHeader()}
             {renderPanel()}
             <ScrollView >
             <View style={{flex:1, flexDirection:'row', justifyContent:'space-evenly', marginVertical: 20}}>
@@ -137,9 +235,10 @@ const Profile = ({navigation})=>{
                 <TouchableOpacity onPress={() => navigation.navigate("LeavePermissions")}> 
                     <Image source={images.LeaveButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate("EditWorkFrom")}> 
+                {userInfo.role === 1 ? <TouchableOpacity onPress={() => navigation.navigate("EditWorkFrom")}> 
                     <Image source={images.EmployeeListButton} style={{resizeMode:'contain', width:150, height: 150}}/>
-                </TouchableOpacity>
+                </TouchableOpacity> : <View />}
+                
             </View>
             </ScrollView>
             

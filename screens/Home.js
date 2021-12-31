@@ -203,9 +203,9 @@ const Home = ({ navigation }) => {
         }
     }
 
-    function renderHeader(user) {
-        if (!user) return;
-        if (user.role === 1){
+    function renderHeader() {
+        if (!userInfo) return;
+        if (userInfo.role === 1){
             return (
                 <View style={{ flexDirection: 'row', height: 50 }}>
                     <TouchableOpacity
@@ -220,7 +220,7 @@ const Home = ({ navigation }) => {
                 </View>
             )
         }
-        else if (user.role === 2){
+        else if (userInfo.role === 2){
             return (
                 <View style={{ flexDirection: 'row', height: 50 }}>
                     <TouchableOpacity

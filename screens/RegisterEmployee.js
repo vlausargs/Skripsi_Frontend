@@ -56,8 +56,25 @@ class RegisterEmployee extends React.Component {
       this.state.nik,
       this.state.name,
       this.state.position,
-      message => alert(message),
-    );
+      (message) => {
+          Alert.alert(
+            "SUCCESS!!!",
+            "",
+            [
+                { text: "OK", onPress: () => this.props.navigation.reset({
+                    index: 0,
+                    routes: [
+                        {
+                            name: 'Home',
+                            params: { messages: 'TOKEN EXPIRED' },
+                        },
+                    ],
+                }) }
+            ]
+        );
+        
+        console.log(message)
+      });
     console.log(this.state.nik, this.state.name, this.state.position)
   }
 

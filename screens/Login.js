@@ -94,7 +94,8 @@ render(){
                       disableFullscreenUI={true}
                       autoCapitalize = 'none'
                       onChangeText={(val) => this.setState({ email: val })} 
-                      value={this.state.email}     
+                      value={this.state.email}
+                      keyboardType='email-address'     
                   />   
                   <Input 
                       placeholder="Password"

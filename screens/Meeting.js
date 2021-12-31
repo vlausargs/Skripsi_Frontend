@@ -9,6 +9,7 @@ import {
   Linking,
   SafeAreaView,
   Image,
+  ScrollView,
   RefreshControl
 } from 'react-native';
 import * as authAction from '../actions/authActions';
@@ -23,7 +24,6 @@ import { COLORS, SIZES, FONTS, icons, api_path } from '../constants';
 import moment from 'moment';
 import BiometricPopup from "./components/Auth//Biometric/BiometricPopup"
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export const mapStateToProps = state => ({
   token: state.authReducer.token,
@@ -173,7 +173,8 @@ class Meeting extends Component {
   _updateSections = (activeSection) => {
     this.setState({ activeSection });
   };
-   refresh() {
+
+refresh() {
      this.setState({refreshing: true})
 }
 
@@ -188,7 +189,7 @@ class Meeting extends Component {
     });
     return (
       <ScrollView style={styles.container} refreshControl={
-        <RefreshControl refreshing={this.state.refreshing} onRefresh={() => refresh()} />
+        <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refresh()} />
     }>
         {this.renderHeader()}
         <Switch
@@ -235,7 +236,8 @@ class Meeting extends Component {
           Linking.openURL(this.state.curr_section.link)
             this.setState({biometricActive:false,curr_section:null})
           }} onCancel={()=>{this.setState({biometricActive:false,destUrl:null})}}></BiometricPopup>)}
-          <TouchableOpacity
+          {this.props.users.role === 1 ? 
+              <TouchableOpacity
                 style={{
                     borderWidth: 1,
                     borderColor: 'rgba(0,0,0,0.2)',
@@ -252,7 +254,7 @@ class Meeting extends Component {
                 onPress={() => { this.props.navigation.navigate('CreateMeeting') }}
             >
                 <Icon name='plus' size={30} color='#000000' />
-            </TouchableOpacity>
+            </TouchableOpacity> : <View />}
       </ScrollView>
     );
   }
