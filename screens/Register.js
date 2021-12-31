@@ -123,7 +123,7 @@ class Register extends React.Component{
                             this.setState({ role: itemValue })
                         }>
                         <Picker.Item label="Role" value="0" />
-                        <Picker.Item label="Owner" value="1" />
+                        <Picker.Item label="Admin" value="1" />
                         <Picker.Item label="Employee" value="2" />
                         </Picker>  
                   <View style={styles.button}>

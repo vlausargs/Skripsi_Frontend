@@ -96,9 +96,7 @@ export function getUserInfo (token) {
     return dispatch => {
         return fetchAPI(endpoint, 'GET', header)
             .then((json) => {          
-                dispatch({ type: t.RECEIVE_USER, users: { id: json.user[0].id, name: json.user[0].name, email: json.user[0].email, 
-                    role: json.user[0].role
-                } });
+                dispatch({ type: t.RECEIVE_USER, users: json.users });
             })
             .catch((error) => {
                     dispatch({ type: t.EMPTY_USER });     
@@ -125,9 +123,9 @@ export function getCompanyList (token) {
     }
 }
 
-export function registerCompany(token, company, lat1, long1, start_working_hour, end_working_hour, resultCB) {
+export function registerCompany(token, company, lat,long, start_working_hour, end_working_hour, resultCB) {
 
-    var endpoint = "/api/register";
+    var endpoint = "/api/company/store";
     
     let header = {
         "Authorization": "Bearer " + token,
@@ -136,16 +134,17 @@ export function registerCompany(token, company, lat1, long1, start_working_hour,
     };
 
     let body = {
-        "company": company,
-        "lat1": lat1,
-        "long1": long1,
-        "start_working_hour": start_working_hour,
-        "end_working_hour": end_working_hour
+        "name": company,
+        "lat": lat,
+        "long":long,
+        "start_working_hour": start_working_hour.toLocaleTimeString().substring(0, start_working_hour.toLocaleTimeString().length - 3),
+        "end_working_hour": end_working_hour.toLocaleTimeString().substring(0, end_working_hour.toLocaleTimeString().length - 3)
     };
 
     return dispatch => {
         return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
             .then((json) => {
+                console.log(json)
                 resultCB(json.message)
             })
             .catch((error) => {         

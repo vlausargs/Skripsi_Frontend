@@ -78,8 +78,17 @@ export default class Maps2 extends Component {
 
   getLocation() {
     var coord = JSON.stringify(this.state.marker)
-    this.props.navigation.state.params.onGoBack(this.state.marker)
-    this.props.navigation.goBack()
+    //this.props.navigation.navigate('RegisterCompany', {text:coord})
+    // console.log(coord)
+    this.setState({
+      lat1: this.state.marker,
+      long1: this.state.marker
+    })
+    // const { navigation } = this.props;
+    const {onGoBack} = this.props.route.params
+    console.log(this.props.route.params)
+    onGoBack({lat:this.state.marker.latitude,long:this.state.marker.longitude})
+    this.props.navigation.goBack();
     alert(coord)
   }
   showMap() {

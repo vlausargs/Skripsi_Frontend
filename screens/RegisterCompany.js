@@ -4,7 +4,8 @@ import {
     Text, 
     TouchableOpacity,
     Platform,
-    StyleSheet ,
+    StyleSheet, 
+    Alert,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -40,6 +41,7 @@ class RegisterCompany extends React.Component{
           showEnd: false,
         }
         this.onSubmit = this.onSubmit.bind(this);
+        this.onGoBack = this.onGoBack.bind(this);
     }
     
     setStartH = (event, startH) => {
@@ -86,17 +88,36 @@ class RegisterCompany extends React.Component{
         console.log(this.props.company,'cek company')
     }
       onSubmit(){
-        this.props.actionsAuth.registerCompany(this.props.token, this.state.name, this.state.lat1, this.state.long1, 
-            this.state.startH, this.state.endH, (message) => alert(message));
+        this.props.actionsAuth.registerCompany(this.props.token, this.state.name, this.state.lat1,this.state.long1, 
+            this.state.startH, this.state.endH, (message) => {
+              if(message==='success'){
+                Alert.alert(
+                  "SUCCESS!!!",
+                  "",
+                  [
+                      { text: "OK", onPress: () => navigation.reset({
+                          index: 0,
+                          routes: [
+                              {
+                                  name: 'Login',
+                                  params: { messages: 'TOKEN EXPIRED' },
+                              },
+                          ],
+                      }) }
+                  ]
+              );
+                
+              }else{
+                Alert.alert("ERROR!!!","please retry",[{text: "OK"}])
+              }  
+              
+              console.log(message)
+            });
             console.log('cek lokasi',this.props.lat1, this.props.lat2)
       }
-      refresh=(data)=>{
-        this.setState({
-          lat1: this.props.navigation.getParam(data),
-          long1: this.props.navigation.getParam(data),
-        })
-      }
-
+      onGoBack(data){
+      this.setState({lat1:data.lat,long1:data.long});
+    }
     render(){
         const { showStart, showEnd, startH, endH, mode } = this.state;
         const data = this.props.route.params.data
@@ -122,11 +143,9 @@ class RegisterCompany extends React.Component{
                                 marginVertical: SIZES.padding,
                                 marginHorizontal: SIZES.padding
                             }}
-                            onPress={() => this.props.navigation.navigate('MapRegisterView',{
-                              onGoBack: this.refresh
-                            })}>
+                            onPress={() => this.props.navigation.navigate('MapRegisterView',{onGoBack:this.onGoBack})}>
                             <Text style={styles.inputContainer}>
-                                {data}
+                                {this.state.lat1} , {this.state.long1}
                             </Text>  
                         </TouchableOpacity>
                         <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Start Working Hour</Text>

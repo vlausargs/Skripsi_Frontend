@@ -12,7 +12,7 @@ import {
 import * as authAction from '../actions/authActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+//import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import DataTable, { COL_TYPES } from 'react-native-datatable-component';
 import Accordion from 'react-native-collapsible/Accordion';
 
@@ -109,7 +109,7 @@ class Meeting extends Component {
   _renderHeader = (section) => {
     return (
       <View style={{...styles.content,backgroundColor:COLORS.p2_sandy_brown}}>
-        <Text style={styles.headerText2}>{moment(section.date_time).format('ddd DD/MM/YY (hh:mm)')}</Text>
+        <Text style={styles.headerText2}>{moment(section.date_time+'Z').local().format('ddd DD/MM/YY (HH:mm)')}</Text>
         <Text style={styles.headerText}>{section.title}</Text>
       </View>
     );
@@ -185,12 +185,7 @@ class Meeting extends Component {
           trackColor={{ true: COLORS.primary, false: 'grey' }}
         />
         {this.state.toggled ? (
-          <Agenda
-            items={this.renderItems()}
-            renderItem={this.renderMeeting()}
-            renderEmptyDate={() => <View />}
-            markedDates={this.props.meeting.date_time}
-            style={{ marginBottom: (SIZES.padding * 3) + 10 }}
+          <View
           />
         ) : (
           /*<FlatList
