@@ -190,11 +190,11 @@ const Profile = ({navigation})=>{
     }
 
     function renderPanel(){
-        return(
+        return userInfo &&(
             <View style={styles.panel}>
                 <View style={{flex: 1}}>
                     <View style={styles.panelRow}>
-                        <Text style={styles.panelText}>{userInfo.name}</Text>
+                        <Text style={styles.panelText}>{userInfo?userInfo.name:""}</Text>
                     </View>
                     <View style={styles.panelRow}>
                         <Text style={styles.panelText}>Division</Text> 
@@ -235,7 +235,7 @@ const Profile = ({navigation})=>{
                 <TouchableOpacity onPress={() => navigation.navigate("LeavePermissions")}> 
                     <Image source={images.LeaveButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                 </TouchableOpacity>
-                {userInfo.role === 1 ? <TouchableOpacity onPress={() => navigation.navigate("EditWorkFrom")}> 
+                {userInfo && userInfo.role === 1 ? <TouchableOpacity onPress={() => navigation.navigate("EditWorkFrom")}> 
                     <Image source={images.EmployeeListButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                 </TouchableOpacity> : <View />}
                 
