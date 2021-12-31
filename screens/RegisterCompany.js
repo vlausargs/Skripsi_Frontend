@@ -95,7 +95,7 @@ class RegisterCompany extends React.Component{
                   "SUCCESS!!!",
                   "",
                   [
-                      { text: "OK", onPress: () => navigation.reset({
+                      { text: "OK", onPress: () => this.props.navigation.reset({
                           index: 0,
                           routes: [
                               {
@@ -120,7 +120,6 @@ class RegisterCompany extends React.Component{
     }
     render(){
         const { showStart, showEnd, startH, endH, mode } = this.state;
-        const data = this.props.route.params.data
         return (
             <View style={styles.container}>
                 <View style={{ marginTop: SIZES.padding, marginHorizontal: SIZES.padding }}>

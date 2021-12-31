@@ -138,7 +138,7 @@ const Profile = ({navigation})=>{
                     <Image source={images.LeaveButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate("EditWorkFrom")}> 
-                    <Image source={images.EditWorkButton} style={{resizeMode:'contain', width:150, height: 150}}/>
+                    <Image source={images.EmployeeListButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                 </TouchableOpacity>
             </View>
             </ScrollView>

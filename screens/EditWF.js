@@ -72,17 +72,32 @@ class EditWF extends Component {
   }
 
   renderHeader() {
-    return (
-      <View style={{flexDirection: 'row', height: 50}}>
-        <TouchableOpacity
-          style={{
-            paddingLeft: SIZES.padding * 2,
-            justifyContent: 'center',
-          }}>
-          <Text style={{...FONTS.h2, fontWeight: 'bold'}}>List Employee</Text>
-        </TouchableOpacity>
-      </View>
-    );
+    if(this.props.users.role === 1){
+      return (     
+        <View style={{flexDirection: 'row', height: 50}}>
+          <TouchableOpacity
+            style={{
+              paddingLeft: SIZES.padding * 2,
+              justifyContent: 'center',
+            }}>
+            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>List Employee (Admin)</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    else if(this.props.users.role === 2){
+      return (     
+        <View style={{flexDirection: 'row', height: 50}}>
+          <TouchableOpacity
+            style={{
+              paddingLeft: SIZES.padding * 2,
+              justifyContent: 'center',
+            }}>
+            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>List Employee (Employee)</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }  
   }
 
   openModal (item) {
@@ -98,69 +113,7 @@ class EditWF extends Component {
       <SafeAreaView style={{flex: 1}}>
         {this.renderHeader()}
         <ScrollView>
-          {/*
-                    <Picker
-                        selectedValue={this.state.employee}
-                        style={{
-                            marginVertical: SIZES.padding,
-                            marginHorizontal: SIZES.padding,
-                            textAlign: 'center',
-                            alignSelf: 'stretch',
-                            backgroundColor: COLORS.white,
-                          }}
-                        onValueChange={(itemValue, itemIndex) =>
-                            this.setState({employee: itemValue})
-                        }>
-                        <Picker.Item label="Select Employee" value=""  style={styles.panelText} />
-                        {this.props.listEmployee.map((item, key) => (
-                        <Picker.Item label={item.name} value={item.id} key={item.id} />
-                        ))}
-                    </Picker>
-                    <Picker
-                        selectedValue={this.state.workFrom}
-                        style={{
-                            marginVertical: SIZES.padding,
-                            marginHorizontal: SIZES.padding,
-                            textAlign: 'center',
-                            alignSelf: 'stretch',
-                            backgroundColor: COLORS.white,
-                          }}
-                        onValueChange={(itemValue, itemIndex) =>
-                            this.setState({workFrom: itemValue})
-                        }>
-                        {
-                            workFrom.map((item, key) => (
-                                <Picker.Item label={item.label} value={item.value} key={item.key} />
-                            ))}
-                    </Picker> 
-                    <View style={styles.button}>
-                  <TouchableOpacity onPress={this.onSubmit} style={styles.Login}>
-                      <Text style={styles.textSign}>Submit</Text>
-                  </TouchableOpacity>
-              </View> 
-                    */}
-                    {/*this.props.users.role === 1 ? (
-          <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>Name</DataTable.Title>
-            <DataTable.Title numeric>Work From</DataTable.Title>
-            <DataTable.Title numeric>Action</DataTable.Title>
-          </DataTable.Header>
-          {this.props.listEmployee.map((item, key) => (
-            <DataTable.Row>
-              <DataTable.Cell>{item.name}</DataTable.Cell>
-              <DataTable.Cell>{item.work_from}</DataTable.Cell>
-              <TouchableOpacity>
-                  <DataTable.Cell>Action</DataTable.Cell>
-              </TouchableOpacity>
-            </DataTable.Row>
-          ))}
-        </DataTable>
-        ) : (
-          <View>
-              <Text>Only owner can have access to this menu</Text>
-        </View>
-        )*/}
+          {this.props.users.role === 1 ? (
           <DataTable>
           <DataTable.Header>
             <DataTable.Title>NIK</DataTable.Title>
@@ -208,6 +161,11 @@ class EditWF extends Component {
             </DataTable.Row>
           ))}
           </DataTable>
+        ) : (
+          <View>
+              <Text>Only admin can have access to this menu</Text>
+        </View>
+        )}
         </ScrollView>
       </SafeAreaView>
     );

@@ -8,6 +8,8 @@ import {
   Switch,
   Linking,
   SafeAreaView,
+  Image,
+  RefreshControl
 } from 'react-native';
 import * as authAction from '../actions/authActions';
 import { connect } from 'react-redux';
@@ -21,6 +23,7 @@ import { COLORS, SIZES, FONTS, icons, api_path } from '../constants';
 import moment from 'moment';
 import BiometricPopup from "./components/Auth//Biometric/BiometricPopup"
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export const mapStateToProps = state => ({
   token: state.authReducer.token,
@@ -40,11 +43,12 @@ class Meeting extends Component {
       toggled: false,
       data: [],
       activeSection: [],
+      refreshing: false,
 
       biometricActive:false,
       curr_section:null,
     };
- 
+    this.refresh = this.refresh.bind(this);
   }
 
 
@@ -52,7 +56,7 @@ class Meeting extends Component {
     this.mounted = true;
     this.props.actionsAuth.getUserInfo(this.props.token);
     this.props.actionsAuth.getMeetingList(this.props.token);
-    console.log(this.props.meeting, 'meeting');
+    this.setState({refreshing: false})
   }
 
   toggleSwitch = value => {
@@ -83,20 +87,32 @@ class Meeting extends Component {
   }
 
   renderHeader() {
-    return (
-      <View style={{ flexDirection: 'row', height: 50 }}>
-        <TouchableOpacity
-          style={{
-
-            paddingLeft: SIZES.padding * 2,
-            justifyContent: 'center'
-          }}>
-          <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
-            Meeting Schedule
-          </Text>
-        </TouchableOpacity>
-      </View>
-    )
+    if(this.props.users.role === 1){
+      return (     
+        <View style={{flexDirection: 'row', height: 50}}>
+          <TouchableOpacity
+            style={{
+              paddingLeft: SIZES.padding * 2,
+              justifyContent: 'center',
+            }}>
+            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Meeting (Admin)</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    else if(this.props.users.role === 2){
+      return (     
+        <View style={{flexDirection: 'row', height: 50}}>
+          <TouchableOpacity
+            style={{
+              paddingLeft: SIZES.padding * 2,
+              justifyContent: 'center',
+            }}>
+            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Meeting (Employee)</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }  
   }
   _renderSectionTitle = (section) => {
     return (
@@ -157,6 +173,9 @@ class Meeting extends Component {
   _updateSections = (activeSection) => {
     this.setState({ activeSection });
   };
+   refresh() {
+     this.setState({refreshing: true})
+}
 
   render() {
     let markedDay = {};
@@ -168,17 +187,10 @@ class Meeting extends Component {
       };
     });
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container} refreshControl={
+        <RefreshControl refreshing={this.state.refreshing} onRefresh={() => refresh()} />
+    }>
         {this.renderHeader()}
-        {this.props.users.role === 2 ? (
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => this.props.navigation.navigate('MeetingForm')}>
-            <Image source={icons.add} />
-          </TouchableOpacity>
-        ) : (
-          <View />
-        )}
         <Switch
           onValueChange={this.toggleSwitch}
           value={this.state.toggled}
@@ -241,7 +253,7 @@ class Meeting extends Component {
             >
                 <Icon name='plus' size={30} color='#000000' />
             </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
   }
 }

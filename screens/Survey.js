@@ -141,6 +141,7 @@ class Survey extends Component{
     componentDidMount(){
         this.props.actionsAuth.getCompanyQuestion(this.props.token);
         this.props.actionsAuth.getListEmployee(this.props.token);
+        this.props.actionsAuth.getUserInfo(this.props.token);
     }
 
     onSubmit(){
@@ -161,21 +162,33 @@ class Survey extends Component{
     }
 
     renderHeader() {
-        return (
-            <View style={{flexDirection:'row',height:50}}>
-                <TouchableOpacity 
+        if(this.props.users.role === 1){
+          return (     
+            <View style={{flexDirection: 'row', height: 50}}>
+              <TouchableOpacity
                 style={{
-                    
-                    paddingLeft:SIZES.padding*2,
-                    justifyContent:'center'
+                  paddingLeft: SIZES.padding * 2,
+                  justifyContent: 'center',
                 }}>
-                    <Text style={{...FONTS.h2,fontWeight: 'bold'}}>
-                        Performance Survey
-                    </Text>
-                </TouchableOpacity>
+                <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Performance Survey (Admin)</Text>
+              </TouchableOpacity>
             </View>
-        )
-    }
+          );
+        }
+        else if(this.props.users.role === 2){
+          return (     
+            <View style={{flexDirection: 'row', height: 50}}>
+              <TouchableOpacity
+                style={{
+                  paddingLeft: SIZES.padding * 2,
+                  justifyContent: 'center',
+                }}>
+                <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Performance Survey (Employee)</Text>
+              </TouchableOpacity>
+            </View>
+          );
+        }  
+      }
     onClickDropdown(value,indexPicker,indexQuestion){
         let selectValue = this.state.rating;
         selectValue[indexQuestion] = value;

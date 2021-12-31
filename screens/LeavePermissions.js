@@ -62,6 +62,7 @@ const LeavePermissions = ({ navigation }) => {
     const [isInitData, setisInitData] = useState(true);
     const [isRefreshing, setisRefreshing] = useState(false);
     const [userInfo, setUser] = useState(null);
+    const [adminPermissions, setAdminPermissions] = useState(null);
 
     async function _getTokenValue() {
         var value = await AsyncStorage.getItem('token')
@@ -163,6 +164,23 @@ const LeavePermissions = ({ navigation }) => {
             .catch((error) => console.error(error))
             .finally(() => { });
     }
+    function getAllPermissionCompany(){
+        fetch(api_path + '/api/permission/getAllPermissionCompany', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + currToken,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json)
+                setAdminPermissions(json.permission)
+            })
+            .catch((error) => console.error(error))
+            .finally(() => { });
+    }
     React.useEffect(() => {
         if (isInitData == true) {
             checkToken();
@@ -174,6 +192,7 @@ const LeavePermissions = ({ navigation }) => {
             getLeavePermissionList();
             getPermissionRule();
             getAllEmployeeByCompany();
+            getAllPermissionCompany();
             setisInitData(false);
             setisRefreshing(false);
         }
@@ -346,6 +365,89 @@ const LeavePermissions = ({ navigation }) => {
             })
         )
     }
+    function renderAdminPermissionList() {
+        return (
+
+             adminPermissions.map((item, key) => {
+                if ((filter.type == "" || item.permission_type.id == filter.type) && (filter.employee == "" || item.user.id == filter.employee) && (filter.status == "" || item.status == filter.status))
+                return (
+                    <View style={{ margin: 20 }} key={key}>
+                        <TouchableOpacity style={{
+                            ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding + 10, borderRadius: 20
+                        }}
+                            onPress={() => {
+                                if (userInfo && userInfo.role == 1 && item.status == 0) {
+                                    const pref = [...adminPermissions]
+                                    pref[key].expand = !pref[key].expand
+                                    console.log(pref)
+                                    setAdminPermissions(pref)
+                                }
+                            }}>
+                            <View style={{ marginVertical: 5 }}>
+                               
+                               
+                                <Text style={{ ...FONTS.h4, textAlign: 'left', fontWeight: '700', paddingHorizontal: SIZES.padding * 1.5 }}>
+                                    {item.permission_type.leave_type} <Text style={{ ...FONTS.body3, textAlign: 'left', fontWeight: '700', }}> - {item.status == 0 ? 'Requested' : item.status == 1 ? 'Approved' : 'Rejected'}</Text>
+                                </Text>
+                            </View>
+                            <View style={{ marginVertical: 10, flexDirection: 'row' }}>
+                                <Text style={{ ...FONTS.body3, textAlign: 'left', fontWeight: '700', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
+                                    From: {moment(item.start_date).format('DD/MM/YY')}
+                                </Text>
+                                <Text style={{ ...FONTS.body3, textAlign: 'right', fontWeight: '700', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
+                                    To: {moment(item.end_date).format('DD/MM/YY')}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        {item.expand && (<View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding, borderRadius: 20, flexDirection: 'row', marginTop: 10 }} >
+
+                            <TouchableOpacity
+                                style={{
+                                    ...styles.shadow,
+                                    backgroundColor: COLORS.primary,
+                                    paddingVertical: SIZES.padding * 1.5,
+                                    marginVertical: SIZES.padding,
+                                    marginHorizontal: SIZES.padding,
+                                    maxWidth: 100,
+                                    maxHeight: 100,
+                                    borderRadius: 25,
+                                    flex: 1
+                                }}
+                                onPress={() => {
+                                    postPermissionApprove(item.id);
+                                }}
+                            >
+                                <Text style={{ ...styles.inputContainer, textAlign: 'center', alignSelf: 'stretch', color: 'white' }}>Approve</Text>
+
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    ...styles.shadow,
+                                    backgroundColor: COLORS.primary,
+                                    paddingVertical: SIZES.padding * 1.5,
+                                    marginVertical: SIZES.padding,
+                                    marginHorizontal: SIZES.padding,
+                                    maxWidth: 100,
+                                    maxHeight: 100,
+                                    borderRadius: 25,
+                                    flex: 1,
+
+                                }}
+                                onPress={() => {
+                                    postPermissionReject(item.id);
+                                }}
+                            >
+                                <Text style={{ ...styles.inputContainer, textAlign: 'center', alignSelf: 'stretch', color: 'white' }}>Reject</Text>
+
+                            </TouchableOpacity>
+
+                        </View>)}
+                    </View>
+                )
+
+            })
+        )
+    }
     function changeFilter(key, value) {
         setFilter({ ...filter, [key]: value })
     }
@@ -424,11 +526,11 @@ const LeavePermissions = ({ navigation }) => {
                                 onValueChange={(itemValue, itemIndex) => changeFilter("employee", itemValue)}
                             >
                                 <Picker.Item label="Filter Employee" color="black" value="" style={styles.inputContainer} />
-                                {employees.map((item, key) => {
+                                {/*employees.map((item, key) => {
                                     return (
                                         <Picker.Item label={item.user.name + ' (' + item.nik + ')'} color="black" value={item.user.id} style={styles.inputContainer} key={key} />
                                     )
-                                })}
+                                })*/}
 
                                 {/* <Picker.Item label="Employee" color="blue" value="employee" style={styles.inputContainer} /> */}
                             </Picker>
@@ -489,6 +591,7 @@ const LeavePermissions = ({ navigation }) => {
                 </View>
 
                 {leavePermissions &&  renderPermissionList() }
+                {adminPermissions && renderAdminPermissionList()}
             </ScrollView>
             <TouchableOpacity
                 style={{

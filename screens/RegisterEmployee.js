@@ -47,15 +47,18 @@ class RegisterEmployee extends React.Component {
 
   componentDidMount() {
     this.props.actionsAuth.getPositionList(this.props.token);
+    this.props.actionsAuth.getCompanyList(this.props.token)
   }
 
   onSubmit() {
     this.props.actionsAuth.registerEmployee(
+      this.props.token,
       this.state.nik,
       this.state.name,
       this.state.position,
       message => alert(message),
     );
+    console.log(this.state.nik, this.state.name, this.state.position)
   }
 
   render() {
@@ -101,11 +104,11 @@ class RegisterEmployee extends React.Component {
               backgroundColor: COLORS.lightGray,
             }}
             onValueChange={(itemValue, itemIndex) =>
-              this.setState({name: itemValue})
+              this.setState({position: itemValue})
             }>
               <Picker.Item label="Select Position" value="" />
             {this.props.position.map((item, key) => (
-              <Picker.Item label={item.name} value={item.level} key={item.id} />
+              <Picker.Item label={item.name} value={item.id} key={item.id} />
             ))}
           </Picker>
 

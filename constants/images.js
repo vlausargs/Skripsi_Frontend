@@ -10,6 +10,7 @@ export const LeaveButton = require("../assets/images/LeaveButton.png");
 export const ReviewButton = require("../assets/images/ReviewButton.png");
 export const SurveyButton = require("../assets/images/SurveyButton.png");
 export const EditWorkButton = require("../assets/images/EditWorkButton.png");
+export const EmployeeListButton = require("../assets/images/EmployeeListButton.png");
 
 export default {
     avatar_1,
@@ -21,5 +22,6 @@ export default {
     LeaveButton,
     ReviewButton,
     SurveyButton,
-    EditWorkButton
+    EditWorkButton,
+    EmployeeListButton
 }

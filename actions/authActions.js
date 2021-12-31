@@ -96,7 +96,7 @@ export function getUserInfo (token) {
     return dispatch => {
         return fetchAPI(endpoint, 'GET', header)
             .then((json) => {          
-                dispatch({ type: t.RECEIVE_USER, users: json.users });
+                dispatch({ type: t.RECEIVE_USER, users: json.user });
             })
             .catch((error) => {
                     dispatch({ type: t.EMPTY_USER });     
@@ -184,16 +184,18 @@ export function registerEmployee(token, nik, company, position, resultCB) {
 
     let body = {
         "nik": nik,
-        "company": company,
-        "position": position,
+        "company_id": company,
+        "position_id": position,
     };
 
     return dispatch => {
         return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
             .then((json) => {
+                console.log(json.message,'cek reg')
                 resultCB(json.message)
             })
-            .catch((error) => {         
+            .catch((error) => {  
+                console.log(error.message,'cek err reg')       
                 resultCB(error.message)
             })
     }

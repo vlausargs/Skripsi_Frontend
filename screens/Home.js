@@ -203,21 +203,39 @@ const Home = ({ navigation }) => {
         }
     }
 
-    function renderHeader() {
-        return (
-            <View style={{ flexDirection: 'row', height: 50 }}>
-                <TouchableOpacity
-                    style={{
-
-                        paddingLeft: SIZES.padding * 2,
-                        justifyContent: 'center'
-                    }}>
-                    <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
-                        Attandance
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        )
+    function renderHeader(user) {
+        if (!user) return;
+        if (user.role === 1){
+            return (
+                <View style={{ flexDirection: 'row', height: 50 }}>
+                    <TouchableOpacity
+                        style={{
+                            paddingLeft: SIZES.padding * 2,
+                            justifyContent: 'center'
+                        }}>
+                        <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
+                            Attendance (Admin)
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
+        else if (user.role === 2){
+            return (
+                <View style={{ flexDirection: 'row', height: 50 }}>
+                    <TouchableOpacity
+                        style={{
+    
+                            paddingLeft: SIZES.padding * 2,
+                            justifyContent: 'center'
+                        }}>
+                        <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
+                            Attendance (Employee)
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
     }
     function renderTodayDateTime() {
         return (
