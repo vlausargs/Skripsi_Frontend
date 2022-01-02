@@ -10,6 +10,7 @@ import { api_path } from '../constants';
  * @param {String} site: optional url if there is a different one
  */
 export function fetchAPI(endpoint, method, header, data, site) {
+
     let url = (site ? site : api_path) + endpoint;
 
     let options = {
