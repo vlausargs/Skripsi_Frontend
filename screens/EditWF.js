@@ -151,7 +151,7 @@ class EditWF extends Component {
                   </View>
               </Modal>
           {this.props.listEmployee.map((item, key) => (
-            <DataTable.Row>
+            <DataTable.Row key={key}>
             <DataTable.Cell>{item.nik}</DataTable.Cell>
               <DataTable.Cell>{item.name}</DataTable.Cell>
               <DataTable.Cell>{item.work_from}</DataTable.Cell>

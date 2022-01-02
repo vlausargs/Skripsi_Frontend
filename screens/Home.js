@@ -20,6 +20,7 @@ import Geolocation from 'react-native-geolocation-service';
 import { distance_calc } from '../utils/distance_calc';
 import { Picker } from "@react-native-picker/picker";
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import { DataTable } from "react-native-paper";
 
 const styles = StyleSheet.create({
     container: {
@@ -166,7 +167,7 @@ const Home = ({ navigation }) => {
             .then((response) => response.json())
             .then((json) => {
                 console.log(json)
-               
+
                 setMissing_attandance(json.users.map((item, key) => { return { ...item, "expand": false } }))
 
             })
@@ -457,44 +458,90 @@ const Home = ({ navigation }) => {
         return (
             <View style={{ flex: 1 }}>
                 {missing_attandance &&
-                <View style={{flex:1,flexDirection:'row'}}>
-                <Text style={{ ...FONTS.h3, textAlign: 'left', fontWeight: '700', paddingHorizontal: SIZES.padding * 1.5, paddingBottom: SIZES.padding }}>
-                       From:{moment(filter.start_date.toISOString()).format('DD/MM/YY')}             
-                </Text>
-                <Text style={{ ...FONTS.h3, textAlign: 'right', fontWeight: '700', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
-                    To: {moment(filter.end_date.toISOString()).format('DD/MM/YY')}
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <Text style={{ ...FONTS.h3, textAlign: 'left', fontWeight: '700', paddingHorizontal: SIZES.padding * 1.5, paddingBottom: SIZES.padding }}>
+                            From:{moment(filter.start_date.toISOString()).format('DD/MM/YY')}
+                        </Text>
+                        <Text style={{ ...FONTS.h3, textAlign: 'right', fontWeight: '700', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
+                            To: {moment(filter.end_date.toISOString()).format('DD/MM/YY')}
 
-                    
-                </Text>
- 
-                </View>}
-                {missing_attandance && missing_attandance.map((item,key)=>{
-                    return(
-                    <View style={{ margin: 10,flex:1 }} key={key}>
-                        <TouchableOpacity style={{
-                            ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding + 10, borderRadius: 20
-                        }}
-                            onPress={() => {
+
+                        </Text>
+
+                    </View>}
+                {missing_attandance && missing_attandance.map((item, key) => {
+                    return (
+                        <View style={{ margin: 10, flex: 1 }} key={key}>
+                            <TouchableOpacity style={{
+                                ...styles.shadow, backgroundColor: COLORS.p2_sandy_brown, paddingVertical: SIZES.padding + 10, borderRadius: 20
+                            }}
+                                onPress={() => {
                                     const pref = [...missing_attandance]
                                     pref[key].expand = !pref[key].expand
                                     console.log(pref)
                                     setMissing_attandance(pref)
-                            }}>
-                            <View style={{ marginVertical: 5 }}>
-                               
-                                <Text style={{ ...FONTS.h4, textAlign: 'left', fontWeight: '700', paddingHorizontal: SIZES.padding * 1.5, paddingBottom: SIZES.padding }}>
-                                    {item.name} 
-                                    {/* <Text style={{ ...FONTS.body3, textAlign: 'right', fontWeight: '700', }}> ({item.employee.nik}) </Text> */}
-                                </Text>
-                            </View>
-                            <View style={{ marginVertical: 10, flexDirection: 'row' }}>
-                                <Text style={{ ...FONTS.body3, textAlign: 'left', fontWeight: '700', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
-                                    total missing attandance: {item.missing_attandance.length}
-                                </Text>
-                                
-                            </View>
-                        </TouchableOpacity>
-                    </View>)
+                                }}>
+                                <View style={{ marginVertical: 2 }}>
+
+                                    <Text style={{ ...FONTS.h4, textAlign: 'left', fontWeight: '700', paddingHorizontal: SIZES.padding, paddingBottom: SIZES.padding }}>
+                                        {item.name}
+                                        {/* <Text style={{ ...FONTS.body3, textAlign: 'right', fontWeight: '700', }}> ({item.employee.nik}) </Text> */}
+                                    </Text>
+                                </View>
+                                <View style={{ marginVertical: 5, flexDirection: 'row' }}>
+                                    <Text style={{ ...FONTS.body3, textAlign: 'left', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
+                                        total missing attandance: {item.missing_attandance.length}
+                                    </Text>
+
+                                </View>
+                            </TouchableOpacity>
+                            {item.expand && (
+                                //modal
+                                <Modal
+                                    animationType="fade"
+                                    transparent={true}
+                                    visible={item.expand}
+                                    onRequestClose={() => {
+                                        const pref = [...missing_attandance]
+                                        pref[key].expand = !pref[key].expand
+                                        console.log(pref)
+                                        setMissing_attandance(pref)
+                                    }}
+                                    onRequestClose={() => { 
+                                        const pref = [...missing_attandance]
+                                        pref[key].expand = !pref[key].expand
+                                        console.log(pref)
+                                        setMissing_attandance(pref)
+                                     }}
+                                >
+                                    <View style={styles.centeredView}>
+                                        <View style={{ ...styles.modalView, backgroundColor: COLORS.white, paddingBottom: SIZES.padding, marginBottom: SIZES.padding, flex: 1 }} >
+                                           <Text style={{ ...FONTS.h2, fontWeight: '700' }}>List Missing Attandance</Text>
+                                           <Text style={{ ...FONTS.h3 }}>{item.name}</Text>
+                                           <DataTable>
+                                            <DataTable.Header>
+                                                <DataTable.Title>Date</DataTable.Title>
+                                                <DataTable.Title>Type</DataTable.Title>
+                                                
+                                                <DataTable.Title numeric>Action</DataTable.Title>
+                                            </DataTable.Header>
+                                            {item.missing_attandance.map((item2, key2) => (
+                                                <DataTable.Row key={key2}>
+                                                <DataTable.Cell>{item2.mis_day}</DataTable.Cell>
+                                                <DataTable.Cell>{item2.mis_type}</DataTable.Cell>
+                                                
+                                                <TouchableOpacity onPress={() =>{} }>
+                                                    <DataTable.Cell>send notif</DataTable.Cell>
+                                                </TouchableOpacity>
+                                                </DataTable.Row>
+                                            ))}
+                                            </DataTable>
+                                        </View>
+                                    </View>
+
+                                </Modal>
+                            )}
+                        </View>)
                 })}
             </View>
         )
@@ -515,8 +562,8 @@ const Home = ({ navigation }) => {
             >
                 <View style={styles.centeredView}>
                     <View style={{ ...styles.modalView, backgroundColor: COLORS.white, paddingBottom: SIZES.padding, marginBottom: SIZES.padding, flex: 1 }} >
-                    <Text style={{...FONTS.h2}}>Filter Data</Text>
-                        <View style={{marginTop:SIZES.padding}}>
+                        <Text style={{ ...FONTS.h2 }}>Filter Data</Text>
+                        <View style={{ marginTop: SIZES.padding }}>
 
                             <Text style={FONTS.h4}>Filter Employee</Text>
 
@@ -531,7 +578,7 @@ const Home = ({ navigation }) => {
                                     alignSelf: 'stretch',
                                     backgroundColor: 'white',
                                     borderColor: COLORS.lightGray,
-                                    width:200
+                                    width: 200
                                 }}
                                 // itemStyle={{...FONTS.h1,}}
                                 onValueChange={(itemValue, itemIndex) => changeFilter("employee", itemValue)}
@@ -555,7 +602,7 @@ const Home = ({ navigation }) => {
                                     padding: SIZES.padding * 1.5,
                                     marginVertical: SIZES.padding,
                                     marginHorizontal: SIZES.padding,
-                                    width:200
+                                    width: 200
                                 }}
                                 onPress={() => {
                                     setShowDate({ ...showDate, start: true })
@@ -574,7 +621,7 @@ const Home = ({ navigation }) => {
                                     padding: SIZES.padding * 1.5,
                                     marginVertical: SIZES.padding,
                                     marginHorizontal: SIZES.padding,
-                                    width:200
+                                    width: 200
                                 }}
                                 onPress={() => {
                                     setShowDate({ ...showDate, end: true })
@@ -630,8 +677,8 @@ const Home = ({ navigation }) => {
                                 backgroundColor: COLORS.primary,
                                 borderRadius: 20,
                             }}
-                            onPress={() => { 
-                                setModalVisible(false) 
+                            onPress={() => {
+                                setModalVisible(false)
                                 getMissingAttandace();
                             }}
                         >
