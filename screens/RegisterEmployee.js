@@ -131,7 +131,7 @@ class RegisterEmployee extends React.Component {
 
           <View style={styles.button}>
             <TouchableOpacity style={styles.Login} onPress={this.onSubmit}>
-              <Text style={styles.textSign}>Register</Text>
+              <Text style={styles.textSign}>Submit</Text>
             </TouchableOpacity>
           </View>
         </View>

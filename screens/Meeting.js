@@ -4,7 +4,8 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-
+  Modal,
+  Alert,
   Switch,
   Linking,
   SafeAreaView,
@@ -16,12 +17,12 @@ import * as authAction from '../actions/authActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 //import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-import DataTable, { COL_TYPES } from 'react-native-datatable-component';
+import {DataTable} from 'react-native-paper';
 import Accordion from 'react-native-collapsible/Accordion';
 
 import { COLORS, SIZES, FONTS, icons, api_path } from '../constants';
 
-import moment from 'moment';
+import moment from "moment";
 import BiometricPopup from "./components/Auth//Biometric/BiometricPopup"
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
@@ -29,6 +30,7 @@ export const mapStateToProps = state => ({
   token: state.authReducer.token,
   users: state.authReducer.users,
   meeting: state.authReducer.meeting,
+  meetingAtt: state.authReducer.meetingAtt,
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -44,7 +46,7 @@ class Meeting extends Component {
       data: [],
       activeSection: [],
       refreshing: false,
-
+      modalVisible: false,
       biometricActive:false,
       curr_section:null,
     };
@@ -95,7 +97,7 @@ class Meeting extends Component {
               paddingLeft: SIZES.padding * 2,
               justifyContent: 'center',
             }}>
-            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Meeting (Admin)</Text>
+            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Meeting (ADMIN)</Text>
           </TouchableOpacity>
         </View>
       );
@@ -108,7 +110,7 @@ class Meeting extends Component {
               paddingLeft: SIZES.padding * 2,
               justifyContent: 'center',
             }}>
-            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Meeting (Employee)</Text>
+            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Meeting (EMPLOYEE)</Text>
           </TouchableOpacity>
         </View>
       );
@@ -136,11 +138,14 @@ class Meeting extends Component {
       <View style={{...styles.content,backgroundColor:COLORS.white}}>
         <Text style={styles.panelText}>Place: {section.place}</Text>
         <Text style={styles.panelText}>Desc: {section.description}</Text>
-        <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {
-        // console.log("press")
-          this.setState({biometricActive:true,curr_section:section});
-        }
-        }>LINK</Text>
+          <View style={{flexDirection:'row', alignSelf:'center'}}>
+            <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {
+              this.setState({biometricActive:true,curr_section:section});
+            }
+            }>LINK</Text>
+            <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => this.openModal(section)}>Attendees</Text>
+            {this.props.users.role === 1 &&( <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => this.deleteMeeting(section)}>Delete</Text>)}
+          </View>
       </View>
     );
   };
@@ -176,9 +181,23 @@ class Meeting extends Component {
 
 refresh() {
      this.setState({refreshing: true})
+     this.props.actionsAuth.getMeetingList(this.props.token).then(() => {
+       this.setState({refreshing: false})
+     })
 }
 
+deleteMeeting(item){
+  this.props.actionsAuth.deleteMeeting(this.props.token, item.id, (message) => {
+    alert(message)
+});
+}
+
+openModal (item) {
+  this.setState({ modalVisible: true });
+  this.props.actionsAuth.getMeetAttendaceList(this.props.token, item.id);
+}
   render() {
+    const { modalVisible } = this.state;
     let markedDay = {};
     this.props.meeting.map(item => {
       markedDay[item.date_time] = {
@@ -188,7 +207,8 @@ refresh() {
       };
     });
     return (
-      <ScrollView style={styles.container} refreshControl={
+      <SafeAreaView style={styles.container}>
+        <ScrollView refreshControl={
         <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refresh()} />
     }>
         {this.renderHeader()}
@@ -229,6 +249,29 @@ refresh() {
             onChange={this._updateSections}
           />
         )}
+        <Modal  animationType="slide"
+                transparent={true}
+                visible={modalVisible}>
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                    <DataTable>
+                      <DataTable.Header>
+                        <DataTable.Title>Name</DataTable.Title>
+                        <DataTable.Title>Attendance Time</DataTable.Title>
+                        </DataTable.Header>
+                        {this.props.meetingAtt.map((item, key) => (
+                            <DataTable.Row key={key}>
+                            <DataTable.Cell>{item.user.name}</DataTable.Cell>
+                              <DataTable.Cell>{moment(item.attendance_time).format('HH:MM:SS')}</DataTable.Cell>
+                            </DataTable.Row>
+                        ))}
+                    </DataTable>
+                    <Text style={{ color: COLORS.primary, marginTop: 20 }} 
+                          onPress={() => this.setState({modalVisible: false})}>Close</Text>
+                    </View>
+                  </View>
+                  
+        </Modal>
 
         {this.state.biometricActive==true && (<BiometricPopup onAuthenticate={() => {
           // console.log(this.state.curr_section)
@@ -236,8 +279,9 @@ refresh() {
           Linking.openURL(this.state.curr_section.link)
             this.setState({biometricActive:false,curr_section:null})
           }} onCancel={()=>{this.setState({biometricActive:false,destUrl:null})}}></BiometricPopup>)}
-          {this.props.users.role === 1 ? 
-              <TouchableOpacity
+          
+      </ScrollView>
+      {this.props.users.role === 1 && (<TouchableOpacity
                 style={{
                     borderWidth: 1,
                     borderColor: 'rgba(0,0,0,0.2)',
@@ -254,8 +298,8 @@ refresh() {
                 onPress={() => { this.props.navigation.navigate('CreateMeeting') }}
             >
                 <Icon name='plus' size={30} color='#000000' />
-            </TouchableOpacity> : <View />}
-      </ScrollView>
+            </TouchableOpacity>)}
+      </SafeAreaView>
     );
   }
 }
@@ -336,7 +380,27 @@ const styles = StyleSheet.create({
   panelText: {
     ...FONTS.body2,
     paddingHorizontal: SIZES.padding
-  }
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Meeting);

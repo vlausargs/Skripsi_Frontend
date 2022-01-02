@@ -384,8 +384,9 @@ const LeavePermissions = ({ navigation }) => {
                                 }
                             }}>
                             <View style={{ marginVertical: 5 }}>
-                               
-                               
+                                <Text style={{ ...FONTS.h4, textAlign: 'left', fontWeight: '700', paddingHorizontal: SIZES.padding * 1.5, paddingBottom: SIZES.padding }}>
+                                    {item.user.name} <Text style={{ ...FONTS.body3, textAlign: 'right', fontWeight: '700', }}> {item.nik} </Text>
+                                </Text>
                                 <Text style={{ ...FONTS.h4, textAlign: 'left', fontWeight: '700', paddingHorizontal: SIZES.padding * 1.5 }}>
                                     {item.permission_type.leave_type} <Text style={{ ...FONTS.body3, textAlign: 'left', fontWeight: '700', }}> - {item.status == 0 ? 'Requested' : item.status == 1 ? 'Approved' : 'Rejected'}</Text>
                                 </Text>
@@ -556,7 +557,7 @@ const LeavePermissions = ({ navigation }) => {
             </Modal>
         )
     }
-    return (
+    return userInfo &&(
         <SafeAreaView style={styles.container}>
             {renderHeader()}
             <View>
@@ -593,7 +594,7 @@ const LeavePermissions = ({ navigation }) => {
                 {leavePermissions &&  renderPermissionList() }
                 {adminPermissions && renderAdminPermissionList()}
             </ScrollView>
-            <TouchableOpacity
+            {userInfo.role === 2 && (<TouchableOpacity
                 style={{
                     borderWidth: 1,
                     borderColor: 'rgba(0,0,0,0.2)',
@@ -610,7 +611,8 @@ const LeavePermissions = ({ navigation }) => {
                 onPress={() => { navigation.navigate('CreateLeavePermisson') }}
             >
                 <Icon name='plus' size={30} color='#000000' />
-            </TouchableOpacity>
+            </TouchableOpacity>)}
+            
         </SafeAreaView>
     )
 }

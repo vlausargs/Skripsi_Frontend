@@ -14,6 +14,8 @@ let initialState = {
     companyQuestionReceived: false,
     listEmployeeReceived: false,
     employeeScoreReceived: false,
+    listEmployeeCompanyReceived: false,
+    meetingAttReceived: false,
 
     users: [],
     company:[],
@@ -22,7 +24,9 @@ let initialState = {
     meetingType:[],
     companyQuestion:[],
     listEmployee:[],
+    listEmployeeCompany:[],
     employeeScore:[],
+    meetingAtt:[],
 };
 
 /**
@@ -64,10 +68,18 @@ export default function authReducer(state = initialState, action) {
             return Object.assign({}, state, { listEmployeeReceived: true, listEmployee: action.listEmployee });
         case t.EMPTY_LISTEMPLOYEE:
             return Object.assign({}, state, { listEmployeeReceived: false, listEmployee:[] });
+        case t.RECEIVE_LISTEMPLOYEECOMPANY:
+            return Object.assign({}, state, { listEmployeeCompanyReceived: true, listEmployeeCompany: action.listEmployeeCompany });
+        case t.EMPTY_LISTEMPLOYEECOMPANY:
+            return Object.assign({}, state, { listEmployeeCompanyReceived: false, listEmployeeCompany:[] });
         case t.RECEIVE_EMPLOYEESCORE:
             return Object.assign({}, state, { employeeScoreReceived: true, employeeScore: action.employeeScore });
         case t.EMPTY_EMPLOYEESCORE:
             return Object.assign({}, state, { employeeScoreReceived: false, employeeScore:[] });
+        case t.RECEIVE_MEETINGATT:
+            return Object.assign({}, state, { meetingAttReceived: true, meetingAtt: action.meetingAtt });
+        case t.EMPTY_MEETINGATT:
+            return Object.assign({}, state, { meetingAttReceived: false, meetingAtt:[] });
         default:
             return state;
     }
