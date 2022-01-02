@@ -526,11 +526,11 @@ const LeavePermissions = ({ navigation }) => {
                                 onValueChange={(itemValue, itemIndex) => changeFilter("employee", itemValue)}
                             >
                                 <Picker.Item label="Filter Employee" color="black" value="" style={styles.inputContainer} />
-                                {/*employees.map((item, key) => {
+                                {employees.map((item, key) => {
                                     return (
                                         <Picker.Item label={item.user.name + ' (' + item.nik + ')'} color="black" value={item.user.id} style={styles.inputContainer} key={key} />
                                     )
-                                })*/}
+                                })}
 
                                 {/* <Picker.Item label="Employee" color="blue" value="employee" style={styles.inputContainer} /> */}
                             </Picker>

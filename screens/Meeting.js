@@ -45,8 +45,8 @@ class Meeting extends Component {
       activeSection: [],
       refreshing: false,
 
-      biometricActive:false,
-      curr_section:null,
+      biometricActive: false,
+      curr_section: null,
     };
     this.refresh = this.refresh.bind(this);
   }
@@ -56,7 +56,7 @@ class Meeting extends Component {
     this.mounted = true;
     this.props.actionsAuth.getUserInfo(this.props.token);
     this.props.actionsAuth.getMeetingList(this.props.token);
-    this.setState({refreshing: false})
+    this.setState({ refreshing: false })
   }
 
   toggleSwitch = value => {
@@ -87,32 +87,32 @@ class Meeting extends Component {
   }
 
   renderHeader() {
-    if(this.props.users.role === 1){
-      return (     
-        <View style={{flexDirection: 'row', height: 50}}>
+    if (this.props.users.role === 1) {
+      return (
+        <View style={{ flexDirection: 'row', height: 50 }}>
           <TouchableOpacity
             style={{
               paddingLeft: SIZES.padding * 2,
               justifyContent: 'center',
             }}>
-            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Meeting (Admin)</Text>
+            <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>Meeting (Admin)</Text>
           </TouchableOpacity>
         </View>
       );
     }
-    else if(this.props.users.role === 2){
-      return (     
-        <View style={{flexDirection: 'row', height: 50}}>
+    else if (this.props.users.role === 2) {
+      return (
+        <View style={{ flexDirection: 'row', height: 50 }}>
           <TouchableOpacity
             style={{
               paddingLeft: SIZES.padding * 2,
               justifyContent: 'center',
             }}>
-            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Meeting (Employee)</Text>
+            <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>Meeting (Employee)</Text>
           </TouchableOpacity>
         </View>
       );
-    }  
+    }
   }
   _renderSectionTitle = (section) => {
     return (
@@ -124,8 +124,8 @@ class Meeting extends Component {
 
   _renderHeader = (section) => {
     return (
-      <View style={{...styles.content,backgroundColor:COLORS.p2_sandy_brown}}>
-        <Text style={styles.headerText2}>{moment(section.date_time+'Z').local().format('ddd DD/MM/YY (HH:mm)')}</Text>
+      <View style={{ ...styles.content, backgroundColor: COLORS.p2_sandy_brown }}>
+        <Text style={styles.headerText2}>{moment(section.date_time + 'Z').local().format('ddd DD/MM/YY (HH:mm)')}</Text>
         <Text style={styles.headerText}>{section.title}</Text>
       </View>
     );
@@ -133,12 +133,12 @@ class Meeting extends Component {
 
   _renderContent = (section) => {
     return (
-      <View style={{...styles.content,backgroundColor:COLORS.white}}>
+      <View style={{ ...styles.content, backgroundColor: COLORS.white }}>
         <Text style={styles.panelText}>Place: {section.place}</Text>
         <Text style={styles.panelText}>Desc: {section.description}</Text>
         <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {
-        // console.log("press")
-          this.setState({biometricActive:true,curr_section:section});
+          // console.log("press")
+          this.setState({ biometricActive: true, curr_section: section });
         }
         }>LINK</Text>
       </View>
@@ -174,9 +174,9 @@ class Meeting extends Component {
     this.setState({ activeSection });
   };
 
-refresh() {
-     this.setState({refreshing: true})
-}
+  refresh() {
+    this.setState({ refreshing: true })
+  }
 
   render() {
     let markedDay = {};
@@ -188,9 +188,13 @@ refresh() {
       };
     });
     return (
-      <ScrollView style={styles.container} refreshControl={
+      <SafeAreaView style={{ ...styles.container }}>
+
+      
+      <ScrollView  refreshControl={
         <RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refresh()} />
-    }>
+      }>
+        
         {this.renderHeader()}
         <Switch
           onValueChange={this.toggleSwitch}
@@ -230,32 +234,36 @@ refresh() {
           />
         )}
 
-        {this.state.biometricActive==true && (<BiometricPopup onAuthenticate={() => {
+        {this.state.biometricActive == true && (<BiometricPopup onAuthenticate={() => {
           // console.log(this.state.curr_section)
           this._logAttandance(this.state.curr_section.id)
           Linking.openURL(this.state.curr_section.link)
-            this.setState({biometricActive:false,curr_section:null})
-          }} onCancel={()=>{this.setState({biometricActive:false,destUrl:null})}}></BiometricPopup>)}
-          {this.props.users.role === 1 ? 
-              <TouchableOpacity
-                style={{
-                    borderWidth: 1,
-                    borderColor: 'rgba(0,0,0,0.2)',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 50,
-                    position: 'absolute',
-                    bottom: 10,
-                    right: 10,
-                    height: 50,
-                    backgroundColor: '#fff',
-                    borderRadius: 100,
-                }}
-                onPress={() => { this.props.navigation.navigate('CreateMeeting') }}
-            >
-                <Icon name='plus' size={30} color='#000000' />
-            </TouchableOpacity> : <View />}
+          this.setState({ biometricActive: false, curr_section: null })
+        }} onCancel={() => { this.setState({ biometricActive: false, destUrl: null }) }}></BiometricPopup>)}
+        <View />
+
       </ScrollView>
+      {this.props.users.role === 1 &&
+          <TouchableOpacity
+            style={{
+              zIndex: 9999999,
+              borderWidth: 1,
+              borderColor: 'rgba(0,0,0,0.2)',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 50,
+              height: 50,
+              position: 'absolute',
+              bottom: 10,
+              right: 10,
+              backgroundColor: '#fff',
+              borderRadius: 100,
+            }}
+            onPress={() => { this.props.navigation.navigate('CreateMeeting') }}
+          >
+            <Icon name='plus' size={30} color='#000000' />
+          </TouchableOpacity>}
+      </SafeAreaView>
     );
   }
 }
@@ -273,8 +281,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    
     backgroundColor: COLORS.lightGray4,
-    marginBottom:40
+    marginBottom: 40
   },
   tableTitleContainer: {
     flexDirection: 'row',
