@@ -20,6 +20,8 @@ import {
 export const mapStateToProps = state => ({
   token: state.authReducer.token,
   employeeScore: state.authReducer.employeeScore,
+  users: state.authReducer.users,
+  listEmployeeCompany: state.authReducer.listEmployeeCompany,
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -36,6 +38,8 @@ class ChartPerformance extends Component {
   componentDidMount() {
     this.mounted = true;
     this.props.actionsAuth.getEmployeeScore(this.props.token);
+    this.props.actionsAuth.getEmployeeByCompany(this.props.token);
+    this.props.actionsAuth.getUserInfo(this.props.token)
   }
 
   renderHeader() {
@@ -79,6 +83,23 @@ checkMonthName =(month)=>{
       <SafeAreaView style={{flex: 1}}>
         <View>
         {this.renderHeader()}
+        {this.props.users.role === 1 &&(<Picker
+                        selectedValue={this.state.employee}
+                        style={{
+                            marginVertical: SIZES.padding,
+                            marginHorizontal: SIZES.padding,
+                            textAlign: 'center',
+                            alignSelf: 'stretch',
+                            backgroundColor: COLORS.white,
+                          }}
+                        onValueChange={(itemValue, itemIndex) =>
+                            this.setState({employee: itemValue})
+                        }>
+                        <Picker.Item label="Select Employee" value=""  style={styles.panelText} />
+                        {this.props.listEmployeeCompany.map((item, key) => (
+                        <Picker.Item label={item.name} value={item.id} key={item.id} />
+                        ))}
+                    </Picker>)}
           <BarChart
             data={{
               labels: this.props.employeeScore.map(item => {

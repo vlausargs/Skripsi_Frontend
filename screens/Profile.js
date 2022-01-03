@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
       }
   },
   panelText: {
-      flex: 0.37,
+      flex: 0.7,
       marginVertical: 5,
       marginLeft: 5
   },
