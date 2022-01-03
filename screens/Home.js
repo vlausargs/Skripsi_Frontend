@@ -659,7 +659,7 @@ const Home = ({ navigation }) => {
                                 onValueChange={(itemValue, itemIndex) => changeFilter("user_id", itemValue)}
                             >
                                 <Picker.Item label="Select Employee" color="black" value="" style={styles.inputContainer} />
-                                {employees.map((item, key) => {
+                                {employees && employees.map((item, key) => {
                                     return (
                                         <Picker.Item label={item.user.name + ' (' + item.nik + ')'} color="black" value={item.user.id} style={styles.inputContainer} key={key} />
                                     )
