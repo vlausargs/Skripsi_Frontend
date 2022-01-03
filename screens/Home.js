@@ -78,6 +78,7 @@ const Home = ({ navigation }) => {
         error: null
     });
     const [employees, setEmployees] = useState([]);
+    const [notification, setNotification] = useState([]);
     const [missing_attandance, setMissing_attandance] = useState(null);
     const [filter, setFilter] = useState({ 'start_date': new Date(), 'end_date': new Date(), 'user_id': "" });
     const [modalVisible, setModalVisible] = useState(false);
@@ -105,6 +106,7 @@ const Home = ({ navigation }) => {
             // calculateDistance();
             visualizeDummy();
             getAllEmployeeByCompany();
+            getNotification();
             // if(filter.start_date !=""&& filter.end_date!="")getMissingAttandace();
             setisInitData(false);
             setisRefreshing(false);
@@ -150,6 +152,37 @@ const Home = ({ navigation }) => {
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
     }
+    function getNotification() {
+        fetch(api_path + '/api/notification/getNotifLogged', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + currToken,
+                'Accept': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                // console.log(json)
+
+                if (json.employeeNotif) {
+                    json.employeeNotif.map((item, key) => {
+                        return (Alert.alert(
+                            "Notification From Admin",
+                            item.desc,
+                            [
+                                {
+                                    text: "OK", onPress: () => { }
+                                }
+                            ]
+                        ));
+                    })
+                }
+
+
+            })
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
+    }
     function getMissingAttandace() {
         fetch(api_path + '/api/attendance/get_missing_attandance', {
             method: 'POST',
@@ -174,6 +207,34 @@ const Home = ({ navigation }) => {
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
     }
+    function postNotification(item) {
+        fetch(api_path + '/api/notification/store', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + currToken,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "user_id": item.mis_user_id,
+                "desc": "Missing " + item.mis_type + " (" + item.mis_day + ") please contact Admin/HR !",
+            })
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json)
+                if (json.employeeNotif) {
+                    Alert.alert("Success")
+                } else {
+                    Alert.alert("error")
+                }
+
+
+            })
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
+    }
+
     function getAllEmployeeByCompany() {
         fetch(api_path + '/api/employee/getAllByCompany', {
             method: 'GET',
@@ -322,14 +383,19 @@ const Home = ({ navigation }) => {
                 justifyContent: 'center', flexDirection: 'row'
             }}>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ ...FONTS.h3, textAlign: 'left' }}>
-                        {DateState}
-                    </Text>
+                    {userInfo && userInfo.role == 2 &&
+                        (<Text style={{ ...FONTS.h3, textAlign: 'left' }}>
+                            {DateState}
+                        </Text>
+                        )}
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ ...FONTS.h3, textAlign: 'right' }}>
-                        {ClockState}
-                    </Text>
+                    {userInfo && userInfo.role == 2 &&
+                        (<Text style={{ ...FONTS.h3, textAlign: 'right' }}>
+
+                            {ClockState}
+                        </Text>
+                        )}
                 </View>
             </View>
         )
@@ -457,92 +523,101 @@ const Home = ({ navigation }) => {
         // console.log(missing_attandance)
         return (
             <View style={{ flex: 1 }}>
-                {missing_attandance &&
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                        <Text style={{ ...FONTS.h3, textAlign: 'left', fontWeight: '700', paddingHorizontal: SIZES.padding * 1.5, paddingBottom: SIZES.padding }}>
-                            From:{moment(filter.start_date.toISOString()).format('DD/MM/YY')}
-                        </Text>
-                        <Text style={{ ...FONTS.h3, textAlign: 'right', fontWeight: '700', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
-                            To: {moment(filter.end_date.toISOString()).format('DD/MM/YY')}
+                {missing_attandance && (
+                    <View>
+
+                        <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <Text style={{ ...FONTS.h3, textAlign: 'left', fontWeight: '700', paddingHorizontal: SIZES.padding * 1.5, paddingBottom: SIZES.padding }}>
+                                From:{moment(filter.start_date.toISOString()).format('DD/MM/YY')}
+                            </Text>
+                            <Text style={{ ...FONTS.h3, textAlign: 'right', fontWeight: '700', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
+                                To: {moment(filter.end_date.toISOString()).format('DD/MM/YY')}
 
 
-                        </Text>
+                            </Text>
 
-                    </View>}
-                {missing_attandance && missing_attandance.map((item, key) => {
-                    return (
-                        <View style={{ margin: 10, flex: 1 }} key={key}>
-                            <TouchableOpacity style={{
-                                ...styles.shadow, backgroundColor: COLORS.p2_sandy_brown, paddingVertical: SIZES.padding + 10, borderRadius: 20
-                            }}
-                                onPress={() => {
-                                    const pref = [...missing_attandance]
-                                    pref[key].expand = !pref[key].expand
-                                    console.log(pref)
-                                    setMissing_attandance(pref)
-                                }}>
-                                <View style={{ marginVertical: 2 }}>
+                        </View>
 
-                                    <Text style={{ ...FONTS.h4, textAlign: 'left', fontWeight: '700', paddingHorizontal: SIZES.padding, paddingBottom: SIZES.padding }}>
-                                        {item.name}
-                                        {/* <Text style={{ ...FONTS.body3, textAlign: 'right', fontWeight: '700', }}> ({item.employee.nik}) </Text> */}
-                                    </Text>
-                                </View>
-                                <View style={{ marginVertical: 5, flexDirection: 'row' }}>
-                                    <Text style={{ ...FONTS.body3, textAlign: 'left', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
-                                        total missing attandance: {item.missing_attandance.length}
-                                    </Text>
+                        <ScrollView style={{...styles.shadow, margin: 10, flex: 1,backgroundColor:COLORS.white }} >
+                            <DataTable>
+                                <DataTable.Header>
+                                    <DataTable.Title>Name</DataTable.Title>
+                                    <DataTable.Title>Total Missing Attandance</DataTable.Title>
 
-                                </View>
-                            </TouchableOpacity>
-                            {item.expand && (
-                                //modal
-                                <Modal
-                                    animationType="fade"
-                                    transparent={true}
-                                    visible={item.expand}
-                                    onRequestClose={() => {
-                                        const pref = [...missing_attandance]
-                                        pref[key].expand = !pref[key].expand
-                                        console.log(pref)
-                                        setMissing_attandance(pref)
-                                    }}
-                                    onRequestClose={() => { 
-                                        const pref = [...missing_attandance]
-                                        pref[key].expand = !pref[key].expand
-                                        console.log(pref)
-                                        setMissing_attandance(pref)
-                                     }}
-                                >
-                                    <View style={styles.centeredView}>
-                                        <View style={{ ...styles.modalView, backgroundColor: COLORS.white, paddingBottom: SIZES.padding, marginBottom: SIZES.padding, flex: 1 }} >
-                                           <Text style={{ ...FONTS.h2, fontWeight: '700' }}>List Missing Attandance</Text>
-                                           <Text style={{ ...FONTS.h3 }}>{item.name}</Text>
-                                           <DataTable>
-                                            <DataTable.Header>
-                                                <DataTable.Title>Date</DataTable.Title>
-                                                <DataTable.Title>Type</DataTable.Title>
-                                                
-                                                <DataTable.Title numeric>Action</DataTable.Title>
-                                            </DataTable.Header>
-                                            {item.missing_attandance.map((item2, key2) => (
-                                                <DataTable.Row key={key2}>
-                                                <DataTable.Cell>{item2.mis_day}</DataTable.Cell>
-                                                <DataTable.Cell>{item2.mis_type}</DataTable.Cell>
-                                                
-                                                <TouchableOpacity onPress={() =>{} }>
-                                                    <DataTable.Cell>send notif</DataTable.Cell>
-                                                </TouchableOpacity>
-                                                </DataTable.Row>
-                                            ))}
-                                            </DataTable>
-                                        </View>
-                                    </View>
+                                    <DataTable.Title numeric>Action</DataTable.Title>
+                                </DataTable.Header>
+                                {missing_attandance.map((item, key) => {
+                                    return (
+                                        <DataTable.Row key={key}>
+                                            <DataTable.Cell>{item.name}</DataTable.Cell>
+                                            <DataTable.Cell>{item.missing_attandance.length}</DataTable.Cell>
 
-                                </Modal>
-                            )}
-                        </View>)
-                })}
+                                            <TouchableOpacity onPress={() => {
+                                                const pref = [...missing_attandance]
+                                                pref[key].expand = !pref[key].expand
+                                                console.log(pref)
+                                                setMissing_attandance(pref)
+                                            }}>
+                                                <DataTable.Cell>show detail</DataTable.Cell>
+                                            </TouchableOpacity>
+                                        </DataTable.Row>
+                                    )
+                                })}
+                            </DataTable>
+                            {missing_attandance && missing_attandance.map((item, key) => {
+                                return (
+                                    item.expand && (
+                                        //modal
+                                        <Modal
+                                            animationType="fade"
+                                            transparent={true}
+                                            visible={item.expand}
+                                            onRequestClose={() => {
+                                                const pref = [...missing_attandance]
+                                                pref[key].expand = !pref[key].expand
+                                                console.log(pref)
+                                                setMissing_attandance(pref)
+                                            }}
+                                            onRequestClose={() => {
+                                                const pref = [...missing_attandance]
+                                                pref[key].expand = !pref[key].expand
+                                                console.log(pref)
+                                                setMissing_attandance(pref)
+                                            }}
+                                        key={key}>
+                                            <ScrollView style={styles.centeredView}>
+                                                <View style={{ ...styles.modalView, backgroundColor: COLORS.white, paddingBottom: SIZES.padding, marginBottom: SIZES.padding, flex: 1, alignItems: 'center' }} >
+                                                    <Text style={{ ...FONTS.h2, fontWeight: '700' }}>List Missing Attandance</Text>
+                                                    <Text style={{ ...FONTS.h3 }}>{item.name}</Text>
+                                                    <DataTable>
+                                                        <DataTable.Header>
+                                                            <DataTable.Title>Date</DataTable.Title>
+                                                            <DataTable.Title>Type</DataTable.Title>
+
+                                                            <DataTable.Title numeric>Action</DataTable.Title>
+                                                        </DataTable.Header>
+                                                        {item.missing_attandance.map((item2, key2) => (
+                                                            <DataTable.Row key={key2}>
+                                                                <DataTable.Cell>{item2.mis_day}</DataTable.Cell>
+                                                                <DataTable.Cell>{item2.mis_type}</DataTable.Cell>
+
+                                                                <TouchableOpacity onPress={() => { postNotification(item2) }}>
+                                                                    <DataTable.Cell>send notif</DataTable.Cell>
+                                                                </TouchableOpacity>
+                                                            </DataTable.Row>
+                                                        ))}
+                                                    </DataTable>
+
+                                                </View>
+                                            </ScrollView>
+
+                                        </Modal>))
+
+                            })}
+                        </ScrollView>
+                    </View>
+
+                )}
             </View>
         )
     }
@@ -569,7 +644,7 @@ const Home = ({ navigation }) => {
 
 
                             <Picker
-                                selectedValue={filter.employee}
+                                selectedValue={filter.user_id}
                                 style={{
                                     ...styles.shadow,
                                     marginVertical: SIZES.padding,
@@ -581,7 +656,7 @@ const Home = ({ navigation }) => {
                                     width: 200
                                 }}
                                 // itemStyle={{...FONTS.h1,}}
-                                onValueChange={(itemValue, itemIndex) => changeFilter("employee", itemValue)}
+                                onValueChange={(itemValue, itemIndex) => changeFilter("user_id", itemValue)}
                             >
                                 <Picker.Item label="Select Employee" color="black" value="" style={styles.inputContainer} />
                                 {employees.map((item, key) => {

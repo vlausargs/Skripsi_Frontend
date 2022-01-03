@@ -2,7 +2,8 @@ import React from 'react';
 import {
     View,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    StyleSheet
 } from 'react-native';
 import { createBottomTabNavigator, BottomTabBar } from "@react-navigation/bottom-tabs"
 import Svg, { Path } from 'react-native-svg';
@@ -16,6 +17,22 @@ import RegisterCompany from '../screens/RegisterCompany';
 import Meeting from '../screens/Meeting';
 
 const Tab = createBottomTabNavigator();
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: COLORS.lightGray4
+    },
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 10,
+    },
+});
 const TabBarCustomButton = ({ accessibilityState, children, onPress }) => {
 
     var isSelected = accessibilityState.selected
@@ -40,12 +57,14 @@ const TabBarCustomButton = ({ accessibilityState, children, onPress }) => {
 
                 <TouchableOpacity
                     style={{
+                        ...styles.shadow,
                         top: -22.5,
                         justifyContent: 'center',
                         alignItems: 'center',
                         width: 50,
                         height: 50,
                         borderRadius: 25,
+                        
                         backgroundColor: COLORS.white
                     }}
                     onPress={onPress}
@@ -99,9 +118,11 @@ const Tabs = () => {
                             source={icons.attendance}
                             resizeMode="contain"
                             style={{
+                                
                                 width: 25,
                                 height: 25,
                                 tintColor: focused ? COLORS.primary : COLORS.secondary
+                                
                             }}
                         />
                     ),

@@ -6,7 +6,8 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView
+    SafeAreaView,
+    Linking
 } from "react-native";
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
@@ -182,6 +183,27 @@ export default function CreateLeavePermisson({ navigation }) {
         return (
             <View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingBottom: SIZES.padding, marginVertical: SIZES.padding, flex: 1 }}>
                 <View style={{ marginTop: SIZES.padding, marginHorizontal: SIZES.padding }}>
+                    
+                    <View>
+                        <TouchableOpacity
+                                style={{
+                                    ...styles.shadow,
+                                    backgroundColor: COLORS.primary,
+                                    paddingVertical: SIZES.padding * 1.5,
+                                    marginVertical: SIZES.padding,
+                                    marginHorizontal: SIZES.padding,
+                                    maxWidth: 100,
+                                    maxHeight: 100,
+                                    borderRadius: 25,
+                                }}
+                                onPress={() => {
+                                     Linking.openURL("https://kemenperin.go.id/kompetensi/UU_13_2003.pdf")
+                                }}
+                            >
+                                <Text style={{ ...styles.inputContainer, textAlign: 'center', alignSelf: 'stretch', color: 'white' }}>View Regulation</Text>
+
+                        </TouchableOpacity>
+                    </View>
                     <Text style={{ ...FONTS.h3, fontWeight: 'bold' }}>
                         Types
                     </Text>
@@ -203,7 +225,7 @@ export default function CreateLeavePermisson({ navigation }) {
                             <Picker.Item label="PLEASE CHOOSE ONE" color="black" value="" style={styles.inputContainer} />
                             {permissionRule.map((item, key) => {
                                 return (
-                                    <Picker.Item label={item.leave_type + " (" + item.left_permission + " days)"} color="black" value={item.id} style={styles.inputContainer} key={key} />
+                                    <Picker.Item label={item.leave_type} color="black" value={item.id} style={styles.inputContainer} key={key} />
                                 )
                             })}
 
