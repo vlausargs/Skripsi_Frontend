@@ -456,12 +456,12 @@ const Home = ({ navigation }) => {
                         {userInfo?userInfo.employee_info.position:""} - {userInfo?userInfo.company_info.name:""}
                     </Text>
                 </View> */}
-                <View style={{ marginVertical: 5 }}>
+                <View style={{ marginVertical: 10 }}>
                     <Text style={{ ...FONTS.h3, textAlign: 'center', textAlign: 'center', fontWeight: '700' }}>
                         Office Hour {userInfo ? userInfo.company_info.name : ""}
                     </Text>
                 </View>
-                <View style={{ marginVertical: 10 }}>
+                <View style={{ marginVertical: 5 }}>
                     <Text style={{ ...FONTS.h4, textAlign: 'center' }}>
                         {userInfo ? userInfo.company_info.start_working_hour : ''}- {userInfo ? userInfo.company_info.end_working_hour : ''}
                     </Text>
