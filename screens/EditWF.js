@@ -15,7 +15,7 @@ import {DataTable} from 'react-native-paper';
 export const mapStateToProps = state => ({
   token: state.authReducer.token,
   users: state.authReducer.users,
-  listEmployee: state.authReducer.listEmployee,
+  listEmployeeCompany: state.authReducer.listEmployeeCompany,
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -56,8 +56,9 @@ class EditWF extends Component {
   }
 
   componentDidMount() {
-    this.props.actionsAuth.getListEmployee(this.props.token);
+    this.props.actionsAuth.getEmployeeByCompany(this.props.token);
     this.props.actionsAuth.getUserInfo(this.props.token)
+    console.log(this.props.listEmployeeCompany,'employee company')
   }
 
   onSubmit() {
@@ -80,7 +81,7 @@ class EditWF extends Component {
               paddingLeft: SIZES.padding * 2,
               justifyContent: 'center',
             }}>
-            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>List Employee (Admin)</Text>
+            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>List Employee (ADMIN)</Text>
           </TouchableOpacity>
         </View>
       );
@@ -93,7 +94,7 @@ class EditWF extends Component {
               paddingLeft: SIZES.padding * 2,
               justifyContent: 'center',
             }}>
-            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>List Employee (Employee)</Text>
+            <Text style={{...FONTS.h2, fontWeight: 'bold'}}>List Employee (EMPLOYEE)</Text>
           </TouchableOpacity>
         </View>
       );
@@ -144,19 +145,23 @@ class EditWF extends Component {
                                 <Picker.Item label={item.label} value={item.value} key={item.key} />
                             ))}
                     </Picker>
-                    <TouchableOpacity onPress={() => this.onSubmit()} style={styles.Login}>
-                        <Text style={styles.textSign}>Submit</Text>
-                      </TouchableOpacity>
+                    <View style={{flexDirection:'row', alignContent:'center'}}>
+                    <Text style={[styles.panelText, { color: COLORS.primary,  }]} 
+                          onPress={() => this.setState({modalVisible: false})}>Cancel</Text>
+                    <Text style={[styles.panelText, { color: COLORS.primary }]} 
+                          onPress={() => this.onSubmit()}>Submit</Text>
+                    </View>
                   </View>
                   </View>
               </Modal>
-          {this.props.listEmployee.map((item, key) => (
+          {this.props.listEmployeeCompany.map((item, key) => (
             <DataTable.Row key={key}>
             <DataTable.Cell>{item.nik}</DataTable.Cell>
-              <DataTable.Cell>{item.name}</DataTable.Cell>
+              <DataTable.Cell>{item.user.name}</DataTable.Cell>
               <DataTable.Cell>{item.work_from}</DataTable.Cell>
               <TouchableOpacity onPress={() => this.openModal(item)}>
-                  <DataTable.Cell>Action</DataTable.Cell>
+                  <DataTable.Cell><Text style={{color:COLORS.primary}}>
+                  Action</Text></DataTable.Cell>
               </TouchableOpacity>
             </DataTable.Row>
           ))}
@@ -194,9 +199,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   panelText: {
-    flex: 1,
     marginVertical: 5,
-    marginLeft: 5,
+    marginHorizontal: 20,
   },
   panelRow: {
     flexDirection: 'row',
@@ -233,6 +237,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: 'rgba(0,0,0,0.5)'
   },
 });
 

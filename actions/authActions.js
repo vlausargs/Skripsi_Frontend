@@ -408,3 +408,67 @@ export function editWorkFrom(token, employee_id, work_from, resultCB) {
             })
     }
 }
+
+export function getEmployeeByCompany (token) {
+    var endpoint = "/api/employee/getAllByCompany";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_LISTEMPLOYEECOMPANY, listEmployeeCompany: json.employees });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_LISTEMPLOYEECOMPANY });    
+            })
+    }
+}
+
+export function getMeetAttendaceList (token, meeting_id) {
+    var endpoint = "/api/meetingAttandance/getAttandaceList/" + meeting_id;
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json"
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'GET', header)
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_MEETINGATT, meetingAtt: json.meeting_absents });
+                console.log(json.meeting_absents)
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_MEETINGATT });   
+            })
+    }
+}
+
+export function deleteMeeting(token, id, resultCB) {
+
+    var endpoint = "/api/meeting/delete";
+    
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+
+    let body = {
+        "id": id
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {
+                resultCB(json.message)
+            })
+            .catch((error) => {         
+                resultCB(error.message)
+            })
+    }
+}

@@ -170,7 +170,7 @@ class Survey extends Component{
                   paddingLeft: SIZES.padding * 2,
                   justifyContent: 'center',
                 }}>
-                <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Performance Survey (Admin)</Text>
+                <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Performance Survey (ADMIN)</Text>
               </TouchableOpacity>
             </View>
           );
@@ -183,7 +183,7 @@ class Survey extends Component{
                   paddingLeft: SIZES.padding * 2,
                   justifyContent: 'center',
                 }}>
-                <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Performance Survey (Employee)</Text>
+                <Text style={{...FONTS.h2, fontWeight: 'bold'}}>Performance Survey (EMPLOYEE)</Text>
               </TouchableOpacity>
             </View>
           );

@@ -351,7 +351,7 @@ const Home = ({ navigation }) => {
                             justifyContent: 'center'
                         }}>
                         <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
-                            Attendance (Admin)
+                            Attendance (ADMIN)
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -367,7 +367,7 @@ const Home = ({ navigation }) => {
                             justifyContent: 'center'
                         }}>
                         <Text style={{ ...FONTS.h2, fontWeight: 'bold' }}>
-                            Attendance (Employee)
+                            Attendance (EMPLOYEE)
                         </Text>
                     </TouchableOpacity>
                 </View>
