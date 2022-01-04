@@ -38,11 +38,25 @@ class ChartPerformance extends Component {
 
   componentDidMount() {
     this.mounted = true;
-    this.props.actionsAuth.getEmployeeScore(this.props.token);
+    // if(this.props.users.role === 1){
+    //   this.props.actionsAuth.getEmployeeScore_admin(this.props.token,this.state.employee);
+    // }else{
+      // this.props.actionsAuth.getEmployeeScore(this.props.token);
+    // }
     this.props.actionsAuth.getEmployeeByCompany(this.props.token);
     this.props.actionsAuth.getUserInfo(this.props.token)
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.users.role != this.props.users.role){
+      if(this.props.users.role === 1 ){
+          this.props.actionsAuth.getEmployeeScore_admin(this.props.token,this.state.employee);
+        }else{
+          this.props.actionsAuth.getEmployeeScore(this.props.token);
+        }
+
+    }
+  }
   renderHeader() {
     return (
         <View style={{flexDirection:'row',height:50}}>
@@ -93,8 +107,10 @@ checkMonthName =(month)=>{
                             alignSelf: 'stretch',
                             backgroundColor: COLORS.white,
                           }}
-                        onValueChange={(itemValue, itemIndex) =>
-                            this.setState({employee: itemValue})
+                        onValueChange={(itemValue, itemIndex) =>{
+                          this.setState({employee: itemValue})
+                          this.props.actionsAuth.getEmployeeScore_admin(this.props.token,itemValue);
+                        }
                         }>
                         <Picker.Item label="Select Employee" value=""  style={styles.panelText} />
                         {this.props.listEmployeeCompany.map((item, key) => {

@@ -383,6 +383,29 @@ export function getEmployeeScore (token) {
     }
 }
 
+export function getEmployeeScore_admin (token,employee_id) {
+    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/getUnscoredEmployee_admin";
+
+    let header = {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        'Content-Type': 'application/json' 
+    };
+    let body = {
+        "id": employee_id,
+    };
+
+    return dispatch => {
+        return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
+            .then((json) => {          
+                dispatch({ type: t.RECEIVE_EMPLOYEESCORE, employeeScore: json.data });
+            })
+            .catch((error) => {
+                dispatch({ type: t.EMPTY_EMPLOYEESCORE});    
+            })
+    }
+}
+
 export function editWorkFrom(token, employee_id, work_from, resultCB) {
 
     var endpoint = "/api/employee/editWorkFromUser";
