@@ -16,6 +16,7 @@ import {SafeAreaView} from 'react-native';
 import {
   BarChart,
 } from 'react-native-chart-kit';
+import { Picker } from '@react-native-picker/picker';
 
 export const mapStateToProps = state => ({
   token: state.authReducer.token,
@@ -61,18 +62,18 @@ class ChartPerformance extends Component {
 
 checkMonthName =(month)=>{
   var monthName ;
-    if(month == 1)  monthName = "January"
-    else if(month == 2) monthName = "February" 
-    else if(month == 3) monthName = "March"
-    else if(month == 4) monthName = "April"
+    if(month == 1)  monthName = "Jan"
+    else if(month == 2) monthName = "Feb" 
+    else if(month == 3) monthName = "Mar"
+    else if(month == 4) monthName = "Apr"
     else if(month == 5) monthName = "May"
-    else if(month == 6) monthName = "June"
-    else if(month == 7) monthName = "July"
-    else if(month == 8) monthName = "August"
-    else if(month == 9) monthName = "September"
-    else if(month == 10) monthName = "October"
-    else if(month == 11) monthName = "November"
-    else if(month == 12) monthName = "December"
+    else if(month == 6) monthName = "Jun"
+    else if(month == 7) monthName = "Jul"
+    else if(month == 8) monthName = "Aug"
+    else if(month == 9) monthName = "Sept"
+    else if(month == 10) monthName = "Oct"
+    else if(month == 11) monthName = "Nov"
+    else if(month == 12) monthName = "Dec"
     
     return monthName;
 }
@@ -96,9 +97,10 @@ checkMonthName =(month)=>{
                             this.setState({employee: itemValue})
                         }>
                         <Picker.Item label="Select Employee" value=""  style={styles.panelText} />
-                        {this.props.listEmployeeCompany.map((item, key) => (
-                        <Picker.Item label={item.name} value={item.id} key={item.id} />
-                        ))}
+                        {this.props.listEmployeeCompany.map((item, key) => {
+                          return(
+                        <Picker.Item label={item.user.name} value={item.id} key={item.id} />
+                        )})}
                     </Picker>)}
           <BarChart
             data={{
