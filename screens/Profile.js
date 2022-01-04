@@ -140,7 +140,7 @@ const Profile = ({navigation})=>{
         if (!userInfo) return;
         if (userInfo.role === 1){
             return (
-                <View style={{ flexDirection: 'row', height: 50 }}>
+                <View style={{ ...styles.shadow,flexDirection: 'row',paddingVertical:SIZES.padding*1.5,backgroundColor:COLORS.white  }}>
                     <TouchableOpacity
                         style={{
                             paddingLeft: SIZES.padding * 2,
@@ -155,7 +155,7 @@ const Profile = ({navigation})=>{
         }
         else if (userInfo.role === 2){
             return (
-                <View style={{ flexDirection: 'row', height: 50 }}>
+                <View style={{...styles.shadow,flexDirection: 'row',paddingVertical:SIZES.padding*1.5,backgroundColor:COLORS.white }}>
                     <TouchableOpacity
                         style={{
     
@@ -210,12 +210,12 @@ const Profile = ({navigation})=>{
     return (
         <SafeAreaView style={styles.container}>
             {renderHeader()}
-            {renderPanel()}
+            {/* {renderPanel()} */}
                 {userInfo && (<ScrollView>
                 <View style={{flex:1, flexDirection:'row', justifyContent:'space-evenly', marginVertical: 20}}>
-                    <TouchableOpacity onPress={() => navigation.navigate("Survey")}> 
+                {userInfo.role === 1 &&(<TouchableOpacity onPress={() => navigation.navigate("Survey")}> 
                         <Image source={images.SurveyButton} style={{resizeMode:'contain', width:150, height: 150}}/>
-                    </TouchableOpacity>
+                    </TouchableOpacity>)}
                     <TouchableOpacity onPress={() => navigation.navigate("ChartPerformance")}> 
                         <Image source={images.ReviewButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                     </TouchableOpacity>

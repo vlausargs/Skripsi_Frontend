@@ -91,7 +91,7 @@ class Meeting extends Component {
   renderHeader() {
     if (this.props.users.role === 1) {
       return (
-        <View style={{ flexDirection: 'row', height: 50 }}>
+        <View style={{ ...styles.shadow,flexDirection: 'row',paddingVertical:SIZES.padding*1.5,backgroundColor:COLORS.white  }}>
           <TouchableOpacity
             style={{
               paddingLeft: SIZES.padding * 2,
@@ -104,7 +104,7 @@ class Meeting extends Component {
     }
     else if (this.props.users.role === 2) {
       return (
-        <View style={{ flexDirection: 'row', height: 50 }}>
+        <View style={{ ...styles.shadow,flexDirection: 'row',paddingVertical:SIZES.padding*1.5,backgroundColor:COLORS.white  }}>
           <TouchableOpacity
             style={{
               paddingLeft: SIZES.padding * 2,
@@ -213,11 +213,11 @@ openModal (item) {
       }>
         
         {this.renderHeader()}
-        <Switch
+        {/* <Switch
           onValueChange={this.toggleSwitch}
           value={this.state.toggled}
           trackColor={{ true: COLORS.primary, false: 'grey' }}
-        />
+        /> */}
         {this.state.toggled ? (
           <View
           />

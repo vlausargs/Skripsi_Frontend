@@ -162,7 +162,7 @@ export default function CheckInOut({ route, navigation }) {
                     </View>
                     <View style={{ marginVertical: 5 }}>
                         <TouchableOpacity
-                       
+                            disabled={(CurrLocation.distance < 100) }
                             style={{
 
                                 ...styles.shadow, backgroundColor:  "#71BC68",
