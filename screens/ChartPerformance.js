@@ -142,8 +142,10 @@ checkMonthName =(month)=>{
               decimalPlaces: 0, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              barPercentage: .7,
               style: {
                 borderRadius: 16,
+                
               },
               propsForDots: {
                 r: '6',
@@ -155,6 +157,7 @@ checkMonthName =(month)=>{
             style={{
               marginVertical: 8,
               borderRadius: 16,
+              
             }}
           />
         </View>

@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { Picker } from "@react-native-picker/picker";
 import moment from "moment";
 import React, { useState } from "react";
-import { RefreshControl } from "react-native";
+import { Linking, RefreshControl } from "react-native";
 import { Modal } from "react-native";
 import {
     View,
@@ -51,6 +51,10 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5
     },
+    panelText: {
+        ...FONTS.body2,
+        paddingHorizontal: SIZES.padding
+      },
 })
 const LeavePermissions = ({ navigation }) => {
     const [currToken, setToken] = useState(null);
@@ -192,12 +196,19 @@ const LeavePermissions = ({ navigation }) => {
             getLeavePermissionList();
             getPermissionRule();
             getAllEmployeeByCompany();
-            getAllPermissionCompany();
             setisInitData(false);
             setisRefreshing(false);
         }
 
     }, [isInitData, currToken]);
+
+    React.useEffect(() => {
+        if (isInitData == true && currToken && userInfo && userInfo.role == 1) {
+            getAllPermissionCompany();
+        }
+
+    }, [isInitData, currToken, userInfo]);
+    
     function refresh() {
         setisRefreshing(true);
         setisInitData(true);
@@ -291,12 +302,12 @@ const LeavePermissions = ({ navigation }) => {
                             ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding + 10, borderRadius: 20
                         }}
                             onPress={() => {
-                                if (userInfo && userInfo.role == 1 && item.status == 0) {
+
                                     const pref = [...leavePermissions]
                                     pref[key].expand = !pref[key].expand
                                     console.log(pref)
                                     setLeavePermissions(pref)
-                                }
+                                
                             }}>
                             <View style={{ marginVertical: 5 }}>
                                
@@ -315,10 +326,16 @@ const LeavePermissions = ({ navigation }) => {
                                     To: {moment(item.end_date).format('DD/MM/YY')}
                                 </Text>
                             </View>
+
                         </TouchableOpacity>
                         {item.expand && (<View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding, borderRadius: 20, flexDirection: 'row', marginTop: 10 }} >
-
-                            <TouchableOpacity
+                            <View style={{ marginVertical:1}}>
+                                    <Text style={{ ...FONTS.body3, textAlign: 'right', fontWeight: '700', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
+                                    attachment: <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {Linking.openURL(api_path+item.file_path)}}>LINK</Text>
+                                    </Text>
+                            </View>
+                            {(userInfo && userInfo.role == 1 && item.status == 0) && (<View>
+                                <TouchableOpacity
                                 style={{
                                     ...styles.shadow,
                                     backgroundColor: COLORS.primary,
@@ -357,6 +374,8 @@ const LeavePermissions = ({ navigation }) => {
                                 <Text style={{ ...styles.inputContainer, textAlign: 'center', alignSelf: 'stretch', color: 'white' }}>Reject</Text>
 
                             </TouchableOpacity>
+                            </View>)}
+                           
 
                         </View>)}
                     </View>

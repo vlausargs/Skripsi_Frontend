@@ -120,7 +120,7 @@ class EditWF extends Component {
             <DataTable.Title>NIK</DataTable.Title>
             <DataTable.Title>Name</DataTable.Title>
             <DataTable.Title numeric>Work From</DataTable.Title>
-            <DataTable.Title numeric>Action</DataTable.Title>
+            {/* <DataTable.Title numeric>Action</DataTable.Title> */}
           </DataTable.Header>
           <Modal animationType="slide"
                     transparent={true}
@@ -159,10 +159,11 @@ class EditWF extends Component {
             <DataTable.Cell>{item.nik}</DataTable.Cell>
               <DataTable.Cell>{item.user.name}</DataTable.Cell>
               <DataTable.Cell>{item.work_from}</DataTable.Cell>
-              <TouchableOpacity onPress={() => this.openModal(item)}>
+              {/* <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity onPress={() => this.openModal(item)}> 
                   <DataTable.Cell><Text style={{color:COLORS.primary}}>
                   Action</Text></DataTable.Cell>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </DataTable.Row>
           ))}
           </DataTable>

@@ -15,8 +15,7 @@ import { api_path, COLORS, FONTS, icons, SIZES } from "../constants";
 import { Alert } from "react-native";
 import { Image } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
-
-
+import DocumentPicker from 'react-native-document-picker';
 
 const styles = StyleSheet.create({
     container: {
@@ -38,6 +37,7 @@ const styles = StyleSheet.create({
     }
 })
 export default function CreateLeavePermisson({ navigation }) {
+    const [singleFile, setSingleFile] = useState(null);
     const [currToken, setToken] = useState(null);
     const [permissionRule, setPermissionRule] = useState([]);
     const [isInitData, setisInitData] = useState(true);
@@ -99,25 +99,32 @@ export default function CreateLeavePermisson({ navigation }) {
     }
 
     function postPermission() {
+        // If file selected then create FormData
+        const fileToUpload = singleFile[0];
+        const data = new FormData();
+        console.log(fileToUpload);
+        if (singleFile != null) {
+            data.append('image', fileToUpload);
+        }
+        data.append( "permission_type_id",userInput.permission_type_id)
+        data.append( "start_date",userInput.start_date.toLocaleDateString())
+        data.append( "end_date",userInput.end_date.toLocaleDateString())
         fetch(api_path + '/api/permission/create', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + currToken,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data;',
             },
-            body:JSON.stringify({
-                "permission_type_id":userInput.permission_type_id,
-                "start_date":userInput.start_date.toLocaleDateString(),
-                "end_date":userInput.end_date.toLocaleDateString()
-            })
+            body:data
         })
             .then((response) => response.json())
             .then((json) => {
                 console.log(json)
                 if(json.alert =="success")navigation.goBack();
             })
-            .catch((error) => console.error(error))
+            .catch((error) => {
+                console.error(error)
+                console.error(error.message)})
             .finally(() => {  });
     }
 
@@ -175,6 +182,36 @@ export default function CreateLeavePermisson({ navigation }) {
 
         )
     }
+    async function selectFile(){
+        // Opening Document Picker to select one file
+        try {
+          const res = await DocumentPicker.pick({
+            // Provide which type of file you want user to pick
+            type: [DocumentPicker.types.allFiles],
+            // There can me more options as well
+            // DocumentPicker.types.allFiles
+            // DocumentPicker.types.images
+            // DocumentPicker.types.plainText
+            // DocumentPicker.types.audio
+            // DocumentPicker.types.pdf
+          });
+          // Printing the log realted to the file
+          console.log('res : ' + JSON.stringify(res));
+          // Setting the state to show single file attributes
+          setSingleFile(res);
+        } catch (err) {
+          setSingleFile(null);
+          // Handling any exception (If any)
+          if (DocumentPicker.isCancel(err)) {
+            // If user canceled the document selection
+            // alert('Canceled');
+          } else {
+            // For Unknown Error
+            alert('Unknown Error: ' + JSON.stringify(err));
+            throw err;
+          }
+        }
+      };
     function changeType(value) {
         console.log(userInput)
         setUserInput({ ...userInput, 'permission_type_id': value })
@@ -298,6 +335,23 @@ export default function CreateLeavePermisson({ navigation }) {
                         {/* dropdown leave type */}
                     </View>
                     <View>
+                        <Text style={{ ...FONTS.h3, fontWeight: 'bold' }}>
+                            Attachment
+                        </Text>
+                        <TouchableOpacity
+                            style={{
+                                ...styles.shadow,
+                                 backgroundColor: COLORS.white,
+                                padding:SIZES.padding*1.5,
+                                marginVertical: SIZES.padding,
+                                marginHorizontal: SIZES.padding
+                            }}
+                            activeOpacity={0.5}
+                            onPress={()=>{selectFile()}}>
+                            <Text style={styles.inputContainer}> {singleFile?singleFile[0].name.length>30?singleFile[0].name.slice(0,29)+"...":singleFile[0].name:'Select File'}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View>
                         <TouchableOpacity
                             style={{
                                 ...styles.shadow,
@@ -318,6 +372,7 @@ export default function CreateLeavePermisson({ navigation }) {
                         </TouchableOpacity>
                         {/* dropdown leave type */}
                     </View>
+
                 </View>
             </View>
         )
