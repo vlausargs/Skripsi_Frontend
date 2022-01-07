@@ -331,7 +331,7 @@ const LeavePermissions = ({ navigation }) => {
                         {item.expand && (<View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding, borderRadius: 20, flexDirection: 'row', marginTop: 10 }} >
                             <View style={{ marginVertical:1}}>
                                     <Text style={{ ...FONTS.body3, textAlign: 'right', fontWeight: '700', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
-                                    attachment: <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {Linking.openURL(api_path+item.file_path)}}>LINK</Text>
+                                    attachment: {item.file_path &&(<Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {Linking.openURL(api_path+item.file_path)}}>LINK</Text>)}
                                     </Text>
                             </View>
                             {(userInfo && userInfo.role == 1 && item.status == 0) && (<View>
