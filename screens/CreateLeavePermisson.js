@@ -100,10 +100,10 @@ export default function CreateLeavePermisson({ navigation }) {
 
     function postPermission() {
         // If file selected then create FormData
-        const fileToUpload = singleFile[0];
         const data = new FormData();
-        console.log(fileToUpload);
         if (singleFile != null) {
+            const fileToUpload = singleFile[0];
+            console.log(fileToUpload);
             data.append('image', fileToUpload);
         }
         data.append( "permission_type_id",userInput.permission_type_id)

@@ -419,8 +419,14 @@ const LeavePermissions = ({ navigation }) => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        {item.expand && (<View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding, borderRadius: 20, flexDirection: 'row', marginTop: 10 }} >
-
+                        {item.expand && (<View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding, borderRadius: 20, flexDirection: 'column', marginTop: 10,flex:1 }} >
+                            
+                            <View style={{flex:1, marginVertical:1, flexDirection: 'row',alignItems: 'center',alignContent:'center'}}>
+                                        <Text style={{ ...FONTS.body3, textAlign: 'left', fontWeight: '700', flex: 1, paddingHorizontal: SIZES.padding * 1.5 }}>
+                                        attachment: {item.file_path &&(<Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {Linking.openURL(api_path+item.file_path)}}>LINK</Text>)}
+                                        </Text>
+                            </View>
+                            <View style={{flex:1, marginVertical:1, flexDirection: 'row',alignItems: 'center',alignContent:'center' }}>
                             <TouchableOpacity
                                 style={{
                                     ...styles.shadow,
@@ -460,7 +466,7 @@ const LeavePermissions = ({ navigation }) => {
                                 <Text style={{ ...styles.inputContainer, textAlign: 'center', alignSelf: 'stretch', color: 'white' }}>Reject</Text>
 
                             </TouchableOpacity>
-
+                            </View>
                         </View>)}
                     </View>
                 )
