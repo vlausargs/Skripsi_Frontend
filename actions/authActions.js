@@ -384,7 +384,7 @@ export function getEmployeeScore (token) {
 }
 
 export function getEmployeeScore_admin (token,employee_id) {
-    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/getUnscoredEmployee_admin";
+    var endpoint = "/api/companyQuestion/scoreCompanyQuestion/getEmployeeScore_admin";
 
     let header = {
         "Authorization": "Bearer " + token,
