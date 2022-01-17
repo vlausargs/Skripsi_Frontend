@@ -157,7 +157,11 @@ class Survey extends Component{
             this.state.employee,
             this.state.date,
             sum,
-            message => alert(message),
+            (message) => {
+                
+                alert(message)
+                if(message == 'success')this.props.navigation.goBack();
+            },
           );;
     }
 

@@ -30,12 +30,14 @@ export const mapDispatchToProps = (dispatch) => ({
 class RegisterCompany extends React.Component{
     constructor(props) {
         super(props);
+        var date = new Date()
+        date.setSeconds(0)
         this.state = {
           name: "",
           lat1: null,
           long1: null,
-          startH: new Date(),
-          endH: new Date(),
+          startH: date,
+          endH: date,
           mode: 'time',
           showStart: false,
           showEnd: false,
@@ -135,7 +137,7 @@ class RegisterCompany extends React.Component{
                           value={this.state.name}           
                       /> 
               
-                        <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Address</Text>   
+                        <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Coordinate</Text>   
                         <TouchableOpacity style={{
                                  backgroundColor: COLORS.lightGray,
                                  padding:SIZES.padding*1.5,
@@ -144,7 +146,7 @@ class RegisterCompany extends React.Component{
                             }}
                             onPress={() => this.props.navigation.navigate('MapRegisterView',{onGoBack:this.onGoBack})}>
                             <Text style={styles.inputContainer}>
-                                {this.state.lat1} , {this.state.long1}
+                                {this.state.lat1?parseFloat(this.state.lat1).toFixed(5):""} , {this.state.long1?parseFloat(this.state.long1).toFixed(5):""}
                             </Text>  
                         </TouchableOpacity>
                         <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Start Working Hour</Text>

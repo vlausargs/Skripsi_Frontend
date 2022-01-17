@@ -11,6 +11,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Picker} from '@react-native-picker/picker';
 //import DataTable, {COL_TYPES} from 'react-native-datatable-component';
 import {DataTable} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 export const mapStateToProps = state => ({
   token: state.authReducer.token,
@@ -43,7 +44,6 @@ const workFrom = [
 class EditWF extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       employee: '',
       workFrom: '',
@@ -75,7 +75,7 @@ class EditWF extends Component {
   renderHeader() {
     if(this.props.users.role === 1){
       return (     
-        <View style={{flexDirection: 'row', height: 50}}>
+        <View style={{ ...styles.shadow,flexDirection: 'row',paddingVertical:SIZES.padding*1.5,backgroundColor:COLORS.white }}>
           <TouchableOpacity
             style={{
               paddingLeft: SIZES.padding * 2,
@@ -88,7 +88,7 @@ class EditWF extends Component {
     }
     else if(this.props.users.role === 2){
       return (     
-        <View style={{flexDirection: 'row', height: 50}}>
+        <View style={{ ...styles.shadow,flexDirection: 'row',paddingVertical:SIZES.padding*1.5,backgroundColor:COLORS.white }}>
           <TouchableOpacity
             style={{
               paddingLeft: SIZES.padding * 2,
@@ -173,6 +173,24 @@ class EditWF extends Component {
         </View>
         )}
         </ScrollView>
+              {this.props.users.role === 1 && (<TouchableOpacity
+                style={{
+                    borderWidth: 1,
+                    borderColor: 'rgba(0,0,0,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 50,
+                    position: 'absolute',
+                    bottom: 10,
+                    right: 10,
+                    height: 50,
+                    backgroundColor: '#fff',
+                    borderRadius: 100,
+                }}
+                onPress={() => { this.props.navigation.navigate('RegisterEmployee') }}
+            >
+                <Icon name='plus' size={30} color='#000000' />
+            </TouchableOpacity>)}
       </SafeAreaView>
     );
   }
@@ -243,6 +261,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 10,
   },
 });
 

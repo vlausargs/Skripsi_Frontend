@@ -173,7 +173,7 @@ export function getPositionList (token) {
     }
 }
 
-export function registerEmployee(token, nik, company, position, resultCB) {
+export function registerEmployee(token, nik, name, email, resultCB) {
 
     var endpoint = "/api/employee/store";
     
@@ -185,8 +185,8 @@ export function registerEmployee(token, nik, company, position, resultCB) {
 
     let body = {
         "nik": nik,
-        "company_id": company,
-        "position_id": position,
+        "name":name,
+        "email":email,
     };
 
     return dispatch => {

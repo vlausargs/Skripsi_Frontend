@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,19 +8,20 @@ import {
   StyleSheet,
   StatusBar,
   Alert,
+  ScrollView,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-import {Input} from 'react-native-elements';
-import {COLORS, SIZES, FONTS, icons, images} from '../constants';
+import { Input } from 'react-native-elements';
+import { COLORS, SIZES, FONTS, icons, images } from '../constants';
 import * as authAction from '../actions/authActions';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 export const mapStateToProps = state => ({
   token: state.authReducer.token,
@@ -38,9 +39,9 @@ class RegisterEmployee extends React.Component {
   constructor() {
     super();
     this.state = {
-      nik:'',
+      email:'',
+      nik: '',
       name: '',
-      position: '',
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -55,24 +56,28 @@ class RegisterEmployee extends React.Component {
       this.props.token,
       this.state.nik,
       this.state.name,
-      this.state.position,
+      this.state.email,
       (message) => {
-          Alert.alert(
-            "SUCCESS!!!",
-            "",
-            [
-                { text: "OK", onPress: () => this.props.navigation.reset({
-                    index: 0,
-                    routes: [
-                        {
-                            name: 'Home',
-                            params: { messages: 'TOKEN EXPIRED' },
-                        },
-                    ],
-                }) }
-            ]
+        Alert.alert(
+          "SUCCESS!!!",
+          "",
+          [
+            {
+              text: "OK", onPress: () =>{
+                this.props.navigation.reset({
+                  index: 0,
+                  routes: [
+                    {
+                      name: 'Home',
+                      params: { messages: 'TOKEN EXPIRED' },
+                    },
+                  ],
+                })
+              } 
+            }
+          ]
         );
-        
+
         console.log(message)
       });
     console.log(this.state.nik, this.state.name, this.state.position)
@@ -81,18 +86,39 @@ class RegisterEmployee extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{ marginTop: SIZES.padding, marginHorizontal: SIZES.padding }}>
-        <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>NIK</Text>
-        <Input
+        <ScrollView style={{ marginTop: SIZES.padding, marginHorizontal: SIZES.padding }}>
+
+          <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Email</Text>
+          <Input
+            placeholder="Email"
+            placeholderTextColor={COLORS.black}
+            inputContainerStyle={styles.inputContainer}
+            disableFullscreenUI={true}
+            autoCapitalize="none"
+            onChangeText={val => this.setState({ email: val })}
+            value={this.state.email}
+          />
+          <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Name</Text>
+          <Input
+            placeholder="Name"
+            placeholderTextColor={COLORS.black}
+            inputContainerStyle={styles.inputContainer}
+            disableFullscreenUI={true}
+            autoCapitalize="none"
+            onChangeText={val => this.setState({ name: val })}
+            value={this.state.name}
+          />
+          <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>NIK</Text>
+          <Input
             placeholder="NIK"
             placeholderTextColor={COLORS.black}
             inputContainerStyle={styles.inputContainer}
             disableFullscreenUI={true}
             autoCapitalize="none"
-            onChangeText={val => this.setState({nik: val})}
+            onChangeText={val => this.setState({ nik: val })}
             value={this.state.nik}
           />
-          <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Company</Text>
+          {/* <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Company</Text>
           <Picker
             selectedValue={this.state.name}
             style={{
@@ -103,14 +129,14 @@ class RegisterEmployee extends React.Component {
               backgroundColor: COLORS.lightGray,
             }}
             onValueChange={(itemValue, itemIndex) =>
-              this.setState({name: itemValue})
+              this.setState({ name: itemValue })
             }>
-              <Picker.Item label="Select Company" value="" />
+            <Picker.Item label="Select Company" value="" />
             {this.props.company.map((item, key) => (
               <Picker.Item label={item.name} value={item.id} key={item.id} />
             ))}
-          </Picker>
-          <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Position</Text>
+          </Picker> */}
+          {/* <Text style={{ ...FONTS.h4, fontWeight: 'bold' }}>Position</Text>
           <Picker
             selectedValue={this.state.position}
             style={{
@@ -121,21 +147,21 @@ class RegisterEmployee extends React.Component {
               backgroundColor: COLORS.lightGray,
             }}
             onValueChange={(itemValue, itemIndex) =>
-              this.setState({position: itemValue})
+              this.setState({ position: itemValue })
             }>
-              <Picker.Item label="Select Position" value="" />
+            <Picker.Item label="Select Position" value="" />
             {this.props.position.map((item, key) => (
               <Picker.Item label={item.name} value={item.id} key={item.id} />
             ))}
-          </Picker>
+          </Picker> */}
 
           <View style={styles.button}>
             <TouchableOpacity style={styles.Login} onPress={this.onSubmit}>
               <Text style={styles.textSign}>Submit</Text>
             </TouchableOpacity>
           </View>
-        </View>
-          
+        </ScrollView>
+
       </View>
     );
   }
@@ -159,7 +185,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
-    width:150,
+    width: 150,
     height: 30
   },
   textSign: {

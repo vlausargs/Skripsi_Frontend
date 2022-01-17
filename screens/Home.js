@@ -102,7 +102,7 @@ const Home = ({ navigation }) => {
         return controller.abort();
     }, [isInitData, currToken]);
     React.useEffect(() => {
-        if (isInitData == true && userInfo) {
+        if (isInitData == true && userInfo && userInfo.company_info) {
             // calculateDistance();
             visualizeDummy();
             getAllEmployeeByCompany();

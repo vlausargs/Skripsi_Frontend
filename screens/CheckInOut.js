@@ -143,7 +143,7 @@ export default function CheckInOut({ route, navigation }) {
             <View style={{ backgroundColor: "#E15C5C", flex: 1 }}>
                 <Maps user={user} currToken={currToken}></Maps>
             </View>
-            <View style={{ backgroundColor: "#E1ACAA", flex: 1 }}>
+            <View style={{ backgroundColor: COLORS.lightGray, flex: 1 }}>
                 <View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingVertical: SIZES.padding + 10, margin: 20, borderRadius: 20 }}>
                     {/* <View style={{marginVertical:5}}>
                     <Text style={{...FONTS.h2,textAlign:'center',fontWeight: 'bold'}}>
@@ -162,15 +162,15 @@ export default function CheckInOut({ route, navigation }) {
                     </View>
                     <View style={{ marginVertical: 5 }}>
                         <TouchableOpacity
-                            disabled={(CurrLocation.distance < 100) }
+                            disabled={(CurrLocation.distance > 100) }
                             style={{
 
-                                ...styles.shadow, backgroundColor:  "#71BC68",
+                                ...styles.shadow, backgroundColor:  (CurrLocation.distance < 100)?"#71BC68":"#808080",
                                 justifyContent: 'center',
                                 marginHorizontal: SIZES.padding * 5,
                                 paddingVertical: SIZES.padding / 2,
                                 borderRadius: 20
-                            }} onPress={() => { postAttandance() }}>
+                            }} onPress={() => { (CurrLocation.distance < 100) && postAttandance() }}>
                             <Text style={{ ...FONTS.h2, fontWeight: 'bold', textAlign: 'center' }}>
                                  Submit
                             </Text>

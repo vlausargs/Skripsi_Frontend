@@ -10,7 +10,7 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CompanyMarker from "./components/CompanyMarker";
-
+import {LogBox} from 'react-native'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -37,11 +37,13 @@ const angularDistance = distance / circumference
 
 export default class Maps2 extends Component {
 
+  
   constructor(props) {
     super(props)
     this.state = {
       region:null,
-      marker: null
+      marker: null,
+      regionSet: true
     }
 
     this.getLocation = this.getLocation.bind(this);
@@ -66,7 +68,10 @@ export default class Maps2 extends Component {
     // return false;
   }
   componentDidMount() {
-    this.getCurrentLocation();
+    if(this.state.regionSet == true){
+      this.getCurrentLocation();
+      this.setState({ regionSet: false });
+    }
   }
   componentDidUpdate() {
     // console.log(this.state.region)
@@ -85,11 +90,13 @@ export default class Maps2 extends Component {
       long1: this.state.marker
     })
     // const { navigation } = this.props;
+    LogBox.ignoreAllLogs(true)
     const {onGoBack} = this.props.route.params
     console.log(this.props.route.params)
     onGoBack({lat:this.state.marker.latitude,long:this.state.marker.longitude})
     this.props.navigation.goBack();
-    alert(coord)
+    LogBox.ignoreAllLogs(false)
+    // alert(coord)
   }
   showMap() {
     return this.state.region != null ? (
@@ -99,7 +106,11 @@ export default class Maps2 extends Component {
         style={styles.map}
         onPress={(e) => {this.setState({ marker: e.nativeEvent.coordinate }); console.log(e.nativeEvent.coordinate)}}
         initialRegion={this.state.region}
-        region={this.state.region}>
+        onMapReady={() => {
+          this.setState({ regionSet: false });
+        }}
+        // region={this.state.region}
+        >
           {this.state.marker&&<Marker coordinate={this.state.marker}/>}
       </MapView>) : (
       <MapView

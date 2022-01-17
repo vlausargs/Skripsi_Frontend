@@ -39,7 +39,7 @@ class Register extends React.Component{
           email: "",
           password: "",
           confirm_password:"",
-          role:"",
+          role:"1",
           secureText: true,
 
         }
@@ -112,7 +112,7 @@ class Register extends React.Component{
                           onChangeText={(val) => this.setState({ confirm_password : val })}
                           value={this.state.confirm_password}
                       /> 
-                      <Picker
+                      {/* <Picker
                         selectedValue={this.state.role}
                         style={{ 
                             marginHorizontal:SIZES.padding,
@@ -126,7 +126,7 @@ class Register extends React.Component{
                         <Picker.Item label="Role" value="0" />
                         <Picker.Item label="Admin" value="1" />
                         <Picker.Item label="Employee" value="2" />
-                        </Picker>  
+                        </Picker>   */}
                   <View style={styles.button}>
                       <TouchableOpacity style={styles.Login} onPress={this.onSubmit}>
                           <Text style={styles.textSign}>Register</Text>
