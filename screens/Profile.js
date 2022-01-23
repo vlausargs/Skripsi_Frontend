@@ -212,21 +212,34 @@ const Profile = ({navigation})=>{
             {renderHeader()}
             {/* {renderPanel()} */}
                 {userInfo && (<ScrollView>
-                <View style={{flex:1, flexDirection:'row', justifyContent:'space-evenly', marginVertical: 20}}>
-                {userInfo.role === 1 &&(<TouchableOpacity onPress={() => navigation.navigate("Survey")}> 
+                <View style={{flex:1, flexDirection:'row', justifyContent:'space-evenly', marginVertical: 20,flexWrap: 'wrap'}}>
+                {userInfo.role === 1 &&(<TouchableOpacity style={{ margin: 3,flexBasis: '45%'}} onPress={() => navigation.navigate("Survey")}> 
                         <Image source={images.SurveyButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                     </TouchableOpacity>)}
-                    <TouchableOpacity onPress={() => navigation.navigate("ChartPerformance")}> 
+                    <TouchableOpacity style={{ margin: 3,flexBasis: '45%'}} onPress={() => navigation.navigate("ChartPerformance")}> 
                         <Image source={images.ReviewButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                     </TouchableOpacity>
-                </View>
-                <View style={{flex:1, flexDirection:'row', justifyContent:'space-evenly'}}>
-                    <TouchableOpacity onPress={() => navigation.navigate("LeavePermissions")}> 
+                    {/* <TouchableOpacity style={{ margin: 3,flexBasis: '45%'}} onPress={() => navigation.navigate("ChartPerformance")}> 
+                        <Image source={images.ReviewButton} style={{resizeMode:'contain', width:150, height: 150}}/>
+                    </TouchableOpacity> */}
+             
+                    <TouchableOpacity style={{ margin: 3,flexBasis: '45%'}} onPress={() => navigation.navigate("LeavePermissions")}> 
                         <Image source={images.LeaveButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                     </TouchableOpacity>
-                    {userInfo.role === 1 &&(<TouchableOpacity onPress={() => navigation.navigate("EditWorkFrom")}> 
+                    {userInfo.role === 1 &&(<TouchableOpacity style={{ margin: 3,flexBasis: '45%'}} onPress={() => navigation.navigate("EditWorkFrom")}> 
                         <Image source={images.EmployeeListButton} style={{resizeMode:'contain', width:150, height: 150}}/>
                     </TouchableOpacity>)}
+                    <TouchableOpacity style={{ margin: 3,flexBasis: '45%'}} onPress={() => navigation.reset({
+                            index: 0,
+                            routes: [
+                                {
+                                    name: 'Login',
+                                    params: { messages: 'LOGOUT' },
+                                },
+                            ],
+                        }) }> 
+                        <Image source={images.Logout} style={{resizeMode:'contain', width:150, height: 150}}/>
+                    </TouchableOpacity>
                 </View>
             </ScrollView> )}
                      

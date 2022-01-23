@@ -417,7 +417,7 @@ export function editWorkFrom(token, employee_id, work_from, resultCB) {
     };
 
     let body = {
-        "employee_id": employee_id,
+        "id": employee_id,
         "work_from": work_from
     };
 

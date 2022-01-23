@@ -119,7 +119,8 @@ class EditWF extends Component {
           <DataTable.Header>
             <DataTable.Title>NIK</DataTable.Title>
             <DataTable.Title>Name</DataTable.Title>
-            <DataTable.Title numeric>Work From</DataTable.Title>
+            <DataTable.Title>Work From</DataTable.Title>
+            <DataTable.Title>Edit</DataTable.Title>
             {/* <DataTable.Title numeric>Action</DataTable.Title> */}
           </DataTable.Header>
           <Modal animationType="slide"

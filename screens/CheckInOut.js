@@ -152,14 +152,28 @@ export default function CheckInOut({ route, navigation }) {
                  </View> */}
                     <View style={{ marginVertical: 5 }}>
                         <Text style={{ ...FONTS.h2, textAlign: 'center' }}>
-                            Distance to Office:
+                            Work From:
                         </Text>
                     </View>
                     <View style={{ marginVertical: 5 }}>
                         <Text style={{ ...FONTS.body, textAlign: 'center' }}>
-                            {CurrLocation.distance} M ( {CurrLocation.distance < 100 ? 'within range' : 'not in range'} )
+                            {user.employee_info.work_from}
                         </Text>
                     </View>
+                    {user.employee_info.work_from =='Office'&&(
+                    <View>
+                        <View style={{ marginVertical: 5 }}>
+                            <Text style={{ ...FONTS.h2, textAlign: 'center' }}>
+                                Distance to Office:
+                            </Text>
+                        </View>
+                        <View style={{ marginVertical: 5 }}>
+                            <Text style={{ ...FONTS.body, textAlign: 'center' }}>
+                                {CurrLocation.distance} M ( {CurrLocation.distance < 100 ? 'within range' : 'not in range'} )
+                            </Text>
+                        </View>
+                    </View>
+                        )}
                     <View style={{ marginVertical: 5 }}>
                         <TouchableOpacity
                             disabled={(CurrLocation.distance > 100) }
@@ -170,7 +184,7 @@ export default function CheckInOut({ route, navigation }) {
                                 marginHorizontal: SIZES.padding * 5,
                                 paddingVertical: SIZES.padding / 2,
                                 borderRadius: 20
-                            }} onPress={() => { (CurrLocation.distance < 100) && postAttandance() }}>
+                            }} onPress={() => { ((user.employee_info.work_from =='Office' && CurrLocation.distance < 100)||user.employee_info.work_from =='Home') && postAttandance() }}>
                             <Text style={{ ...FONTS.h2, fontWeight: 'bold', textAlign: 'center' }}>
                                  Submit
                             </Text>
