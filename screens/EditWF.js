@@ -159,11 +159,13 @@ class EditWF extends Component {
             <DataTable.Cell>{item.nik}</DataTable.Cell>
               <DataTable.Cell>{item.user.name}</DataTable.Cell>
               <DataTable.Cell>{item.work_from}</DataTable.Cell>
-              {/* <TouchableOpacity onPress={() => {}}>
+              <DataTable.Cell>
               <TouchableOpacity onPress={() => this.openModal(item)}> 
                   <DataTable.Cell><Text style={{color:COLORS.primary}}>
                   Action</Text></DataTable.Cell>
-              </TouchableOpacity> */}
+              </TouchableOpacity>
+
+              </DataTable.Cell>
             </DataTable.Row>
           ))}
           </DataTable>
