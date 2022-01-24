@@ -150,6 +150,7 @@ export default function CheckInOut({ route, navigation }) {
                       Office Location
                     </Text>    
                  </View> */}
+             
                     <View style={{ marginVertical: 5 }}>
                         <Text style={{ ...FONTS.h2, textAlign: 'center' }}>
                             Work From:
@@ -157,10 +158,10 @@ export default function CheckInOut({ route, navigation }) {
                     </View>
                     <View style={{ marginVertical: 5 }}>
                         <Text style={{ ...FONTS.body, textAlign: 'center' }}>
-                            {user.employee_info.work_from}
+                            {user && user.employee_info.work_from}
                         </Text>
                     </View>
-                    {user.employee_info.work_from =='Office'&&(
+                    {/* {user.employee_info.work_from =='Office'&&( */}
                     <View>
                         <View style={{ marginVertical: 5 }}>
                             <Text style={{ ...FONTS.h2, textAlign: 'center' }}>
@@ -173,13 +174,16 @@ export default function CheckInOut({ route, navigation }) {
                             </Text>
                         </View>
                     </View>
-                        )}
+                        {/* )} */}
                     <View style={{ marginVertical: 5 }}>
+                        {user &&
+                        
+                        (
                         <TouchableOpacity
-                            disabled={(CurrLocation.distance > 100) }
+                            disabled={!((user.employee_info.work_from =='Office' && CurrLocation.distance < 100)||user.employee_info.work_from =='Home') }
                             style={{
 
-                                ...styles.shadow, backgroundColor:  (CurrLocation.distance < 100)?"#71BC68":"#808080",
+                                ...styles.shadow, backgroundColor:  ((user.employee_info.work_from =='Office' && CurrLocation.distance < 100)||user.employee_info.work_from =='Home')?"#71BC68":"#808080",
                                 justifyContent: 'center',
                                 marginHorizontal: SIZES.padding * 5,
                                 paddingVertical: SIZES.padding / 2,
@@ -189,6 +193,8 @@ export default function CheckInOut({ route, navigation }) {
                                  Submit
                             </Text>
                         </TouchableOpacity>
+
+                        )}
 
                     </View>
                 </View>
