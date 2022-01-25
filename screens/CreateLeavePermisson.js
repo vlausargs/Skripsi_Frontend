@@ -100,6 +100,10 @@ export default function CreateLeavePermisson({ navigation }) {
 
     function postPermission() {
         // If file selected then create FormData
+        if(userInput.permission_type_id == null){
+            Alert.alert("Error","Leave Types cannot be empty")
+            return 0;
+        }
         const data = new FormData();
         if (singleFile != null) {
             const fileToUpload = singleFile[0];

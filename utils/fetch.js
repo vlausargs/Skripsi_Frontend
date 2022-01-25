@@ -27,7 +27,7 @@ export function fetchAPI(endpoint, method, header, data, site) {
                         return json;}
     
                     else
-                        throw { code: response.status, message: json.message }
+                        throw { code: response.status, message: json.errors, }
                 })
         })
         .catch(error => { 

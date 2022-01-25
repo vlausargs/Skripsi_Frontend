@@ -57,7 +57,7 @@ class Login extends React.Component {
         }
         else {
             this.props.actionsAuth.login(this.state.email, this.state.password, (token) => this.onFinish(token));
-            this.setState({ email : '', password : ''});
+            // this.setState({ email : '', password : ''});
             Keyboard.dismiss(); 
         }
           

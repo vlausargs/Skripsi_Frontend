@@ -46,12 +46,14 @@ export function login(email, password, finishCB) {
             })
             .catch((error) => {
                 console.log('cek error',error)
-                if (errors[error] === undefined)
-                    Alert.alert(errors['Unknown Error'].name, errors['Unknown Error'].message);
-                else if (errors[error].login !== undefined)
-                    Alert.alert(errors[error].login[0], errors[error].login[1]);
-                else
-                    Alert.alert(errors[error].name, errors[error].message);
+                if (error.code!== undefined){
+                    console.log('cek error cpde',error.code)
+                    if (errors[error.code] === undefined)
+                        Alert.alert(errors['Unknown Error'].name, errors['Unknown Error'].message);
+                    else if (errors[error.code].login !== undefined)
+                        Alert.alert(errors[error.code].login[0], errors[error.code].login[1]);
+                }else
+                    Alert.alert("Login Error", "wrong email or password");
                 finishCB(null);
             })
     }
@@ -79,8 +81,10 @@ export function register(name, email, password, password_confirmation, role, res
         return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
             .then((json) => {
                 resultCB(json)
+                console.log(json);
             })
-            .catch((error) => {         
+            .catch((error,errors) => {      
+                console.log(errors)   
                 resultCB(error)
             })
     }

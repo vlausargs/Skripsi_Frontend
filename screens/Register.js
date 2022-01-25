@@ -50,8 +50,8 @@ class Register extends React.Component{
       onSubmit(){
         this.props.actionsAuth.register(this.state.name, this.state.email, this.state.password, 
             this.state.confirm_password, this.state.role, ({message,token}) => {
-                if(message!=='success') return alert(message)
-                alert(message)
+                if(message!=='success') return Alert.alert("Error",message)
+                // alert(message)
                 return this.props.navigation.reset({
                     index: 0,
                     routes: [{ name: 'Login' }]
