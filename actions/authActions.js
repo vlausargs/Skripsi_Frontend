@@ -403,6 +403,7 @@ export function getEmployeeScore_admin (token,employee_id) {
         return fetchAPI(endpoint, 'POST', header, JSON.stringify(body))
             .then((json) => {          
                 dispatch({ type: t.RECEIVE_EMPLOYEESCORE, employeeScore: json.data });
+                console.log(json.data);
             })
             .catch((error) => {
                 dispatch({ type: t.EMPTY_EMPLOYEESCORE});    

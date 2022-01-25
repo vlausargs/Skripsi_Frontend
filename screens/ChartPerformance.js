@@ -131,7 +131,7 @@ checkMonthName =(month)=>{
                 },
               ],
             }}
-            width={Dimensions.get('window').width} // from react-native
+            width={Dimensions.get('window').width+30} // from react-native
             height={220}
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
@@ -142,9 +142,10 @@ checkMonthName =(month)=>{
               decimalPlaces: 0, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              barPercentage: .7,
+              barPercentage: this.props.employeeScore.length<3?.6:this.props.employeeScore.length<6?.5:.4,
               style: {
                 borderRadius: 16,
+                
                 
               },
               propsForDots: {
@@ -157,7 +158,8 @@ checkMonthName =(month)=>{
             style={{
               marginVertical: 8,
               borderRadius: 16,
-              
+              marginLeft:-30,
+              paddingright:40
             }}
           />
         </View>
