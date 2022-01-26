@@ -593,7 +593,6 @@ const Home = ({ navigation }) => {
                                                         <DataTable.Header>
                                                             <DataTable.Title>Date</DataTable.Title>
                                                             <DataTable.Title>Type</DataTable.Title>
-
                                                             <DataTable.Title numeric>Action</DataTable.Title>
                                                         </DataTable.Header>
                                                         {item.missing_attandance.map((item2, key2) => (
@@ -601,7 +600,18 @@ const Home = ({ navigation }) => {
                                                                 <DataTable.Cell>{item2.mis_day}</DataTable.Cell>
                                                                 <DataTable.Cell>{item2.mis_type}</DataTable.Cell>
 
-                                                                <TouchableOpacity onPress={() => { postNotification(item2) }}>
+                                                                <TouchableOpacity onPress={() => { Alert.alert(
+                                                                        "Confirmation",
+                                                                        "Are you sure want to send notification to " + item.name,
+                                                                        [
+                                                                            {
+                                                                            text: "Cancel",
+                                                                            onPress: () => console.log("Cancel Pressed"),
+                                                                            style: "cancel"
+                                                                            },
+                                                                            { text: "OK", onPress: () =>  { postNotification(item2) }}
+                                                                        ]
+                                                                        ); }}>
                                                                     <DataTable.Cell>send notif</DataTable.Cell>
                                                                 </TouchableOpacity>
                                                             </DataTable.Row>

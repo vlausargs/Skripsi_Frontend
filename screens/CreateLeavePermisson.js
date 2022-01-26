@@ -367,9 +367,18 @@ export default function CreateLeavePermisson({ navigation }) {
                                 maxHeight:100,
                                 borderRadius: 25,
                             }}
-                            onPress={() => {
-                                postPermission();
-                            }}
+                            onPress={() => { Alert.alert(
+                                "Confirmation",
+                                "Are you sure want to request this permission?",
+                                [
+                                    {
+                                    text: "Cancel",
+                                    onPress: () => console.log("Cancel Pressed"),
+                                    style: "cancel"
+                                    },
+                                    { text: "OK", onPress: () =>  { postPermission() }}
+                                ]
+                                ); }}
                         >
                            <Text style={{...styles.inputContainer,textAlign: 'center',alignSelf: 'stretch',color:'white'}}>Submit</Text>
 

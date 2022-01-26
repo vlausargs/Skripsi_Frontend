@@ -347,9 +347,18 @@ const LeavePermissions = ({ navigation }) => {
                                     borderRadius: 25,
                                     flex: 1
                                 }}
-                                onPress={() => {
-                                    postPermissionApprove(item.id);
-                                }}
+                                onPress={() => { Alert.alert(
+                                    "Confirmation",
+                                    "Are you sure want to approve " + item.user.name + "'s permission?" ,
+                                    [
+                                        {
+                                        text: "Cancel",
+                                        onPress: () => console.log("Cancel Pressed"),
+                                        style: "cancel"
+                                        },
+                                        { text: "OK", onPress: () =>  { postPermissionApprove(item.id) }}
+                                    ]
+                                    ); }}
                             >
                                 <Text style={{ ...styles.inputContainer, textAlign: 'center', alignSelf: 'stretch', color: 'white' }}>Approve</Text>
 
@@ -367,9 +376,18 @@ const LeavePermissions = ({ navigation }) => {
                                     flex: 1,
 
                                 }}
-                                onPress={() => {
-                                    postPermissionReject(item.id);
-                                }}
+                                onPress={() => { Alert.alert(
+                                    "Confirmation",
+                                    "Are you sure want to reject " + item.user.name + "'s permission?" ,
+                                    [
+                                        {
+                                        text: "Cancel",
+                                        onPress: () => console.log("Cancel Pressed"),
+                                        style: "cancel"
+                                        },
+                                        { text: "OK", onPress: () =>  { postPermissionReject(item.id) }}
+                                    ]
+                                    ); }}
                             >
                                 <Text style={{ ...styles.inputContainer, textAlign: 'center', alignSelf: 'stretch', color: 'white' }}>Reject</Text>
 
@@ -439,9 +457,18 @@ const LeavePermissions = ({ navigation }) => {
                                     borderRadius: 25,
                                     flex: 1
                                 }}
-                                onPress={() => {
-                                    postPermissionApprove(item.id);
-                                }}
+                                onPress={() => { Alert.alert(
+                                    "Confirmation",
+                                    "Are you sure want to approve " + item.user.name + "'s permission?" ,
+                                    [
+                                        {
+                                        text: "Cancel",
+                                        onPress: () => console.log("Cancel Pressed"),
+                                        style: "cancel"
+                                        },
+                                        { text: "OK", onPress: () =>  { postPermissionApprove(item.id) }}
+                                    ]
+                                    ); }}
                             >
                                 <Text style={{ ...styles.inputContainer, textAlign: 'center', alignSelf: 'stretch', color: 'white' }}>Approve</Text>
 
@@ -459,9 +486,18 @@ const LeavePermissions = ({ navigation }) => {
                                     flex: 1,
 
                                 }}
-                                onPress={() => {
-                                    postPermissionReject(item.id);
-                                }}
+                                onPress={() => { Alert.alert(
+                                    "Confirmation",
+                                    "Are you sure want to reject " + item.user.name + "'s permission?" ,
+                                    [
+                                        {
+                                        text: "Cancel",
+                                        onPress: () => console.log("Cancel Pressed"),
+                                        style: "cancel"
+                                        },
+                                        { text: "OK", onPress: () =>  { postPermissionReject(item.id) }}
+                                    ]
+                                    ); }}
                             >
                                 <Text style={{ ...styles.inputContainer, textAlign: 'center', alignSelf: 'stretch', color: 'white' }}>Reject</Text>
 
