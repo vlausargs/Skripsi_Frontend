@@ -33,7 +33,9 @@ class ChartPerformance extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      init:true,
+    };
   }
 
   componentDidMount() {
@@ -43,8 +45,14 @@ class ChartPerformance extends Component {
     // }else{
       // this.props.actionsAuth.getEmployeeScore(this.props.token);
     // }
-    this.props.actionsAuth.getEmployeeByCompany(this.props.token);
-    this.props.actionsAuth.getUserInfo(this.props.token)
+    // this.props.employeeScore= undefined
+    if(this.state.init == true){
+      this.props.actionsAuth.clearEmployeeScore();
+      this.props.actionsAuth.clearUserInfo();
+      this.props.actionsAuth.getEmployeeByCompany(this.props.token);
+      this.props.actionsAuth.getUserInfo(this.props.token);
+      this.state.init = false;
+    } 
   }
 
   componentDidUpdate(prevProps) {
@@ -54,7 +62,7 @@ class ChartPerformance extends Component {
         }else{
           this.props.actionsAuth.getEmployeeScore(this.props.token);
         }
-
+        
     }
   }
   renderHeader() {
@@ -91,7 +99,12 @@ checkMonthName =(month)=>{
     
     return monthName;
 }
-
+  calc_avg = ()=>{
+    const array = this.props.employeeScore.map(item => {return item.score;});
+    if (array.length >0)
+    return (array.reduce((a, b) => a + b) / array.length).toFixed(2);
+     
+  }
   render() {
     var months = this.props.employeeScore.month
     return (
@@ -120,14 +133,14 @@ checkMonthName =(month)=>{
                     </Picker>)}
           <BarChart
             data={{
-              labels: this.props.employeeScore.map(item => {
+              labels: this.props.employeeScore?this.props.employeeScore.map(item => {
                 return this.checkMonthName(item.month);
-              }),
+              }):[],
               datasets: [
                 {
-                  data: this.props.employeeScore.map(item => {
+                  data: this.props.employeeScore?this.props.employeeScore.map(item => {
                     return item.score;
-                  }),
+                  }):[],
                 },
               ],
             }}
@@ -162,6 +175,17 @@ checkMonthName =(month)=>{
               paddingright:40
             }}
           />
+          {this.props.employeeScore.length>0 &&(
+            <View style={{margin:SIZES.padding}}>
+              <Text style={{...FONTS.body3}}>Performa kerja {this.props.users.name} tahun {new Date().getFullYear() } berdasarkan hasil penilaian dari atasan.</Text>
+              <Text style={{...FONTS.body3,marginTop:10}}>Diperloeh nilai tertinggi {Math.max(...this.props.employeeScore.map(item => {return item.score;}))} dan nilai terendah {Math.min(...this.props.employeeScore.map(item => {return item.score;}))} dengan
+              rata-rata {this.calc_avg()} selama {this.props.employeeScore.map(item => {return item.score;}).length} bulan dari nilai maximum 50
+              </Text>
+              <Text style={{...FONTS.body3,marginTop:10}}>{this.calc_avg() <40?"Tingkatkan!":"Pertahankan!"} </Text>
+            </View>
+          )
+
+          }
         </View>
       </SafeAreaView>
     );

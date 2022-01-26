@@ -108,6 +108,14 @@ export function getUserInfo (token) {
             })
     }
 }
+export function clearUserInfo () {
+    
+
+    return dispatch => {
+        return dispatch({ type: t.RECEIVE_USER, users: {} });
+
+    }
+}
 
 export function getCompanyList (token) {
     var endpoint = "/api/company/getCompanyList";
@@ -384,6 +392,13 @@ export function getEmployeeScore (token) {
             .catch((error) => {
                 dispatch({ type: t.EMPTY_EMPLOYEESCORE});    
             })
+    }
+}
+
+export function clearEmployeeScore () {
+
+    return dispatch => {
+        return  dispatch({ type: t.RECEIVE_EMPLOYEESCORE, employeeScore: [] });
     }
 }
 
