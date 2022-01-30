@@ -199,7 +199,7 @@ checkMonthName =(month)=>{
           {this.props.employeeScore.length>0 &&(
             <View style={{margin:SIZES.padding}}>
               <Text style={{...FONTS.body3}}>Performa kerja {this.props.users.role === 2?this.props.users.name:''} {this.props.users.role === 1 && this.state.employee!=null &&  this.props.listEmployeeCompany.length>0 ?this.props.listEmployeeCompany.find(obj=>obj.id ==this.state.employee).user.name:''} tahun {new Date().getFullYear() } berdasarkan hasil penilaian dari atasan.</Text>
-              <Text style={{...FONTS.body3,marginTop:10}}>Diperloeh nilai tertinggi {Math.max(...this.props.employeeScore.map(item => {return item.score;}))} dan nilai terendah {Math.min(...this.props.employeeScore.map(item => {return item.score;}))} dari batas minimum 50 dengan rata-rata {this.calc_avg()} selama {this.props.employeeScore.map(item => {return item.score;}).length} bulan 
+              <Text style={{...FONTS.body3,marginTop:10}}>Diperloeh nilai tertinggi {Math.max(...this.props.employeeScore.map(item => {return item.score;}))} dan nilai terendah {Math.min(...this.props.employeeScore.map(item => {return item.score;}))} dengan rata-rata {this.calc_avg()} selama {this.props.employeeScore.map(item => {return item.score;}).length} bulan dari batas minimum 50 
               </Text>
               <Text style={{...FONTS.body3,marginTop:10}}>{this.calc_avg() <50?"Tingkatkan!":"Pertahankan!"} </Text>
             </View>
