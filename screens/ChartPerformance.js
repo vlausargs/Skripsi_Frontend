@@ -109,8 +109,11 @@ checkMonthName =(month)=>{
     var months = this.props.employeeScore.month
     return (
       <SafeAreaView style={{flex: 1}}>
+        <View style={{ ...styles.shadow, backgroundColor: COLORS.white, paddingBottom: SIZES.padding }}>
+          {this.renderHeader()}
+
+        </View>
         <View>
-        {this.renderHeader()}
         {this.props.users.role === 1 &&(<Picker
                         selectedValue={this.state.employee}
                         style={{
@@ -141,6 +144,10 @@ checkMonthName =(month)=>{
                   data: this.props.employeeScore?this.props.employeeScore.map(item => {
                     return item.score;
                   }):[],
+                  colors: 
+                  this.props.employeeScore?this.props.employeeScore.map(item => {return item.score < 50?(opacity = 1) => `#ffdc2a`:(opacity = 1) => `#50ad4f`;
+                  }):[],
+                    
                 },
               ],
             }}
@@ -148,18 +155,27 @@ checkMonthName =(month)=>{
             height={220}
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
+              // backgroundGradientFrom: "#fff",
+              // backgroundGradientTo: "#fff",
+              // height:5000,
+              // fillShadowGradient: `rgba(1, 122, 205, 1)`,
+              // fillShadowGradientOpacity: 1,
+              // decimalPlaces: 0, // optional, defaults to 2dp
+              // color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+              // labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
+              barPercentage: this.props.employeeScore.length<3?.6:this.props.employeeScore.length<6?.5:.4,
+
               fillShadowGradientOpacity:1,
               backgroundColor: COLORS.black,
               backgroundGradientFrom: COLORS.primary,
               backgroundGradientTo: COLORS.primary,
+              fillShadowGradient: `rgba(255, 255, 255, 255)`,
+              
               decimalPlaces: 0, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              barPercentage: this.props.employeeScore.length<3?.6:this.props.employeeScore.length<6?.5:.4,
+              color: (opacity = 1) => `#FFFFFF`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, 255)`,
               style: {
                 borderRadius: 16,
-                
-                
               },
               propsForDots: {
                 r: '6',
@@ -167,6 +183,11 @@ checkMonthName =(month)=>{
                 stroke: COLORS.white,
               },
             }}
+            fromZero={true}
+            withCustomBarColorFromData={true}
+            flatColor={true}
+            withInnerLines={true}
+            showBarTops={false}
             bezier
             style={{
               marginVertical: 8,
@@ -177,11 +198,10 @@ checkMonthName =(month)=>{
           />
           {this.props.employeeScore.length>0 &&(
             <View style={{margin:SIZES.padding}}>
-              <Text style={{...FONTS.body3}}>Performa kerja {this.props.users.name} tahun {new Date().getFullYear() } berdasarkan hasil penilaian dari atasan.</Text>
-              <Text style={{...FONTS.body3,marginTop:10}}>Diperloeh nilai tertinggi {Math.max(...this.props.employeeScore.map(item => {return item.score;}))} dan nilai terendah {Math.min(...this.props.employeeScore.map(item => {return item.score;}))} dengan
-              rata-rata {this.calc_avg()} selama {this.props.employeeScore.map(item => {return item.score;}).length} bulan dari nilai maximum 50
+              <Text style={{...FONTS.body3}}>Performa kerja {this.props.users.role === 2?this.props.users.name:''} {this.props.users.role === 1 && this.state.employee!=null &&  this.props.listEmployeeCompany.length>0 ?this.props.listEmployeeCompany.find(obj=>obj.id ==this.state.employee).user.name:''} tahun {new Date().getFullYear() } berdasarkan hasil penilaian dari atasan.</Text>
+              <Text style={{...FONTS.body3,marginTop:10}}>Diperloeh nilai tertinggi {Math.max(...this.props.employeeScore.map(item => {return item.score;}))} dan nilai terendah {Math.min(...this.props.employeeScore.map(item => {return item.score;}))} dari batas minimum 50 dengan rata-rata {this.calc_avg()} selama {this.props.employeeScore.map(item => {return item.score;}).length} bulan 
               </Text>
-              <Text style={{...FONTS.body3,marginTop:10}}>{this.calc_avg() <40?"Tingkatkan!":"Pertahankan!"} </Text>
+              <Text style={{...FONTS.body3,marginTop:10}}>{this.calc_avg() <50?"Tingkatkan!":"Pertahankan!"} </Text>
             </View>
           )
 
@@ -196,6 +216,16 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.lightGray4,
   },
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+        width: 0,
+        height: 3,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 10,
+},
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChartPerformance);
