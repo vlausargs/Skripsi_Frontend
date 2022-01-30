@@ -145,7 +145,7 @@ checkMonthName =(month)=>{
                     return item.score;
                   }):[],
                   colors: 
-                  this.props.employeeScore?this.props.employeeScore.map(item => {return item.score < 50?(opacity = 1) => `#ffdc2a`:(opacity = 1) => `#50ad4f`;
+                  this.props.employeeScore?this.props.employeeScore.map(item => {return item.score < 25?(opacity = 1) => `#FF322A`:item.score < 50?(opacity = 1) => `#ffdc2a`:(opacity = 1) => `#50ad4f`;
                   }):[],
                     
                 },
@@ -201,7 +201,7 @@ checkMonthName =(month)=>{
               <Text style={{...FONTS.body3}}>Performa kerja {this.props.users.role === 2?this.props.users.name:''} {this.props.users.role === 1 && this.state.employee!=null &&  this.props.listEmployeeCompany.length>0 ?this.props.listEmployeeCompany.find(obj=>obj.id ==this.state.employee).user.name:''} tahun {new Date().getFullYear() } berdasarkan hasil penilaian dari atasan.</Text>
               <Text style={{...FONTS.body3,marginTop:10}}>Diperloeh nilai tertinggi {Math.max(...this.props.employeeScore.map(item => {return item.score;}))} dan nilai terendah {Math.min(...this.props.employeeScore.map(item => {return item.score;}))} dengan rata-rata {this.calc_avg()} selama {this.props.employeeScore.map(item => {return item.score;}).length} bulan dari batas minimum 50 
               </Text>
-              <Text style={{...FONTS.body3,marginTop:10}}>{this.calc_avg() <50?"Tingkatkan!":"Pertahankan!"} </Text>
+              <Text style={{...FONTS.body3,marginTop:10}}>{this.calc_avg() <25?"Perlu pengangan khusus, coaching & konseling.":this.calc_avg() <50?"Perlu pemantauan/bimbingan, coaching & mentoring.":"Siap development dengan penugasan/ tanggung jawab lebih luas."} </Text>
             </View>
           )
 
