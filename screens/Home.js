@@ -152,6 +152,9 @@ const Home = ({ navigation }) => {
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
     }
+    function changeNotifStatus(id) {
+        
+    }
     function getNotification() {
         fetch(api_path + '/api/notification/getNotifLogged', {
             method: 'GET',
@@ -171,7 +174,7 @@ const Home = ({ navigation }) => {
                             item.desc,
                             [
                                 {
-                                    text: "OK", onPress: () => { }
+                                    text: "OK", onPress: () => { changeNotifStatus(item.id) }
                                 }
                             ]
                         ));
