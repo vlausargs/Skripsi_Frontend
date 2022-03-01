@@ -139,10 +139,14 @@ class Meeting extends Component {
         <Text style={styles.panelText}>Place: {section.place}</Text>
         <Text style={styles.panelText}>Desc: {section.description}</Text>
           <View style={{flexDirection:'row', alignSelf:'center'}}>
-            <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {
+            {section.link === null ? <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {
               this.setState({biometricActive:true,curr_section:section});
             }
-            }>LINK</Text>
+            }>ATTEND</Text> : <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => {
+              this.setState({biometricActive:true,curr_section:section});
+            }
+            }>LINK</Text> }
+            
             <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => this.openModal(section)}>Attendees</Text>
             {this.props.users.role === 1 &&( <Text style={[styles.panelText, { color: COLORS.primary }]} onPress={() => this.deleteMeeting(section)}>Delete</Text>)}
           </View>
@@ -213,34 +217,10 @@ openModal (item) {
       }>
         
         {this.renderHeader()}
-        {/* <Switch
-          onValueChange={this.toggleSwitch}
-          value={this.state.toggled}
-          trackColor={{ true: COLORS.primary, false: 'grey' }}
-        /> */}
         {this.state.toggled ? (
           <View
           />
         ) : (
-          /*<FlatList
-            data={this.props.meeting}
-            renderItem={({item}) => (
-              <View style={styles.tableContainer}>
-                <Text style={styles.row}>{item.date_time}</Text>
-                <Text style={styles.row}>{item.title}</Text>
-                <Text style={styles.row}>{item.place}</Text>
-                <Text style={styles.row}>{item.description}</Text>
-                <Text
-                  style={styles.row}
-                  onPress={() => Linking.openURL(item.link)}>
-                  {item.link}
-                </Text>
-                <TouchableOpacity>
-                  <Text style={styles.row}>Open</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          />*/
           <Accordion
             sections={this.props.meeting}
             activeSections={this.state.activeSection}
