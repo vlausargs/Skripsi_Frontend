@@ -7,7 +7,7 @@
  */
 
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -26,7 +26,8 @@ import RootStackScreen from './screens/RootStackScreen';
 import { connect, Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import store from './redux/store';
-import { Appearance } from 'react-native';
+import { Alert, Appearance, Linking, PermissionsAndroid, Platform } from 'react-native';
+import IntentLauncher, { IntentConstant  } from 'react-native-intent-launcher';
 
 const Stack = createStackNavigator();
 
@@ -140,6 +141,33 @@ const App = () => {
         </NavigationContainer>
       )
        */
+      useEffect(() => {
+        requestLocationPermission();
+
+      });
+    const  requestLocationPermission = async () => {
+      const  status  = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);    
+      if (status === PermissionsAndroid.RESULTS.GRANTED) {
+        //console.pass
+      } else {
+        // Alert Message if user does not allow permissions
+        Alert.alert("Location Permission", "Location permission need to be enabled from setting", [
+          {
+            text: 'Open Settings',
+            onPress: () => goToSettings(),
+            style: 'cancel',
+          }
+        ]);
+      }
+    };
+    const  goToSettings = () => {
+
+      IntentLauncher.startActivity({
+        action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
+        data: 'package:com.skripsi_frontend'
+      })
+        
+    };
     return (
       
         <NavigationContainer>
