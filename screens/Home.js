@@ -153,22 +153,27 @@ const Home = ({ navigation }) => {
             .finally(() => setLoading(false));
     }
     function changeNotifStatus(id) {
+        // console.log(api_path + '/api/notification/updateStatus')
+        // console.log(JSON.stringify({
+        //     "id": id
+        // }))
         fetch(api_path + '/api/notification/updateStatus', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + currToken,
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "id": id,
+                "id": id
             })
         })
-            .then((response) => response.json())
+            .then((response) => {response.json()})
             .then((json) => {
                 console.log(json)
             })
             .catch((error) => console.error(error))
-            .finally(() => setLoading(false));
+            .finally(() => {});
     }
     function getNotification() {
         fetch(api_path + '/api/notification/getNotifLogged', {
