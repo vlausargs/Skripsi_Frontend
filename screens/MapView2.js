@@ -90,12 +90,17 @@ export default class Maps2 extends Component {
       long1: this.state.marker
     })
     // const { navigation } = this.props;
-    LogBox.ignoreAllLogs(true)
-    const {onGoBack} = this.props.route.params
-    console.log(this.props.route.params)
-    onGoBack({lat:this.state.marker.latitude,long:this.state.marker.longitude})
-    this.props.navigation.goBack();
-    LogBox.ignoreAllLogs(false)
+    if(this.state.marker != null){
+      console.log(this.state.marker)
+      LogBox.ignoreAllLogs(true)
+      const {onGoBack} = this.props.route.params
+      console.log(this.props.route.params)
+      onGoBack({lat:this.state.marker.latitude,long:this.state.marker.longitude})
+      this.props.navigation.goBack();
+      LogBox.ignoreAllLogs(false)
+    }else{
+      Alert.alert("Error","please click the location of office")
+    }
     // alert(coord)
   }
   showMap() {
